@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="app\services\" />
+    <Folder Include="app\components\document\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
   <ItemGroup>

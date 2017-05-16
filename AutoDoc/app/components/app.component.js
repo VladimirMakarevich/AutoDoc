@@ -10,12 +10,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular/core");
+const document_service_1 = require("../../app/services/document.service");
 let AppComponent = class AppComponent {
+    constructor(documentService) {
+        this.documentService = documentService;
+    }
     addFile() {
         let fi = this.fileInput.nativeElement;
         if (fi.files && fi.files[0]) {
             let fileToUpload = fi.files[0];
-            this.uploadService
+            this.documentService
                 .upload(fileToUpload)
                 .subscribe(res => {
                 console.log(res);
@@ -24,7 +28,7 @@ let AppComponent = class AppComponent {
     }
 };
 __decorate([
-    core_1.ViewChild("fileInput"),
+    core_1.ViewChild('fileInput'),
     __metadata("design:type", Object)
 ], AppComponent.prototype, "fileInput", void 0);
 AppComponent = __decorate([
@@ -40,11 +44,13 @@ AppComponent = __decorate([
                     </div>
                     <div class="form-group">
                         <div class="col-md-10">
-                            <input value="Upload" (click)="addFile()"/>
+                            <input type="submit" value="Upload" (click)="addFile()"/>
                         </div>
                     </div>
                 </div>`,
-    })
+        providers: [document_service_1.DocumentService]
+    }),
+    __metadata("design:paramtypes", [document_service_1.DocumentService])
 ], AppComponent);
 exports.AppComponent = AppComponent;
 //# sourceMappingURL=app.component.js.map

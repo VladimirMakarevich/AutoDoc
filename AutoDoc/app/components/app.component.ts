@@ -1,4 +1,5 @@
-﻿import { Component, OnInit, ViewChild} from '@angular/core';
+﻿import { Component, OnInit, ViewChild, ViewChildren } from '@angular/core';
+import { DocumentService } from '../../app/services/document.service';
 
 @Component({
     selector: 'autodoc-app',
@@ -12,21 +13,25 @@
                     </div>
                     <div class="form-group">
                         <div class="col-md-10">
-                            <input value="Upload" (click)="addFile()"/>
+                            <input type="submit" value="Upload" (click)="addFile()"/>
                         </div>
                     </div>
                 </div>`,
+    providers: [DocumentService]
 })
 
 export class AppComponent {
 
-    @ViewChild("fileInput") fileInput;
+    constructor(private documentService: DocumentService) {
+    }
 
+    @ViewChild('fileInput') fileInput: any;
+        
     addFile(): void {
         let fi = this.fileInput.nativeElement;
         if (fi.files && fi.files[0]) {
             let fileToUpload = fi.files[0];
-            this.uploadService
+            this.documentService
                 .upload(fileToUpload)
                 .subscribe(res => {
                     console.log(res);

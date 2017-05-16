@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace AutoDoc.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Document")]
     public class DocumentController : DefaultController
     {
         public DocumentController()
@@ -19,24 +19,20 @@ namespace AutoDoc.Controllers
         }
 
         [HttpPost("UploadFiles")]
-        public async Task<IActionResult> UploadFiles(List<IFormFile> files)
+        [Route("UploadFiles")]
+        public async Task UploadFiles(IFormFile file)
         {
-            long size = files.Sum(f => f.Length);
+            if (file == null) throw new Exception("File is null");
+            if (file.Length == 0) throw new Exception("File is empty");
 
-            var filePath = Path.GetTempFileName();
-
-            foreach (var formFile in files)
+            using (Stream stream = file.OpenReadStream())
             {
-                if (formFile.Length > 0)
+                using (var binaryReader = new BinaryReader(stream))
                 {
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await formFile.CopyToAsync(stream);
-                    }
+                    var fileContent = binaryReader.ReadBytes((int)file.Length);
+                    //await _uploadService.AddFile(fileContent, file.FileName, file.ContentType);
                 }
             }
-
-            return Ok(new { count = files.Count, size, filePath });
         }
     }
 }
