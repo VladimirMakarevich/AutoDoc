@@ -14,10 +14,10 @@ const appRoutingProviders: any[] = [
 
 @NgModule({
     imports: [BrowserModule, FormsModule, HttpModule, RouterModule.forRoot(routes)],
-	providers: [{provide: APP_BASE_HREF, useValue : '/' }]
-    exports: [RouterModule],
+	providers: [{provide: APP_BASE_HREF, useValue : '/' }],
     declarations: [AppComponent],
-	exports: [ AppComponent ],
+    exports: [AppComponent, RouterModule ],
     bootstrap: [AppComponent],
 })
+
 export class AppModule { }
