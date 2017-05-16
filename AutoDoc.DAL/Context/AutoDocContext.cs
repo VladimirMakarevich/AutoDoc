@@ -22,6 +22,7 @@ namespace AutoDoc.DAL.Context
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Name).IsRequired();
+                entity.Property(e => e.Message).IsRequired();
 
                 entity.HasOne(b => b.Document)
                     .WithMany(d => d.Bookmarks)
