@@ -114,14 +114,16 @@ namespace AutoDoc.BL.Parsers
             mainPart.Document.Save();
         }*/
 
-        public static void ReplaceBookmark<T>(WordprocessingDocument doc, string bookmarkName, T newElement) where T :OpenXmlElement
+        public static void ReplaceBookmark<T>(WordprocessingDocument doc, string bookmarkName, T newElement) where T : OpenXmlElement
         {
             MainDocumentPart mainPart = doc.MainDocumentPart;
             Body body = mainPart.Document.GetFirstChild<Body>();
+
             var bookmark = body
                                 .Descendants<BookmarkStart>()
                                 .FirstOrDefault(o => o.Name == bookmarkName);
             var parent = bookmark.Parent; //bookmark's parent element
+
             if (newElement != null)
             {
                 parent.InsertAfterSelf(newElement);

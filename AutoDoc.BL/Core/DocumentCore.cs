@@ -5,9 +5,9 @@ using DocumentFormat.OpenXml.Packaging;
 
 namespace AutoDoc.BL.Core
 {
-    class DocumentCore
+    public static class DocumentCore
     {
-        public WordprocessingDocument OpenDocument(string path)
+        public static WordprocessingDocument OpenDocument(string path)
         {
             try
             {
@@ -20,7 +20,7 @@ namespace AutoDoc.BL.Core
             }
         }
 
-        public void CloseDocument(WordprocessingDocument doc)
+        public static void CloseDocument(WordprocessingDocument doc)
         {
             doc.Close();
         }
