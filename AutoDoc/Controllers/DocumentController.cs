@@ -18,9 +18,9 @@ namespace AutoDoc.Controllers
 
         }
 
-        [HttpPost("UploadFiles")]
+        [HttpPost]
         [Route("UploadFiles")]
-        public async Task UploadFiles(IFormFile file)
+        public void UploadFiles(IFormFile file)
         {
             if (file == null) throw new Exception("File is null");
             if (file.Length == 0) throw new Exception("File is empty");

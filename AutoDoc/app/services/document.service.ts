@@ -21,37 +21,11 @@ export class DocumentService {
     }
 
     upload(fileToUpload: any) {
+
         let input = new FormData();
         input.append("file", fileToUpload);
 
         return this.http
-            .post("/api/Document/UploadFiles", input);
+            .post("http://localhost:50348/api/Document/UploadFiles", input);
     }
-
-    //postData(obj: id) {
-
-    //    let headers = new Headers({
-    //        'Content-Type': 'application/json'
-    //    });
-
-    //    headers.append('Accept', 'application/json; charset=utf-8');
-    //    headers.append('Access-Control-Allow-Methods', 'POST, GET, DELETE, PUT');
-    //    headers.append('Access-Control-Allow-Headers', "X-Requested-With, Content-Type, Origin, Authorization, Accept, Client-Security-Token, Accept-Encoding");
-    //    console.log("headers1: value" + JSON.stringify(headers));
-
-    //    let options = new RequestOptions({ method: 'POST', headers: headers });
-
-    //    let url = "http://localhost:51377/api/PayPal/PaymentWithPaypal/";
-
-    //    var currentUrl = "http://localhost:3000/";
-    //    var data = new Object();
-    //    data.ProductId = obj;
-    //    data.Url = currentUrl;
-
-    //    var PaymentPaypalJsonModel = JSON.stringify(data);
-
-    //    return this.http.post(url, PaymentPaypalJsonModel, options)
-    //        .subscribe(data => { window.open(JSON.parse(data._body) )
-    //        });
-    //    }
 }

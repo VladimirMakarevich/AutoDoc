@@ -27,7 +27,7 @@ let DocumentService = class DocumentService {
         let input = new FormData();
         input.append("file", fileToUpload);
         return this.http
-            .post("/api/Document/UploadFiles", input);
+            .post("http://localhost:50348/api/Document/UploadFiles", input);
     }
 };
 DocumentService = __decorate([
