@@ -9,9 +9,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="AppData\WordDocuments\" />
     <Folder Include="app\components\document\" />
-    <Folder Include="wwwroot\" />
+    <Folder Include="wwwroot\AppData\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.0.2" />
