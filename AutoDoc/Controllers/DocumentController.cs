@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using Microsoft.AspNetCore.Http;
+using AutoDoc.DocumentFormat;
+using DocumentFormat.OpenXml.Packaging;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -30,9 +32,12 @@ namespace AutoDoc.Controllers
                 using (var binaryReader = new BinaryReader(stream))
                 {
                     var fileContent = binaryReader.ReadBytes((int)file.Length);
-                    //await _uploadService.AddFile(fileContent, file.FileName, file.ContentType);
                 }
             }
+
+            //var doc = WordprocessingDocument.Open(filePath, true);
+
+            Bookmarks.GetBookmarks(doc);
         }
     }
 }
