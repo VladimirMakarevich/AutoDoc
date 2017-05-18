@@ -10,44 +10,36 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 const core_1 = require("@angular/core");
 const http_1 = require("@angular/http");
+const Observable_1 = require("rxjs/Observable");
 const http_2 = require("@angular/http");
-const rxjs_1 = require("rxjs");
-const http_3 = require("@angular/http");
 require("rxjs/add/operator/catch");
-require("rxjs/add/operator/debounceTime");
-require("rxjs/add/operator/distinctUntilChanged");
 require("rxjs/add/operator/map");
-require("rxjs/add/operator/switchMap");
-require("rxjs/add/operator/toPromise");
-require("rxjs/add/observable/throw");
-require("rxjs/Rx");
-let DocumentService = class DocumentService {
+let BookmarkService = class BookmarkService {
     constructor(http) {
         this.http = http;
-        this.documentUrlGet = 'http://localhost:50348/api/Document/GetBookmarks?id=';
-        this.documentUrlPost = 'http://localhost:50348/api/Document/UploadFiles';
+        this.bookmarkUrlGet = 'http://localhost:50348/api/Bookmark/GetBookmarks?id=';
+        this.bookmarkUrlPost = 'http://localhost:50348/api/Bookmark/PostBookmarks';
     }
-    downloadFile(id) {
-        let headers = new http_2.Headers({ 'Content-Type': 'application/json', 'MyApp-Application': 'AppName', 'Accept': 'application/pdf' });
-        let options = new http_3.RequestOptions({ headers: headers, responseType: http_3.ResponseContentType.Blob });
-        return this.http.get(this.documentUrlGet + id)
-            .map(this.extractContent)
+    postData(bookmarks) {
+        let headers = new http_2.Headers({ 'Content-Type': 'application/json' });
+        let options = new http_2.RequestOptions({ headers: headers });
+        return this.http.post(this.bookmarkUrlPost, { bookmarks }, options)
+            .map(this.extractData)
             .catch(this.handleError);
     }
-    uploadFile(fileToUpload) {
-        let input = new FormData();
-        input.append("file", fileToUpload);
-        return this.http
-            .post(this.documentUrlPost, input);
+    getData(id) {
+        return this.http.get(this.bookmarkUrlGet + id)
+            .map(this.extractData)
+            .catch(this.handleError);
     }
-    extractContent(res) {
-        let blob = res.blob();
-        window['saveAs'](blob, 'test.docx');
+    extractData(res) {
+        let body = res.json();
+        return body.data || {};
     }
     handleError(error) {
         // In a real world app, you might use a remote logging infrastructure
         let errMsg;
-        if (error instanceof http_2.Response) {
+        if (error instanceof http_1.Response) {
             const body = error.json() || '';
             const err = body.error || JSON.stringify(body);
             errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
@@ -56,12 +48,12 @@ let DocumentService = class DocumentService {
             errMsg = error.message ? error.message : error.toString();
         }
         console.error(errMsg);
-        return rxjs_1.Observable.throw(errMsg);
+        return Observable_1.Observable.throw(errMsg);
     }
 };
-DocumentService = __decorate([
+BookmarkService = __decorate([
     core_1.Injectable(),
     __metadata("design:paramtypes", [http_1.Http])
-], DocumentService);
-exports.DocumentService = DocumentService;
-//# sourceMappingURL=document.service.js.map
+], BookmarkService);
+exports.BookmarkService = BookmarkService;
+//# sourceMappingURL=bookmark.service.js.map

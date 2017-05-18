@@ -2,7 +2,7 @@
 import { Http } from '@angular/http';
 import { Response, Headers } from '@angular/http';
 import { Observable } from 'rxjs';
-import { RequestOptions, Request, RequestMethod } from '@angular/http'
+import { RequestOptions, Request, RequestMethod, ResponseContentType } from '@angular/http'
 
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/debounceTime';

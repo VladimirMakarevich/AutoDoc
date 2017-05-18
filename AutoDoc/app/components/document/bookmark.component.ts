@@ -28,7 +28,7 @@ export class BookmarkComponent implements OnInit {
     ) { }
 
     uploadNewValues(): void {
-        this.bookmarkService.postData(this.bookmarks).subscribe(ans => {
+        this.bookmarkService.postData(this.bookmarks).subscribe((ans : string)=> {
             console.log(ans);
             this.router.navigate(['./download', this.id]);
         });
@@ -40,7 +40,7 @@ export class BookmarkComponent implements OnInit {
             if (this.id != '') {
                 this.bookmarkService.getData(this.id)
                     .subscribe(
-                    bookmarks => this.bookmarks = bookmarks,
+                    (bookmarks : Bookmark[]) => this.bookmarks = bookmarks,
                     error => this.errorMessage = <any>error);
             }
         });

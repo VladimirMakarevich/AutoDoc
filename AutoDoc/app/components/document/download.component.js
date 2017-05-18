@@ -11,37 +11,35 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 const core_1 = require("@angular/core");
 const document_service_1 = require("../../services/document/document.service");
 const router_1 = require("@angular/router");
+const router_2 = require("@angular/router");
 const core_2 = require("@angular/core");
-let UploadComponent = class UploadComponent {
-    constructor(documentService, router) {
-        this.documentService = documentService;
+let DownloadComponent = class DownloadComponent {
+    constructor(routeActivated, router, location, documentService) {
+        this.routeActivated = routeActivated;
         this.router = router;
+        this.location = location;
+        this.documentService = documentService;
     }
-    addFile() {
-        let fi = this.fileInput.nativeElement;
-        if (fi.files && fi.files[0]) {
-            let fileToUpload = fi.files[0];
-            this.documentService
-                .uploadFile(fileToUpload)
-                .subscribe(((id) => {
-                console.log(id);
-                this.router.navigate(['./bookmark', id]);
-            }));
-        }
+    ngOnInit() {
+        this.routeActivated.params.subscribe((params) => {
+            this.id = params['id'];
+        });
+    }
+    getFile() {
+        this.documentService.downloadFile(this.id);
     }
 };
-__decorate([
-    core_1.ViewChild('fileInput'),
-    __metadata("design:type", Object)
-], UploadComponent.prototype, "fileInput", void 0);
-UploadComponent = __decorate([
+DownloadComponent = __decorate([
     core_1.Component(({
-        selector: 'upload-component',
-        template: './upload.component.html',
+        selector: 'download-component',
+        template: './download.component.html',
         providers: [document_service_1.DocumentService]
     })),
     core_2.Injectable(),
-    __metadata("design:paramtypes", [document_service_1.DocumentService, router_1.Router])
-], UploadComponent);
-exports.UploadComponent = UploadComponent;
-//# sourceMappingURL=upload.component.js.map
+    __metadata("design:paramtypes", [router_1.ActivatedRoute,
+        router_2.Router,
+        Location,
+        document_service_1.DocumentService])
+], DownloadComponent);
+exports.DownloadComponent = DownloadComponent;
+//# sourceMappingURL=download.component.js.map

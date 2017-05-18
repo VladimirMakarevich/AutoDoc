@@ -1,5 +1,6 @@
 ﻿import { Component, OnInit, ViewChild, ViewChildren } from '@angular/core';
 import { DocumentService } from "../../services/document/document.service";
+import { ActivatedRoute, Params } from '@angular/router';
 import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 
@@ -23,10 +24,10 @@ export class UploadComponent {
             let fileToUpload = fi.files[0];
             this.documentService
                 .uploadFile(fileToUpload)
-                .subscribe(id => {
+                .subscribe(((id : string) => {
                     console.log(id);
                     this.router.navigate(['./bookmark', id]);
-                });
+                }) as any);
         }
     }
 }

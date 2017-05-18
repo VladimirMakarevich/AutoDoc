@@ -10,7 +10,8 @@ let AppComponent = class AppComponent {
 };
 AppComponent = __decorate([
     core_1.Component({
-        selector: 'autodoc-app'
+        selector: 'autodoc-app',
+        template: '<upload-component></upload-component>'
     })
 ], AppComponent);
 exports.AppComponent = AppComponent;

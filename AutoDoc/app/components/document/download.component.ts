@@ -1,5 +1,6 @@
 ﻿import { Component, OnInit, ViewChild, ViewChildren } from '@angular/core';
-import {  DocumentService } from "../../services/document/document.service";
+import { DocumentService } from "../../services/document/document.service";
+import { ActivatedRoute, Params } from '@angular/router';
 import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 

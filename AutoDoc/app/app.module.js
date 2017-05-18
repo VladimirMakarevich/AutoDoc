@@ -13,7 +13,15 @@ const router_1 = require("@angular/router");
 const http_1 = require("@angular/http");
 const app_component_1 = require("./components/app.component");
 const upload_component_1 = require("./components/document/upload.component");
-const routes = [];
+const bookmark_component_1 = require("./components/document/bookmark.component");
+const download_component_1 = require("./components/document/download.component");
+const document_service_1 = require("./services/document/document.service");
+const bookmark_service_1 = require("./services/document/bookmark.service");
+const routes = [
+    { path: 'bookmark/:id', component: bookmark_component_1.BookmarkComponent },
+    { path: 'download/:id', component: download_component_1.DownloadComponent },
+    { path: 'upload/', component: upload_component_1.UploadComponent }
+];
 const appRoutingProviders = [];
 let AppModule = class AppModule {
 };
@@ -26,11 +34,15 @@ AppModule = __decorate([
             router_1.RouterModule.forRoot(routes)
         ],
         providers: [
-            { provide: common_1.APP_BASE_HREF, useValue: '/' }
+            { provide: common_1.APP_BASE_HREF, useValue: '/' },
+            document_service_1.DocumentService,
+            bookmark_service_1.BookmarkService
         ],
         declarations: [
             app_component_1.AppComponent,
-            upload_component_1.UploadComponent
+            upload_component_1.UploadComponent,
+            download_component_1.DownloadComponent,
+            bookmark_component_1.BookmarkComponent
         ],
         exports: [
             app_component_1.AppComponent,
