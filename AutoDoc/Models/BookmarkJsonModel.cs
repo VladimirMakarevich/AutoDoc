@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 
 namespace AutoDoc.Models
 {
-    public class BookmarksJsonModel
+    public class BookmarkJsonModel
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Message { get; set; }
     }

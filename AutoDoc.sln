@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoDoc.DAL", "AutoDoc.DAL\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoDoc.BL", "AutoDoc.BL\AutoDoc.BL.csproj", "{495E1353-0A64-4D5E-B820-7C752E65E089}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoDoc.DocumentFormat", "AutoDoc.DocumentFormat\AutoDoc.DocumentFormat.csproj", "{0D777C19-8315-41D5-B4A3-587A97ADAD2F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{495E1353-0A64-4D5E-B820-7C752E65E089}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{495E1353-0A64-4D5E-B820-7C752E65E089}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{495E1353-0A64-4D5E-B820-7C752E65E089}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0D777C19-8315-41D5-B4A3-587A97ADAD2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0D777C19-8315-41D5-B4A3-587A97ADAD2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0D777C19-8315-41D5-B4A3-587A97ADAD2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0D777C19-8315-41D5-B4A3-587A97ADAD2F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

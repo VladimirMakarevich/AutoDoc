@@ -22,7 +22,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AutoDoc.BL\AutoDoc.BL.csproj" />
-    <ProjectReference Include="..\AutoDoc.DocumentFormat\AutoDoc.DocumentFormat.csproj" />
+    <ProjectReference Include="..\AutoDoc.DAL\AutoDoc.DAL.csproj" />
   </ItemGroup>
 
 </Project>

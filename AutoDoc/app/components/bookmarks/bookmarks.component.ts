@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, ViewChild, ViewChildren } from '@angular/core';
+﻿import { Component, OnInit } from '@angular/core';
 
 @Component({
     selector: 'bookmarks',

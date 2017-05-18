@@ -9,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using AutoMapper;
 using AutoDoc.Mappers;
+using AutoDoc.DAL.Repository;
+using AutoDoc.DAL.Entities;
 
 namespace AutoDoc
 {
@@ -25,8 +27,7 @@ namespace AutoDoc
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
         }
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
@@ -36,6 +37,8 @@ namespace AutoDoc
 
             services.AddSingleton(mapper);
 
+            //services.AddTransient<IRepositoryBase<Document>, RepositoryBase<Document>>();
+
             services.AddCors(o => o.AddPolicy("EnableCors", builder =>
             {
                 builder.AllowAnyOrigin()
@@ -44,7 +47,6 @@ namespace AutoDoc
             }));
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
