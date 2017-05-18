@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoDoc.DAL.Context;
+using AutoDoc.DAL.Entities;
+using AutoDoc.DAL.Repository;
+using AutoDoc.DAL.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -9,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using AutoMapper;
 using AutoDoc.Mappers;
+using Microsoft.EntityFrameworkCore;
 
 namespace AutoDoc
 {
@@ -29,6 +34,15 @@ namespace AutoDoc
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<AutoDocContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            //services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
+            services.AddTransient<IDocumentService, DocumentService>();
+            services.AddTransient<IBookmarkService, BookmarkService>();
+            services.AddTransient<IRepositoryBase<Bookmark>, RepositoryBase<Bookmark>>();
+            services.AddTransient<IRepositoryBase<Document>, RepositoryBase<Document>>();
+
             services.AddMvc();
 
             var config = AutoMapperConfig.GetMapper(services);

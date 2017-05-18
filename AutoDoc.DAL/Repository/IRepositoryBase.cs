@@ -6,7 +6,7 @@ using AutoDoc.DAL.Entities;
 
 namespace AutoDoc.DAL.Repository
 {
-    public interface IRepositoryBase<T> where T : BaseEntity
+    public interface IRepositoryBase<T> : IDisposable where T : BaseEntity 
     {
         void Add(T entity);
 

@@ -5,13 +5,13 @@ using AutoDoc.DAL.Entities;
 
 namespace AutoDoc.DAL.Services
 {
-    public interface IDocumentService
+    public interface IDocumentService : IDisposable
     {
         List<Document> GetAllDocuments();
         Document GetDocument(string name);
         Document GetDocument(int id);
         void DeleteDocument(int id);
-        void CreateDocument(Document document);
+        int CreateDocument(Document document);
         void EditDocument(Document document);
     }
 }

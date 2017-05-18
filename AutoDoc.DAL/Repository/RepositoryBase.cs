@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AutoDoc.DAL.Repository
 {
-    public class RepositoryBase<T> : IRepositoryBase<T> where T : BaseEntity
+    public class RepositoryBase<T> : IRepositoryBase<T>, IDisposable where T : BaseEntity
     {
         private DbContext _dataContext;
         private readonly DbSet<T> _dbSet;
@@ -68,6 +68,26 @@ namespace AutoDoc.DAL.Repository
         public virtual void Commit()
         {
             _dataContext.SaveChanges();
+        }
+
+        private bool _disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this._disposed)
+            {
+                if (disposing)
+                {
+                    _dataContext.Dispose();
+                }
+            }
+            this._disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

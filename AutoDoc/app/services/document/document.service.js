@@ -8,7 +8,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular/core");
 const http_1 = require("@angular/http");
 require("rxjs/add/operator/catch");
@@ -19,7 +18,7 @@ require("rxjs/add/operator/switchMap");
 require("rxjs/add/operator/toPromise");
 require("rxjs/add/observable/throw");
 require("rxjs/Rx");
-let DocumentService = class DocumentService {
+let UploadService = class UploadService {
     constructor(http) {
         this.http = http;
     }
@@ -30,9 +29,9 @@ let DocumentService = class DocumentService {
             .post("http://localhost:50348/api/Document/UploadFiles", input);
     }
 };
-DocumentService = __decorate([
+UploadService = __decorate([
     core_1.Injectable(),
     __metadata("design:paramtypes", [http_1.Http])
-], DocumentService);
-exports.DocumentService = DocumentService;
-//# sourceMappingURL=document.service.js.map
+], UploadService);
+exports.UploadService = UploadService;
+//# sourceMappingURL=upload.service.js.map

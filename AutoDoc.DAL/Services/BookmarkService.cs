@@ -7,7 +7,7 @@ using AutoDoc.DAL.Repository;
 
 namespace AutoDoc.DAL.Services
 {
-    public class BookmarkService : IBookmarkService
+    public class BookmarkService : IBookmarkService, IDisposable
     {
         private readonly IRepositoryBase<Bookmark> _baseRepository;
 
@@ -37,10 +37,12 @@ namespace AutoDoc.DAL.Services
             return _baseRepository.GetAll().ToList();
         }
 
-        public void CreateBookmark(Bookmark bookmark)
+        public int CreateBookmark(Bookmark bookmark)
         {
             _baseRepository.Add(bookmark);
             _baseRepository.Commit();
+
+            return _baseRepository.Get(b => b.DocumentId == bookmark.DocumentId && b.Name == b.Name).Id;
         }
 
         public void EditBookmark(Bookmark bookmark)
@@ -53,6 +55,26 @@ namespace AutoDoc.DAL.Services
         {
             _baseRepository.Delete(_baseRepository.GetById(id));
             _baseRepository.Commit();
+        }
+
+        private bool _disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this._disposed)
+            {
+                if (disposing)
+                {
+                    _baseRepository.Dispose();
+                }
+            }
+            this._disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

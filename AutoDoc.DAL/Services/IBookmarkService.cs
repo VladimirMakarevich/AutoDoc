@@ -5,14 +5,14 @@ using AutoDoc.DAL.Entities;
 
 namespace AutoDoc.DAL.Services
 {
-    public interface IBookmarkService
+    public interface IBookmarkService : IDisposable
     {
         List<Bookmark> GetAllBookmarks();
         List<Bookmark> GetAllBookmarksByDocument(int id);
         Bookmark GetBookmark(string name);
         Bookmark GetBookmark(int id);
         void DeleteBookmark(int id);
-        void CreateBookmark(Bookmark bookmark);
+        int CreateBookmark(Bookmark bookmark);
         void EditBookmark(Bookmark bookmark);
     }
 }
