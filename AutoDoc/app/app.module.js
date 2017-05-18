@@ -13,7 +13,13 @@ const common_1 = require("@angular/common");
 const router_1 = require("@angular/router");
 const http_1 = require("@angular/http");
 const app_component_1 = require("./components/app.component");
-const routes = [];
+const document_component_1 = require("./components/document/document.component");
+const error_component_1 = require("./components/error/error.component");
+const routes = [
+    { path: '', component: app_component_1.AppComponent },
+    { path: 'document', component: document_component_1.DocumentComponent },
+    { path: '**', component: error_component_1.ErrorComponent }
+];
 const appRoutingProviders = [];
 let AppModule = class AppModule {
 };
@@ -21,7 +27,9 @@ AppModule = __decorate([
     core_1.NgModule({
         imports: [platform_browser_1.BrowserModule, forms_1.FormsModule, http_1.HttpModule, router_1.RouterModule.forRoot(routes)],
         providers: [{ provide: common_1.APP_BASE_HREF, useValue: '/' }],
-        declarations: [app_component_1.AppComponent],
+        declarations: [app_component_1.AppComponent,
+            document_component_1.DocumentComponent,
+            error_component_1.ErrorComponent],
         exports: [app_component_1.AppComponent, router_1.RouterModule],
         bootstrap: [app_component_1.AppComponent],
     })

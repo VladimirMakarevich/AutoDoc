@@ -10,12 +10,14 @@ using DocumentFormat.OpenXml.Packaging;
 using Microsoft.AspNetCore.Hosting;
 using AutoDoc.BL.Core;
 using AutoDoc.BL.Parsers;
+using Microsoft.AspNetCore.Cors;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace AutoDoc.Controllers
 {
     [Route("api/Document")]
+    [EnableCors("EnableCors")]
     public class DocumentController : DefaultController
     {
         IHostingEnvironment _hostingEnvironment;

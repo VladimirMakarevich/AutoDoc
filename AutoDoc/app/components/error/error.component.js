@@ -7,18 +7,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular/core");
-let AppComponent = class AppComponent {
+let ErrorComponent = class ErrorComponent {
 };
-AppComponent = __decorate([
+ErrorComponent = __decorate([
     core_1.Component({
-        selector: 'autodoc-app',
-        template: `<div>
-                    <div>
-                        <h2>AutDoc App</h2>
-                    </div>
-                    <router-outlet></router-outlet>
-                </div>`,
+        selector: 'error',
+        templateUrl: 'app/components/error/error.component.html',
     })
-], AppComponent);
-exports.AppComponent = AppComponent;
-//# sourceMappingURL=app.component.js.map
+], ErrorComponent);
+exports.ErrorComponent = ErrorComponent;
+//# sourceMappingURL=error.component.js.map
