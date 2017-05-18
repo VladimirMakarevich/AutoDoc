@@ -11,6 +11,9 @@ using AutoMapper;
 using AutoDoc.Mappers;
 using AutoDoc.DAL.Repository;
 using AutoDoc.DAL.Entities;
+using AutoDoc.DAL.Context;
+using Microsoft.EntityFrameworkCore;
+using AutoDoc.DAL.Services;
 
 namespace AutoDoc
 {
@@ -37,14 +40,20 @@ namespace AutoDoc
 
             services.AddSingleton(mapper);
 
-            //services.AddTransient<IRepositoryBase<Document>, RepositoryBase<Document>>();
-
             services.AddCors(o => o.AddPolicy("EnableCors", builder =>
             {
                 builder.AllowAnyOrigin()
                        .AllowAnyMethod()
                        .AllowAnyHeader();
             }));
+
+            services.AddDbContext<AutoDocContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("Server=(localdb)\\mssqllocaldb;Database=AutoDoc;Trusted_Connection=True;")));
+
+            services.AddTransient<IRepositoryBase<Document>, RepositoryBase<Document>>();
+            //services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
+            services.AddTransient<IDocumentService, DocumentService>();
+            //services.AddScoped(typeof(IDocumentService), typeof(DocumentService));
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)

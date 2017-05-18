@@ -14,6 +14,7 @@ using AutoDoc.BL.ModelsUtilities;
 using AutoDoc.DAL.Repository;
 using AutoDoc.DAL.Entities;
 using AutoDoc.Mappers;
+using AutoDoc.DAL.Services;
 
 namespace AutoDoc.Controllers
 {
@@ -22,14 +23,15 @@ namespace AutoDoc.Controllers
     public class DocumentController : DefaultController
     {
         private IHostingEnvironment _hostingEnvironment;
-        private IRepositoryBase<Document> _repositoryDocument;
+        private IDocumentService _documentService;
         private DocumentMapper _documentMapper;
         private BookmarkMapper _bookmarkMapper;
 
-        public DocumentController(IHostingEnvironment hostingEnvironment, IRepositoryBase<Document> repositoryDocument, DocumentMapper documentMapper, BookmarkMapper bookmarkMapper)
+        public DocumentController(IHostingEnvironment hostingEnvironment,
+            IDocumentService documentService, DocumentMapper documentMapper, BookmarkMapper bookmarkMapper)
         {
             _hostingEnvironment = hostingEnvironment;
-            _repositoryDocument = repositoryDocument;
+            _documentService = documentService;
             _documentMapper = documentMapper;
             _bookmarkMapper = bookmarkMapper;
         }
@@ -50,7 +52,7 @@ namespace AutoDoc.Controllers
             }
 
             var document = _documentMapper.GetDocument(file.FileName, filePath);
-            _repositoryDocument.Add(document);
+            _documentService.CreateDocument(document);
 
             var doc = DocumentCore.OpenDocument(filePath);
             var bookmarksList = WordBookmarkParser.FindAllBookmarks(doc);
@@ -64,7 +66,7 @@ namespace AutoDoc.Controllers
         [Route("ReplaceBookmarks")]
         public int ReplaceBookmarks(BookmarksListJsonModel bookmarkList)
         {
-            var document = _repositoryDocument.GetById(bookmarkList.DocumentId);
+            var document = _documentService.GetDocument(bookmarkList.DocumentId);
             var doc = DocumentCore.OpenDocument(document.Path);
 
             foreach (var bookmarks in bookmarkList.Bookmarks)

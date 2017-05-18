@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using AutoDoc.DAL.Entities;
+﻿using AutoDoc.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -9,10 +6,13 @@ namespace AutoDoc.DAL.Context
 {
     public class AutoDocContext : DbContext
     {
-        public AutoDocContext(DbContextOptions<AutoDocContext> options) : base(options) { }
-
         public DbSet<Bookmark> Bookmarks { get; set; }
         public DbSet<Document> Documents { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=AutoDoc;Trusted_Connection=True;");
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -10,6 +10,6 @@ namespace AutoDoc.DAL.Entities
         public string Name { get; set; }
         public string Message { get; set; }
 
-        public Document Document { get; set; }
+        public virtual Document Document { get; set; }
     }
 }
