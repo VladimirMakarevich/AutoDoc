@@ -24,16 +24,16 @@ namespace AutoDoc.Controllers
     {
         private IHostingEnvironment _hostingEnvironment;
         private IDocumentService _documentService;
-        private DocumentMapper _documentMapper;
-        private BookmarkMapper _bookmarkMapper;
+        public DocumentMapper _documentMapper = new DocumentMapper();
+        public BookmarkMapper _bookmarkMapper = new BookmarkMapper();
 
         public DocumentController(IHostingEnvironment hostingEnvironment,
-            IDocumentService documentService, DocumentMapper documentMapper, BookmarkMapper bookmarkMapper)
+            IDocumentService documentService)
         {
             _hostingEnvironment = hostingEnvironment;
             _documentService = documentService;
-            _documentMapper = documentMapper;
-            _bookmarkMapper = bookmarkMapper;
+            //_documentMapper = documentMapper;
+            //_bookmarkMapper = bookmarkMapper;
         }
 
         [HttpPost]

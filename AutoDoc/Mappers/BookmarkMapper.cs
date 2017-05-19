@@ -9,12 +9,12 @@ namespace AutoDoc.Mappers
 {
     public class BookmarkMapper
     {
-        private IMapper _mapper;
+        //private readonly IMapper _mapper;
 
-        public BookmarkMapper(IMapper mapper)
-        {
-            _mapper = mapper;
-        }
+        //public BookmarkMapper(IMapper mapper)
+        //{
+        //    _mapper = mapper;
+        //}
 
         public BookmarksListJsonModel GetBookmarksListJsonModel(List<string> bookmarksList)
         {

@@ -10,12 +10,12 @@ namespace AutoDoc.Mappers
 {
     public class DocumentMapper
     {
-        private IMapper _mapper;
+        //private readonly IMapper _mapper;
 
-        public DocumentMapper(IMapper mapper)
-        {
-            _mapper = mapper;
-        }
+        //public DocumentMapper(IMapper mapper)
+        //{
+        //    _mapper = mapper;
+        //}
 
         public Document GetDocument(string fileName, string filePath)
         {

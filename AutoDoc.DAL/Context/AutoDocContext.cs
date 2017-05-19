@@ -9,10 +9,15 @@ namespace AutoDoc.DAL.Context
         public DbSet<Bookmark> Bookmarks { get; set; }
         public DbSet<Document> Documents { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=AutoDoc;Trusted_Connection=True;");
+        public AutoDocContext(DbContextOptions<AutoDocContext> options)
+            : base(options)
+        { 
         }
+
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=AutoDoc;Trusted_Connection=True;");
+        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

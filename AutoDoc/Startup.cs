@@ -33,12 +33,24 @@ namespace AutoDoc
 
         public void ConfigureServices(IServiceCollection services)
         {
+            string connection = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<AutoDocContext>(options => options.UseSqlServer(connection));
+
+            //services.AddDbContext<AutoDocContext>(options =>
+            //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddMvc();
 
-            var config = AutoMapperConfig.GetMapper(services);
-            var mapper = config.GetMappers();
+            services.AddTransient<IRepositoryBase<Document>, RepositoryBase<Document>>();
+            //services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
+            services.AddTransient<IDocumentService, DocumentService>();
+            //services.AddScoped(typeof(IDocumentService), typeof(DocumentService));
 
-            services.AddSingleton(mapper);
+            //var config = AutoMapperConfig.GetMapper(services);
+            //var mapper = config.GetMappers();
+            //services.AddSingleton(mapper);
+            //services.AddSingleton<DocumentMapper>();
+            services.AddAutoMapper();
 
             services.AddCors(o => o.AddPolicy("EnableCors", builder =>
             {
@@ -46,14 +58,6 @@ namespace AutoDoc
                        .AllowAnyMethod()
                        .AllowAnyHeader();
             }));
-
-            services.AddDbContext<AutoDocContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("Server=(localdb)\\mssqllocaldb;Database=AutoDoc;Trusted_Connection=True;")));
-
-            services.AddTransient<IRepositoryBase<Document>, RepositoryBase<Document>>();
-            //services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
-            services.AddTransient<IDocumentService, DocumentService>();
-            //services.AddScoped(typeof(IDocumentService), typeof(DocumentService));
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
