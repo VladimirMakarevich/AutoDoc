@@ -26,5 +26,10 @@ namespace AutoDoc.DAL.Services
         {
             _baseRepository.Add(document);
         }
+
+        public IEnumerable<Document> GetAll()
+        {
+            return _baseRepository.GetAll();
+        }
     }
 }

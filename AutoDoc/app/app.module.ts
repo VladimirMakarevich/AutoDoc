@@ -25,7 +25,9 @@ const appRoutingProviders: any[] = [
 	providers: [{provide: APP_BASE_HREF, useValue : '/' }],
     declarations: [AppComponent,
         DocumentComponent,
-        ErrorComponent],
+        DownDocumentComponent,
+        ErrorComponent,
+        BookmarkComponent],
     exports: [AppComponent, RouterModule ],
     bootstrap: [AppComponent],
 })

@@ -24,21 +24,26 @@ namespace AutoDoc.Controllers
     {
         private IHostingEnvironment _hostingEnvironment;
         private IDocumentService _documentService;
-        public DocumentMapper _documentMapper = new DocumentMapper();
-        public BookmarkMapper _bookmarkMapper = new BookmarkMapper();
+        private IBookmarkService _bookmarkService;
+        public DocumentMapper _documentMapper;
+        public BookmarkMapper _bookmarkMapper;
 
         public DocumentController(IHostingEnvironment hostingEnvironment,
-            IDocumentService documentService)
+            IDocumentService documentService,
+            IBookmarkService bookmarkService,
+            DocumentMapper documentMapper,
+            BookmarkMapper bookmarkMapper)
         {
             _hostingEnvironment = hostingEnvironment;
             _documentService = documentService;
-            //_documentMapper = documentMapper;
-            //_bookmarkMapper = bookmarkMapper;
+            _bookmarkService = bookmarkService;
+            _documentMapper = documentMapper;
+            _bookmarkMapper = bookmarkMapper;
         }
 
         [HttpPost]
-        [Route("UploadFiles")]
-        public async Task<List<BookmarkJsonModel>> UploadFile(IFormFile file)
+        [Route("UploadFile")]
+        public async Task<DocumentJsonModel> UploadFile(IFormFile file)
         {
             if (file == null) throw new Exception("File is null");
             if (file.Length == 0) throw new Exception("File is empty");
@@ -51,15 +56,23 @@ namespace AutoDoc.Controllers
                 await file.CopyToAsync(fileStream);
             }
 
-            var document = _documentMapper.GetDocument(file.FileName, filePath);
-            _documentService.CreateDocument(document);
-
             var doc = DocumentCore.OpenDocument(filePath);
             var bookmarksList = WordBookmarkParser.FindAllBookmarks(doc);
 
-            var bookmarksJsonModel = _bookmarkMapper.GetBookmarksListJsonModel(bookmarksList);
+            var bookmarks = _bookmarkMapper.ToBookmarks(bookmarksList);
+            var document = _documentMapper.ToDocument(file.FileName, filePath, bookmarks);
+            _documentService.CreateDocument(document);
 
-            return bookmarksJsonModel;
+            //var bookmark = _bookmarkMapper.ToBookmark(bookmarksJsonModel);
+            //_bookmarkService.CreateBookmark
+
+            //var documentId = _documentService.GetAll().LastOrDefault().Id;
+            //var documentJsonModel = _documentMapper.ToDocumentJsonModel(bookmarksJsonModel, documentId);
+
+            var documentLast = _documentService.GetAll().LastOrDefault();
+            var documentJsonModel = _documentMapper.ToDocumentJsonModel(documentLast);
+
+            return documentJsonModel;
         }
 
         [HttpPost]

@@ -2,7 +2,7 @@
 
 @Component({
     selector: 'download-document',
-    templateUrl: 'app/components/document/download/updocument.component.html',
+    templateUrl: 'app/components/document/download/downdocument.component.html',
 })
 
 export class DownDocumentComponent {

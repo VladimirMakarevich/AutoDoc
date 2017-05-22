@@ -1,4 +1,6 @@
 ﻿import { Component, OnInit } from '@angular/core';
+import { Bookmark } from '../../models/bookmarks/bookmark.type';
+import { Document } from '../../models/document/document.type';
 
 @Component({
     selector: 'bookmarks-replace',
@@ -7,7 +9,8 @@
 
 export class BookmarkComponent {
 
-    constructor() {
+    constructor(private bookmark: Bookmark,
+        private document: Document) {
     }
 
     uploadBookmarks() {

@@ -14,6 +14,7 @@ const router_1 = require("@angular/router");
 const http_1 = require("@angular/http");
 const app_component_1 = require("./components/app.component");
 const document_component_1 = require("./components/document/upload/document.component");
+const downdocument_component_1 = require("./components/document/download/downdocument.component");
 const bookmarks_component_1 = require("./components/bookmarks/bookmarks.component");
 const error_component_1 = require("./components/error/error.component");
 const routes = [
@@ -31,7 +32,9 @@ AppModule = __decorate([
         providers: [{ provide: common_1.APP_BASE_HREF, useValue: '/' }],
         declarations: [app_component_1.AppComponent,
             document_component_1.DocumentComponent,
-            error_component_1.ErrorComponent],
+            downdocument_component_1.DownDocumentComponent,
+            error_component_1.ErrorComponent,
+            bookmarks_component_1.BookmarkComponent],
         exports: [app_component_1.AppComponent, router_1.RouterModule],
         bootstrap: [app_component_1.AppComponent],
     })

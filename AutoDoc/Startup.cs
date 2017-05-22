@@ -36,21 +36,16 @@ namespace AutoDoc
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<AutoDocContext>(options => options.UseSqlServer(connection));
 
-            //services.AddDbContext<AutoDocContext>(options =>
-            //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
             services.AddMvc();
+            services.AddAutoMapper(typeof(Startup));
+
+            services.AddSingleton<BookmarkMapper, BookmarkMapper>();
+            services.AddSingleton<DocumentMapper, DocumentMapper>();
 
             services.AddTransient<IRepositoryBase<Document>, RepositoryBase<Document>>();
-            //services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
             services.AddTransient<IDocumentService, DocumentService>();
-            //services.AddScoped(typeof(IDocumentService), typeof(DocumentService));
-
-            //var config = AutoMapperConfig.GetMapper(services);
-            //var mapper = config.GetMappers();
-            //services.AddSingleton(mapper);
-            //services.AddSingleton<DocumentMapper>();
-            services.AddAutoMapper();
+            services.AddTransient<IRepositoryBase<Bookmark>, RepositoryBase<Bookmark>>();
+            services.AddTransient<IBookmarkService, BookmarkService>();
 
             services.AddCors(o => o.AddPolicy("EnableCors", builder =>
             {

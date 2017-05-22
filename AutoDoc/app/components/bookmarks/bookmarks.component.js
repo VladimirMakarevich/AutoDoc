@@ -10,8 +10,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular/core");
+const bookmark_type_1 = require("../../models/bookmarks/bookmark.type");
+const document_type_1 = require("../../models/document/document.type");
 let BookmarkComponent = class BookmarkComponent {
-    constructor() {
+    constructor(bookmark, document) {
+        this.bookmark = bookmark;
+        this.document = document;
     }
     uploadBookmarks() {
     }
@@ -21,7 +25,8 @@ BookmarkComponent = __decorate([
         selector: 'bookmarks-replace',
         templateUrl: 'app/components/bookmarks/bookmarks.component.html',
     }),
-    __metadata("design:paramtypes", [])
+    __metadata("design:paramtypes", [bookmark_type_1.Bookmark,
+        document_type_1.Document])
 ], BookmarkComponent);
 exports.BookmarkComponent = BookmarkComponent;
 //# sourceMappingURL=bookmarks.component.js.map
