@@ -22,7 +22,6 @@ namespace AutoDoc.DAL.Repository
 
         public virtual void Add(T entity)
         {
-            //_dataContext.Add(entity);
             _dataContext.Entry(entity).State = EntityState.Added;
             _dbSet.Add(entity);
             _dataContext.SaveChanges();

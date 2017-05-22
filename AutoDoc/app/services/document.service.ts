@@ -31,7 +31,9 @@ export class DocumentService {
         return this.http
             .post("http://localhost:50348/api/Document/UploadFile", input)
                             .map(response => response.json() as Document)
-                            .toPromise();
+            .toPromise();
+
+        localStorage.setItem('currentUser', JSON.stringify({ name: name }));
     }
 
     download(fileToDownload: any) {

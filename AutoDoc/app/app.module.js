@@ -17,8 +17,6 @@ const document_component_1 = require("./components/document/upload/document.comp
 const downdocument_component_1 = require("./components/document/download/downdocument.component");
 const bookmarks_component_1 = require("./components/bookmarks/bookmarks.component");
 const error_component_1 = require("./components/error/error.component");
-const document_service_1 = require("./services/document.service");
-const bookmark_service_1 = require("./services/bookmark.service");
 const routes = [
     { path: '', component: app_component_1.AppComponent },
     { path: 'document', component: document_component_1.DocumentComponent },
@@ -32,7 +30,7 @@ let AppModule = class AppModule {
 AppModule = __decorate([
     core_1.NgModule({
         imports: [platform_browser_1.BrowserModule, forms_1.FormsModule, http_1.HttpModule, router_1.RouterModule.forRoot(routes)],
-        providers: [{ provide: common_1.APP_BASE_HREF, useValue: '/' }, bookmark_service_1.BookmarkService, document_service_1.DocumentService],
+        providers: [{ provide: common_1.APP_BASE_HREF, useValue: '/' }],
         declarations: [app_component_1.AppComponent,
             document_component_1.DocumentComponent,
             downdocument_component_1.DownDocumentComponent,

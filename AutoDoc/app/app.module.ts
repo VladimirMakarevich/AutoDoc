@@ -13,6 +13,7 @@ import { ErrorComponent } from './components/error/error.component';
 
 import { DocumentService } from './services/document.service';
 import { BookmarkService } from './services/bookmark.service';
+import { DataService } from './services/data.service';
 
 const routes: Routes = [
     { path: '', component: AppComponent },
@@ -27,14 +28,14 @@ const appRoutingProviders: any[] = [
 
 @NgModule({
     imports: [BrowserModule, FormsModule, HttpModule, RouterModule.forRoot(routes)],
-    providers: [{ provide: APP_BASE_HREF, useValue: '/' }, BookmarkService, DocumentService],
+    providers: [{ provide: APP_BASE_HREF, useValue: '/' }],
     declarations: [AppComponent,
         DocumentComponent,
         DownDocumentComponent,
         ErrorComponent,
         BookmarkComponent],
     exports: [AppComponent, RouterModule ],
-    bootstrap: [AppComponent],
+    bootstrap: [AppComponent ],
 })
 
 export class AppModule { }

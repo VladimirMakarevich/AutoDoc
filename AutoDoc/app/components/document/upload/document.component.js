@@ -11,14 +11,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular/core");
 const document_service_1 = require("../../../services/document.service");
+const data_service_1 = require("../../../services/data.service");
 const router_1 = require("@angular/router");
 let DocumentComponent = class DocumentComponent {
-    constructor(documentService, router) {
+    constructor(documentService, dataservice, router) {
         this.documentService = documentService;
+        this.dataservice = dataservice;
         this.router = router;
+        this.hero = {
+            name: "Utpal Kumar Das"
+        };
     }
-    navigateToBookmarks() {
-        //this.router.navigate(['bookmarks', this.document]);
+    ngOnInit() {
+    }
+    ngOnDestroy() {
+        this.dataservice.document = this.document;
+        this.dataservice.hero = this.hero;
+    }
+    navigateToBookmarks(document) {
+        document = this.document;
         this.router.navigate(['bookmarks']);
     }
     addFile() {
@@ -31,7 +42,7 @@ let DocumentComponent = class DocumentComponent {
                 console.log(document.bookmarks);
                 console.log(document.id);
                 this.document = document;
-                this.navigateToBookmarks();
+                this.navigateToBookmarks(document);
             });
             //.subscribe(response => {
             //    console.log(response);
@@ -49,9 +60,9 @@ DocumentComponent = __decorate([
     core_1.Component({
         selector: 'document',
         templateUrl: 'app/components/document/upload/document.component.html',
-        providers: [document_service_1.DocumentService]
+        providers: [document_service_1.DocumentService, data_service_1.DataService]
     }),
-    __metadata("design:paramtypes", [document_service_1.DocumentService,
+    __metadata("design:paramtypes", [document_service_1.DocumentService, data_service_1.DataService,
         router_1.Router])
 ], DocumentComponent);
 exports.DocumentComponent = DocumentComponent;
