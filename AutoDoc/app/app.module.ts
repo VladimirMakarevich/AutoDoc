@@ -5,7 +5,8 @@ import { APP_BASE_HREF } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpModule }   from '@angular/http';
 import { AppComponent } from './components/app.component';
-import { DocumentComponent } from './components/document/document.component';
+import { DocumentComponent } from './components/document/upload/updocument.component';
+import { DownloadDocumentComponent } from './components/document/download/downdocument.component';
 import { ErrorComponent } from './components/error/error.component';
 
 const routes: Routes = [

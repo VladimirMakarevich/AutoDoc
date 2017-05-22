@@ -1,0 +1,10 @@
+﻿<div>
+	<h2>Your Bookmarks</h2>
+	<ul>
+		<li *ngFor="let bookmark of bookmarks">
+			<span class="badge">{{bookmark.id}}</span> {{bookmark.name}}
+			<input [(ngModel)]="bookmark.message" placeholder="" />
+		</li>
+	</ul>
+	<button (click)="uploadBookmarks()">Upload</button>
+</div>

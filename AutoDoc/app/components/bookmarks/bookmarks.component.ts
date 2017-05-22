@@ -7,4 +7,10 @@
 
 export class BookmarksComponent {
 
+    constructor() {
+    }
+
+    uploadBookmarks() {
+
+    }
 }

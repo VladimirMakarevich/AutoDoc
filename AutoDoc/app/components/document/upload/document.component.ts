@@ -1,9 +1,9 @@
 ﻿import { Component, OnInit, ViewChild, ViewChildren } from '@angular/core';
-import { DocumentService } from '../../services/document.service';
+import { DocumentService } from '../../../services/document.service';
 
 @Component({
     selector: 'document',
-    templateUrl: 'app/components/document/document.component.html',
+    templateUrl: 'app/components/document/upload/document.component.html',
     providers: [DocumentService]
 })
 
