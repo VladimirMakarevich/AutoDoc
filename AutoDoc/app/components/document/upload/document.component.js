@@ -10,10 +10,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular/core");
-const document_service_1 = require("../../services/document.service");
+const document_service_1 = require("../../../services/document.service");
+const router_1 = require("@angular/router");
 let DocumentComponent = class DocumentComponent {
-    constructor(documentService) {
+    constructor(documentService, router) {
         this.documentService = documentService;
+        this.router = router;
+    }
+    navigateToBookmarks() {
+        this.router.navigate(['bookmarks', this.bookmarks]);
     }
     addFile() {
         let fi = this.fileInput.nativeElement;
@@ -21,9 +26,10 @@ let DocumentComponent = class DocumentComponent {
             let fileToUpload = fi.files[0];
             this.documentService
                 .upload(fileToUpload)
-                .subscribe(res => {
-                console.log(res);
-                this.bookmarks = res;
+                .subscribe(response => {
+                console.log(response);
+                this.bookmarks = response;
+                this.navigateToBookmarks();
             });
         }
     }
@@ -34,11 +40,12 @@ __decorate([
 ], DocumentComponent.prototype, "fileInput", void 0);
 DocumentComponent = __decorate([
     core_1.Component({
-        selector: 'document',
-        templateUrl: 'app/components/document/document.component.html',
+        selector: 'upload-document',
+        templateUrl: 'app/components/document/upload/document.component.html',
         providers: [document_service_1.DocumentService]
     }),
-    __metadata("design:paramtypes", [document_service_1.DocumentService])
+    __metadata("design:paramtypes", [document_service_1.DocumentService,
+        router_1.Router])
 ], DocumentComponent);
 exports.DocumentComponent = DocumentComponent;
 //# sourceMappingURL=document.component.js.map

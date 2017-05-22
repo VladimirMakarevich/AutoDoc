@@ -13,9 +13,6 @@ AppComponent = __decorate([
     core_1.Component({
         selector: 'autodoc-app',
         template: `<div>
-                    <div>
-                        <h2>AutDoc App</h2>
-                    </div>
                     <router-outlet></router-outlet>
                 </div>`,
     })

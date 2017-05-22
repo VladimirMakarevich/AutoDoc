@@ -13,11 +13,13 @@ const common_1 = require("@angular/common");
 const router_1 = require("@angular/router");
 const http_1 = require("@angular/http");
 const app_component_1 = require("./components/app.component");
-const document_component_1 = require("./components/document/document.component");
+const document_component_1 = require("./components/document/upload/document.component");
+const bookmarks_component_1 = require("./components/bookmarks/bookmarks.component");
 const error_component_1 = require("./components/error/error.component");
 const routes = [
     { path: '', component: app_component_1.AppComponent },
     { path: 'document', component: document_component_1.DocumentComponent },
+    { path: 'bookmarks', component: bookmarks_component_1.BookmarkComponent },
     { path: '**', component: error_component_1.ErrorComponent }
 ];
 const appRoutingProviders = [];

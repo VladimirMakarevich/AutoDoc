@@ -7,13 +7,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular/core");
-let BookmarksComponent = class BookmarksComponent {
+let DownDocumentComponent = class DownDocumentComponent {
 };
-BookmarksComponent = __decorate([
+DownDocumentComponent = __decorate([
     core_1.Component({
-        selector: 'bookmarks',
-        templateUrl: 'app/components/bookmarks/bookmarks.component.html',
+        selector: 'download-document',
+        templateUrl: 'app/components/document/download/updocument.component.html',
     })
-], BookmarksComponent);
-exports.BookmarksComponent = BookmarksComponent;
-//# sourceMappingURL=bookmarks.component.js.map
+], DownDocumentComponent);
+exports.DownDocumentComponent = DownDocumentComponent;
+//# sourceMappingURL=downdocument.component.js.map

@@ -1,6 +1,6 @@
-﻿import { Bookmark } from './bookmark.type';
+﻿import { Bookmark } from '../../models/bookmarks/bookmark.type';
 
 export class Document {
     id: number;
-    Bookmark: Bookmark[];
+    bookmarks: Bookmark[];
 }

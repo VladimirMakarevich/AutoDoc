@@ -1,11 +1,11 @@
 ﻿import { Component, OnInit } from '@angular/core';
 
 @Component({
-    selector: 'bookmarks',
+    selector: 'bookmarks-replace',
     templateUrl: 'app/components/bookmarks/bookmarks.component.html',
 })
 
-export class BookmarksComponent {
+export class BookmarkComponent {
 
     constructor() {
     }

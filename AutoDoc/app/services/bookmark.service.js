@@ -11,6 +11,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular/core");
 const http_1 = require("@angular/http");
+const http_2 = require("@angular/http");
+const http_3 = require("@angular/http");
 require("rxjs/add/operator/catch");
 require("rxjs/add/operator/debounceTime");
 require("rxjs/add/operator/distinctUntilChanged");
@@ -23,16 +25,15 @@ let DocumentService = class DocumentService {
     constructor(http) {
         this.http = http;
     }
-    upload(fileToUpload) {
-        let input = new FormData();
-        input.append("file", fileToUpload);
-        return this.http
-            .post("http://localhost:50348/api/Document/UploadFile", input);
-    }
-    download(fileToDownload) {
-        let body = JSON.stringify(fileToDownload);
-        return this.http
-            .get("http://localhost:50348/api/Document/DownloadDocument", body);
+    upload(obj) {
+        let headers = new http_2.Headers({ 'Content-Type': 'application/json' });
+        headers.append('Accept', 'application/json; charset=utf-8');
+        headers.append('Access-Control-Allow-Methods', 'POST, GET, DELETE, PUT');
+        headers.append('Access-Control-Allow-Headers', "X-Requested-With, Content-Type, Origin, Authorization, Accept, Client-Security-Token, Accept-Encoding");
+        let options = new http_3.RequestOptions({ method: 'POST', headers: headers });
+        let body = JSON.stringify(obj);
+        let url = "http://localhost:50348/api/Document/ReplaceBookmarks";
+        return this.http.post(url, body, options);
     }
 };
 DocumentService = __decorate([
@@ -40,4 +41,4 @@ DocumentService = __decorate([
     __metadata("design:paramtypes", [http_1.Http])
 ], DocumentService);
 exports.DocumentService = DocumentService;
-//# sourceMappingURL=document.service.js.map
+//# sourceMappingURL=bookmark.service.js.map

@@ -2,7 +2,7 @@
 	<h2>Your Bookmarks</h2>
 	<ul>
 		<li *ngFor="let bookmark of bookmarks">
-			<span class="badge">{{bookmark.id}}</span> {{bookmark.name}}
+			<span class="badge">{{document.bookmarks.id}}</span> {{document.bookmarks.name}}
 			<input [(ngModel)]="bookmark.message" placeholder="" />
 		</li>
 	</ul>

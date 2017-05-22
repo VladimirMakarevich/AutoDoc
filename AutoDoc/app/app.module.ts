@@ -5,13 +5,15 @@ import { APP_BASE_HREF } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpModule }   from '@angular/http';
 import { AppComponent } from './components/app.component';
-import { DocumentComponent } from './components/document/upload/updocument.component';
-import { DownloadDocumentComponent } from './components/document/download/downdocument.component';
+import { DocumentComponent } from './components/document/upload/document.component';
+import { DownDocumentComponent } from './components/document/download/downdocument.component';
+import { BookmarkComponent } from './components/bookmarks/bookmarks.component';
 import { ErrorComponent } from './components/error/error.component';
 
 const routes: Routes = [
     { path: '', component: AppComponent },
     { path: 'document', component: DocumentComponent },
+    { path: 'bookmarks', component: BookmarkComponent },
     { path: '**', component: ErrorComponent }
 ];
 
