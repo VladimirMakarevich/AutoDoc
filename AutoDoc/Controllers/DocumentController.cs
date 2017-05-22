@@ -64,12 +64,12 @@ namespace AutoDoc.Controllers
 
         [HttpPost]
         [Route("ReplaceBookmarks")]
-        public int ReplaceBookmarks(BookmarksListJsonModel bookmarkList)
+        public int ReplaceBookmarks(DocumentJsonModel documentJsonModel)
         {
-            var document = _documentService.GetDocument(bookmarkList.DocumentId);
+            var document = _documentService.GetDocument(documentJsonModel.Id);
             var doc = DocumentCore.OpenDocument(document.Path);
 
-            foreach (var bookmarks in bookmarkList.Bookmarks)
+            foreach (var bookmarks in document.Bookmarks)
             {
                 var wordprocessingText = TextUtil.GetText(bookmarks.Message);
                 WordBookmarkParser.ReplaceBookmark(doc, bookmarks.Name, wordprocessingText);
