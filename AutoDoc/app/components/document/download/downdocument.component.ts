@@ -1,7 +1,7 @@
 ﻿import { Component, OnInit } from '@angular/core';
 
 @Component({
-    selector: 'download-document',
+    selector: 'downdocument',
     templateUrl: 'app/components/document/download/downdocument.component.html',
 })
 

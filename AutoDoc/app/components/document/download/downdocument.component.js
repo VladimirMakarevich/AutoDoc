@@ -11,7 +11,7 @@ let DownDocumentComponent = class DownDocumentComponent {
 };
 DownDocumentComponent = __decorate([
     core_1.Component({
-        selector: 'download-document',
+        selector: 'downdocument',
         templateUrl: 'app/components/document/download/downdocument.component.html',
     })
 ], DownDocumentComponent);

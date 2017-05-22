@@ -1,4 +1,10 @@
 ﻿<div>
 	<h2>Your Bookmarks</h2>
-	<button (click)="uploadBookmarks()">Upload</button>
+        <ul>
+        <li *ngFor="let bookmark of document.bookmarks">
+            <span>{{bookmark.id}}</span> {{bookmark.name}}
+            <input [(ngModel)]="bookmark.message" placeholder="New Value" />
+        </li>
+    </ul>
+	<button (click)="uploadBookmarks(document.id)">Set</button>
 </div>

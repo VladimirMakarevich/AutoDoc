@@ -14,7 +14,7 @@ import 'rxjs/add/observable/throw';
 import 'rxjs/Rx';
 
 @Injectable()
-export class DocumentService {
+export class BookmarkService {
 
     constructor(private http: Http) {
 

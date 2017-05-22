@@ -18,7 +18,8 @@ let DocumentComponent = class DocumentComponent {
         this.router = router;
     }
     navigateToBookmarks() {
-        this.router.navigate(['bookmarks', this.bookmarks]);
+        //this.router.navigate(['bookmarks', this.document]);
+        this.router.navigate(['bookmarks']);
     }
     addFile() {
         let fi = this.fileInput.nativeElement;
@@ -26,11 +27,17 @@ let DocumentComponent = class DocumentComponent {
             let fileToUpload = fi.files[0];
             this.documentService
                 .upload(fileToUpload)
-                .subscribe(response => {
-                console.log(response);
-                this.bookmarks = response;
+                .then(document => {
+                console.log(document.bookmarks);
+                console.log(document.id);
+                this.document = document;
                 this.navigateToBookmarks();
             });
+            //.subscribe(response => {
+            //    console.log(response);
+            //    this.document = response;
+            //    this.navigateToBookmarks()
+            //});
         }
     }
 };
@@ -40,7 +47,7 @@ __decorate([
 ], DocumentComponent.prototype, "fileInput", void 0);
 DocumentComponent = __decorate([
     core_1.Component({
-        selector: 'upload-document',
+        selector: 'document',
         templateUrl: 'app/components/document/upload/document.component.html',
         providers: [document_service_1.DocumentService]
     }),

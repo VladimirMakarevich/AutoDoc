@@ -21,7 +21,7 @@ require("rxjs/add/operator/switchMap");
 require("rxjs/add/operator/toPromise");
 require("rxjs/add/observable/throw");
 require("rxjs/Rx");
-let DocumentService = class DocumentService {
+let BookmarkService = class BookmarkService {
     constructor(http) {
         this.http = http;
     }
@@ -36,9 +36,9 @@ let DocumentService = class DocumentService {
         return this.http.post(url, body, options);
     }
 };
-DocumentService = __decorate([
+BookmarkService = __decorate([
     core_1.Injectable(),
     __metadata("design:paramtypes", [http_1.Http])
-], DocumentService);
-exports.DocumentService = DocumentService;
+], BookmarkService);
+exports.BookmarkService = BookmarkService;
 //# sourceMappingURL=bookmark.service.js.map

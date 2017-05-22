@@ -27,7 +27,9 @@ let DocumentService = class DocumentService {
         let input = new FormData();
         input.append("file", fileToUpload);
         return this.http
-            .post("http://localhost:50348/api/Document/UploadFile", input);
+            .post("http://localhost:50348/api/Document/UploadFile", input)
+            .map(response => response.json())
+            .toPromise();
     }
     download(fileToDownload) {
         let body = JSON.stringify(fileToDownload);

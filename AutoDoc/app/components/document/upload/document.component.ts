@@ -1,23 +1,26 @@
 ﻿import { Component, OnInit, ViewChild, ViewChildren } from '@angular/core';
 import { DocumentService } from '../../../services/document.service';
+import { Bookmark } from '../../../models/bookmarks/bookmark.type';
+import { Document } from '../../../models/document/document.type';
 import { Router } from '@angular/router';
 
 @Component({
-    selector: 'upload-document',
+    selector: 'document',
     templateUrl: 'app/components/document/upload/document.component.html',
     providers: [DocumentService]
 })
 
 export class DocumentComponent {
 
-    private bookmarks: any;
+    private document: any;
 
     constructor(private documentService: DocumentService,
         private router: Router) {
     }
 
     navigateToBookmarks() {
-        this.router.navigate(['bookmarks', this.bookmarks]);
+        //this.router.navigate(['bookmarks', this.document]);
+        this.router.navigate(['bookmarks']);
     }
 
 
@@ -29,11 +32,17 @@ export class DocumentComponent {
             let fileToUpload = fi.files[0];
             this.documentService
                 .upload(fileToUpload)
-                .subscribe(response => {
-                    console.log(response);
-                    this.bookmarks = response;
+                .then(document => {
+                    console.log(document.bookmarks);
+                    console.log(document.id);
+                    this.document = document;
                     this.navigateToBookmarks()
                 });
+                //.subscribe(response => {
+                //    console.log(response);
+                //    this.document = response;
+                //    this.navigateToBookmarks()
+                //});
         }
     }
 }

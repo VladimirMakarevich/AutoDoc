@@ -2,7 +2,10 @@
 import { Http } from '@angular/http';
 import { Response, Headers } from '@angular/http';
 import { Observable } from 'rxjs';
-import { RequestOptions, Request, RequestMethod } from '@angular/http'
+import { RequestOptions, Request, RequestMethod } from '@angular/http';
+
+import { Bookmark } from '../models/bookmarks/bookmark.type';
+import { Document } from '../models/document/document.type';
 
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/debounceTime';
@@ -26,7 +29,9 @@ export class DocumentService {
         input.append("file", fileToUpload);
 
         return this.http
-            .post("http://localhost:50348/api/Document/UploadFile", input);
+            .post("http://localhost:50348/api/Document/UploadFile", input)
+                            .map(response => response.json() as Document)
+                            .toPromise();
     }
 
     download(fileToDownload: any) {

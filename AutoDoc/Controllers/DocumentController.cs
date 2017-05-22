@@ -72,6 +72,8 @@ namespace AutoDoc.Controllers
             var documentLast = _documentService.GetAll().LastOrDefault();
             var documentJsonModel = _documentMapper.ToDocumentJsonModel(documentLast);
 
+            DocumentCore.CloseDocument(doc);
+
             return documentJsonModel;
         }
 
