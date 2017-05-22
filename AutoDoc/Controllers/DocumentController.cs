@@ -38,7 +38,7 @@ namespace AutoDoc.Controllers
 
         [HttpPost]
         [Route("UploadFiles")]
-        public async Task<BookmarksListJsonModel> UploadFiles(IFormFile file)
+        public async Task<BookmarkJsonModel> UploadFile(IFormFile file)
         {
             if (file == null) throw new Exception("File is null");
             if (file.Length == 0) throw new Exception("File is empty");
@@ -57,9 +57,9 @@ namespace AutoDoc.Controllers
             var doc = DocumentCore.OpenDocument(filePath);
             var bookmarksList = WordBookmarkParser.FindAllBookmarks(doc);
 
-            var bookmarksListJsonModel = _bookmarkMapper.GetBookmarksListJsonModel(bookmarksList);
+            var bookmarksJsonModel = _bookmarkMapper.GetBookmarksListJsonModel(bookmarksList);
 
-            return bookmarksListJsonModel;
+            return bookmarksJsonModel;
         }
 
         [HttpPost]
@@ -75,8 +75,19 @@ namespace AutoDoc.Controllers
                 WordBookmarkParser.ReplaceBookmark(doc, bookmarks.Name, wordprocessingText);
             }
 
-            //TODO: replace It
             return document.Id;
+        }
+
+        [HttpGet]
+        [Route("DownloadDocument")]
+        public IActionResult DownloadDocument(int documentId)
+        {
+            var document = _documentService.GetDocument(documentId);
+
+            string contentType = "application/octet-stream";
+            string downloadName = document.Name;
+
+            return File(document.Path, contentType, downloadName);
         }
     }
 }

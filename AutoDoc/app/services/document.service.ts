@@ -26,6 +26,14 @@ export class DocumentService {
         input.append("file", fileToUpload);
 
         return this.http
-            .post("http://localhost:50348/api/Document/UploadFiles", input);
+            .post("http://localhost:50348/api/Document/UploadFile", input);
+    }
+
+    download(fileToDownload: any) {
+
+        let body = JSON.stringify(fileToDownload);
+
+        return this.http
+            .get("http://localhost:50348/api/Document/DownloadDocument", body);
     }
 }
