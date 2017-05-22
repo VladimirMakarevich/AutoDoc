@@ -30,6 +30,7 @@ let DocumentService = class DocumentService {
             .post("http://localhost:50348/api/Document/UploadFile", input)
             .map(response => response.json())
             .toPromise();
+        localStorage.setItem('currentUser', JSON.stringify({ name: name }));
     }
     download(fileToDownload) {
         let body = JSON.stringify(fileToDownload);
