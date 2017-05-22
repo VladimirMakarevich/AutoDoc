@@ -16,7 +16,7 @@ namespace AutoDoc.Mappers
         //    _mapper = mapper;
         //}
 
-        public BookmarksListJsonModel GetBookmarksListJsonModel(List<string> bookmarksList)
+        public List<BookmarkJsonModel> GetBookmarksListJsonModel(List<string> bookmarksList)
         {
             throw new NotImplementedException();
         }

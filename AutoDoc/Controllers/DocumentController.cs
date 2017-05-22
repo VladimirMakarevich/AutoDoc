@@ -38,7 +38,7 @@ namespace AutoDoc.Controllers
 
         [HttpPost]
         [Route("UploadFiles")]
-        public async Task<BookmarkJsonModel> UploadFile(IFormFile file)
+        public async Task<List<BookmarkJsonModel>> UploadFile(IFormFile file)
         {
             if (file == null) throw new Exception("File is null");
             if (file.Length == 0) throw new Exception("File is empty");
