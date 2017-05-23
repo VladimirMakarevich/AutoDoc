@@ -34,8 +34,8 @@ const appRoutingProviders: any[] = [
         DownDocumentComponent,
         ErrorComponent,
         BookmarkComponent],
-    exports: [AppComponent, RouterModule ],
-    bootstrap: [AppComponent ],
+    exports: [AppComponent, RouterModule],
+    bootstrap: [AppComponent],
 })
 
 export class AppModule { }

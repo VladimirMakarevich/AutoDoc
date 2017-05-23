@@ -6,6 +6,7 @@ import { Bookmark } from '../../models/bookmarks/bookmark.type';
 import { Document } from '../../models/document/document.type';
 import { Hero } from '../../models/hero.type';
 
+import { WebStorageModule, LocalStorageService } from "angular2-localstorage";
 import { Router } from '@angular/router';
 
 @Component({
@@ -25,7 +26,7 @@ import { Router } from '@angular/router';
 	<button (click)="uploadBookmarks(document.id)">Set</button>
 </div>
   `,
-    providers: [BookmarkService, DataService, Bookmark, Document]
+    providers: [BookmarkService, DataService, Bookmark, Document, DocumentComponent]
 })
 
 export class BookmarkComponent implements OnInit, OnDestroy {

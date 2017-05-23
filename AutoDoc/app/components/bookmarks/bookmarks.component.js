@@ -46,7 +46,7 @@ BookmarkComponent = __decorate([
 	<button (click)="uploadBookmarks(document.id)">Set</button>
 </div>
   `,
-        providers: [bookmark_service_1.BookmarkService, data_service_1.DataService, bookmark_type_1.Bookmark, document_type_1.Document]
+        providers: [bookmark_service_1.BookmarkService, data_service_1.DataService, bookmark_type_1.Bookmark, document_type_1.Document, DocumentComponent]
     }),
     __metadata("design:paramtypes", [bookmark_service_1.BookmarkService, data_service_1.DataService])
 ], BookmarkComponent);

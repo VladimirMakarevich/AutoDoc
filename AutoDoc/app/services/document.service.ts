@@ -33,7 +33,7 @@ export class DocumentService {
                             .map(response => response.json() as Document)
             .toPromise();
 
-        localStorage.setItem('currentUser', JSON.stringify({ name: name }));
+        //localStorage.setItem('currentUser', JSON.stringify({ name: name }));
     }
 
     download(fileToDownload: any) {
