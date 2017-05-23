@@ -42,9 +42,9 @@ namespace AutoDoc
             services.AddSingleton<BookmarkMapper, BookmarkMapper>();
             services.AddSingleton<DocumentMapper, DocumentMapper>();
 
-            services.AddTransient<IRepositoryBase<Document>, RepositoryBase<Document>>();
+            services.AddTransient<IRepositoryDocument<Document>, RepositoryDocument>();
             services.AddTransient<IDocumentService, DocumentService>();
-            services.AddTransient<IRepositoryBase<Bookmark>, RepositoryBase<Bookmark>>();
+            services.AddTransient<IRepositoryBookmark<Bookmark>, RepositoryBookmark>();
             services.AddTransient<IBookmarkService, BookmarkService>();
 
             services.AddCors(o => o.AddPolicy("EnableCors", builder =>

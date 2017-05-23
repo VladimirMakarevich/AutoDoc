@@ -14,11 +14,6 @@ namespace AutoDoc.DAL.Context
         { 
         }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=AutoDoc;Trusted_Connection=True;");
-        //}
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Bookmark>(entity =>

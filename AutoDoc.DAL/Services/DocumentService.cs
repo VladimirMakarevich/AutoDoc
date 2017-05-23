@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using AutoDoc.DAL.Entities;
 using AutoDoc.DAL.Repository;
 
@@ -9,27 +6,27 @@ namespace AutoDoc.DAL.Services
 {
     public class DocumentService : IDocumentService
     {
-        private readonly IRepositoryBase<Document> _baseRepository;
+        private readonly IRepositoryDocument<Document> _documentRepository;
 
-        public DocumentService(IRepositoryBase<Document> baseRepository)
+        public DocumentService(IRepositoryDocument<Document> documentRepository)
         {
-            this._baseRepository = baseRepository;
+            _documentRepository = documentRepository;
         }
 
         public Document GetDocument(int id)
         {
-            var document = _baseRepository.GetById(id);
+            var document = _documentRepository.GetById(id);
             return document;
         }
 
         public void CreateDocument(Document document)
         {
-            _baseRepository.Add(document);
+            _documentRepository.Add(document);
         }
 
         public IEnumerable<Document> GetAll()
         {
-            return _baseRepository.GetAll();
+            return _documentRepository.GetAll();
         }
     }
 }

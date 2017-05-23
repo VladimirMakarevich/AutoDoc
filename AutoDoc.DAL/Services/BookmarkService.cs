@@ -1,30 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using AutoDoc.DAL.Entities;
+﻿using AutoDoc.DAL.Entities;
 using AutoDoc.DAL.Repository;
 
 namespace AutoDoc.DAL.Services
 {
     public class BookmarkService : IBookmarkService
     {
-        private readonly IRepositoryBase<Bookmark> _baseRepository;
+        private readonly IRepositoryBookmark<Bookmark> _bookmarkRepository;
 
-        public BookmarkService(IRepositoryBase<Bookmark> baseRepository)
+        public BookmarkService(IRepositoryBookmark<Bookmark> bookmarkRepository)
         {
-            this._baseRepository = baseRepository;
+            _bookmarkRepository = bookmarkRepository;
         }
 
         public Bookmark GetBookmark(int id)
         {
-            var bookmark = _baseRepository.GetById(id);
+            var bookmark = _bookmarkRepository.GetById(id);
             return bookmark;
         }
 
         public void CreateBookmark(Bookmark bookmark)
         {
-            _baseRepository.Add(bookmark);
+            _bookmarkRepository.Add(bookmark);
         }
     }
 }
