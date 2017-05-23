@@ -24,7 +24,7 @@ const routes = [
     { path: '', component: app_component_1.AppComponent },
     { path: 'document', component: document_component_1.DocumentComponent },
     { path: 'bookmarks', component: bookmarks_component_1.BookmarkComponent },
-    { path: 'download-document', component: downdocument_component_1.DownDocumentComponent },
+    { path: 'downdocument/:id', component: downdocument_component_1.DownDocumentComponent },
     { path: '**', component: error_component_1.ErrorComponent }
 ];
 const appRoutingProviders = [];

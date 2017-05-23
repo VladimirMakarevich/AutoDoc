@@ -36,9 +36,9 @@ export class DocumentService {
         //localStorage.setItem('currentUser', JSON.stringify({ name: name }));
     }
 
-    download(fileToDownload: any) {
+    download(id: number) {
 
-        let body = JSON.stringify(fileToDownload);
+        let body = JSON.stringify(id);
 
         return this.http
             .get("http://localhost:50348/api/Document/DownloadDocument", body);

@@ -32,8 +32,8 @@ let DocumentService = class DocumentService {
             .toPromise();
         //localStorage.setItem('currentUser', JSON.stringify({ name: name }));
     }
-    download(fileToDownload) {
-        let body = JSON.stringify(fileToDownload);
+    download(id) {
+        let body = JSON.stringify(id);
         return this.http
             .get("http://localhost:50348/api/Document/DownloadDocument", body);
     }

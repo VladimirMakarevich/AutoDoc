@@ -16,13 +16,16 @@ namespace AutoDoc.BL.Parsers
 
             foreach (BookmarkStart bookmarkStart in doc.MainDocumentPart.RootElement.Descendants<BookmarkStart>())
             {
-                bookmarkNames.Add(bookmarkStart.Name);
+                if (bookmarkStart.Name != "_GoBack")
+                {
+                    bookmarkNames.Add(bookmarkStart.Name);
+                }
             }
 
             return bookmarkNames;
         }
 
-        /*public static IDictionary<String, BookmarkStart> FindAllBookmarks(WordprocessingDocument doc)
+        public static IDictionary<String, BookmarkStart> FindAllBookmarksSecond(WordprocessingDocument doc)
         {
             IDictionary<String, BookmarkStart> bookmarkMap = new Dictionary<String, BookmarkStart>();
 
@@ -32,7 +35,7 @@ namespace AutoDoc.BL.Parsers
             }
 
             return bookmarkMap;
-        }*/
+        }
 
         /*public static IDictionary<string, BookmarkEnd> FindAllBookmarksRecursive(OpenXmlElement documentPart, Dictionary<string, BookmarkEnd> results = null, Dictionary<string, string> unmatched = null)
         {
@@ -76,9 +79,9 @@ namespace AutoDoc.BL.Parsers
             }
         }*/
 
-        /*public static void ReplaceAllBookmarks<T>(WordprocessingDocument doc, IDictionary<string, T> newValues) where T: OpenXmlElement
+        public static void ReplaceAllBookmarks<T>(WordprocessingDocument doc, Dictionary<string, T> newValues) where T: OpenXmlElement
         {
-            var bookmarkMap = FindAllBookmarks(doc);
+            var bookmarkMap = FindAllBookmarksSecond(doc);
 
             foreach (var value in newValues)
             {
@@ -90,7 +93,19 @@ namespace AutoDoc.BL.Parsers
                     bookmarkEl.GetFirstChild<T>().InsertAfterSelf(value.Value);
                 }
             }
-        }*/
+        }
+
+        public static void ReplaceBookmarkSecondMethod(Dictionary<string, BookmarkEnd> bookMarks, string name, string message)
+        {
+            var bookmark = bookMarks[name];
+            Run bookmarkEl = bookmark.NextSibling<Run>();
+            if (bookmarkEl != null)
+            {
+                //bookmarkText.GetFirstChild<Text>().Text = value.Value;
+                var newValue = new Text(message);
+                bookmarkEl.GetFirstChild<OpenXmlElement>().InsertAfterSelf(newValue);
+            }
+        }
 
         /*public static void InsertIntoBookmark<T>(WordprocessingDocument doc, string bookmarkName, T newElement) where T: OpenXmlElement
         {
@@ -127,7 +142,49 @@ namespace AutoDoc.BL.Parsers
             if (newElement != null)
             {
                 parent.InsertAfterSelf(newElement);
-                parent.Remove();
+            }
+        }
+
+
+        public static Dictionary<string, BookmarkEnd> FindBookmarks(OpenXmlElement documentPart, Dictionary<string, BookmarkEnd> results = null, Dictionary<string, string> unmatched = null)
+        {
+            results = results ?? new Dictionary<string, BookmarkEnd>();
+            unmatched = unmatched ?? new Dictionary<string, string>();
+
+            foreach (var child in documentPart.Elements())
+            {
+                if (child is BookmarkStart)
+                {
+                    var bStart = child as BookmarkStart;
+                    unmatched.Add(bStart.Id, bStart.Name);
+                }
+
+                if (child is BookmarkEnd)
+                {
+                    var bEnd = child as BookmarkEnd;
+                    foreach (var orphanName in unmatched)
+                    {
+                        if (bEnd.Id == orphanName.Key)
+                            results.Add(orphanName.Value, bEnd);
+                    }
+                }
+
+                FindBookmarks(child, results, unmatched);
+            }
+
+            return results;
+        }
+
+        public static void ReplaceBookmarkSecondMethod(WordprocessingDocument doc)
+        {
+            var bookMarks = FindBookmarks(doc.MainDocumentPart.Document);
+
+            foreach (var end in bookMarks)
+            {
+                var textElement = new Text("asdfasdf");
+                var runElement = new Run(textElement);
+
+                end.Value.InsertAfterSelf(runElement);
             }
         }
     }

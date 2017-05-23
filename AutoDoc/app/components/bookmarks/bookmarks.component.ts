@@ -15,8 +15,9 @@ import { Router } from '@angular/router';
 
 export class BookmarkComponent implements OnInit, OnDestroy {
     document: Document;
+    private id: number;
 
-    constructor(private bookmarkService: BookmarkService, public dataservice: DataService) {
+    constructor(private bookmarkService: BookmarkService, public dataservice: DataService, private router: Router) {
     }
 
     ngOnInit() {
@@ -26,7 +27,21 @@ export class BookmarkComponent implements OnInit, OnDestroy {
     ngOnDestroy() {  
     }
 
+    //navigateToDownload(id: number) {
+    //    this.router.navigate(['/download-document'], id);
+    //}
+
     uploadBookmarks(id: number) {
-        this.bookmarkService.uploadBookmarks(this.document)
+        this.bookmarkService.uploadBookmarks(this.document)                
+            .then(id => {
+                this.id = id;
+                this.router.navigate(['/downdocument', id]);
+        });
+
+        //    subscribe((id: string) => {
+        //    if (id != null) {
+        //        this.router.navigate(['/bookmark', id]);
+        //    }
+        //});
     }
 }

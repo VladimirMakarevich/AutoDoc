@@ -6,10 +6,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot/AppData\Magistratura.docx" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Letter.doc" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\AppData\" />
     <Folder Include="wwwroot\AppData\" />
     <Folder Include="wwwroot\AppData\" />
   </ItemGroup>

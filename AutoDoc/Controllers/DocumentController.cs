@@ -15,6 +15,8 @@ using AutoDoc.DAL.Repository;
 using AutoDoc.DAL.Entities;
 using AutoDoc.Mappers;
 using AutoDoc.DAL.Services;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace AutoDoc.Controllers
 {
@@ -76,13 +78,46 @@ namespace AutoDoc.Controllers
         public int ReplaceBookmarks([FromBody]DocumentJsonModel documentJsonModel)
         {
             var document = _documentService.GetDocument(documentJsonModel.Id);
-            var doc = DocumentCore.OpenDocument(document.Path);
 
-            foreach (var bookmarks in document.Bookmarks)
+            WordprocessingDocument doc = DocumentCore.OpenDocument(document.Path);
+            var bookMarks = WordBookmarkParser.FindBookmarks(doc.MainDocumentPart.Document);
+
+            foreach (var value in documentJsonModel.Bookmarks)
             {
-                var wordprocessingText = TextUtil.GetText(bookmarks.Message);
-                WordBookmarkParser.ReplaceBookmark(doc, bookmarks.Name, wordprocessingText);
+                WordBookmarkParser.ReplaceBookmarkSecondMethod(bookMarks, value.Name, value.Message);
+                //var bookmark = bookMarks[value.Name];
+                //Run bookmarkEl = bookmark.NextSibling<Run>();
+                //if (bookmarkEl != null)
+                //{
+                //    //bookmarkText.GetFirstChild<Text>().Text = value.Value;
+                //    bookmarkEl.GetFirstChild<T>().InsertAfterSelf(value.Message);
+                //}
             }
+
+            //foreach (var end in bookMarks)
+            //{
+            //    //WordBookmarkParser.ReplaceBookmarkSecondMethod(doc);
+            //    var textElement = new Text(documentJsonModel.Bookmarks.);
+            //    var runElement = new Run(textElement);
+
+            //    end.Value.InsertAfterSelf(runElement);
+            //}
+
+            //WordBookmarkParser.ReplaceBookmarkSecondMethod(doc);
+            DocumentCore.CloseDocument(doc);
+            //using (WordprocessingDocument doc = DocumentCore.OpenDocument(document.Path))
+            //{
+            //    foreach (var bookmarks in documentJsonModel.Bookmarks)
+            //    {
+            //        var wordprocessingText = TextUtil.GetText(bookmarks.Message);
+            //        WordBookmarkParser.ReplaceBookmark(doc, bookmarks.Name, wordprocessingText);
+            //    }
+
+            //    //var doc2 = DocumentCore.OpenDocument("Z:\\DELL\\programming WORKS\\LightPoint\\New folder\\AutoDoc\\wwwroot\\AppData\\home.docx");
+            //    //doc2.Save();
+            //    //doc2.Close();
+            //    DocumentCore.CloseDocument(doc);
+            //}
 
             return document.Id;
         }

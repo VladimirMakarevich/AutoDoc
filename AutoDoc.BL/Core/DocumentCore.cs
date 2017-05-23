@@ -22,6 +22,7 @@ namespace AutoDoc.BL.Core
 
         public static void CloseDocument(WordprocessingDocument doc)
         {
+            doc.Save();
             doc.Close();
         }
     }

@@ -19,7 +19,7 @@ const routes: Routes = [
     { path: '', component: AppComponent },
     { path: 'document', component: DocumentComponent },
     { path: 'bookmarks', component: BookmarkComponent },
-    { path: 'download-document', component: DownDocumentComponent },
+    { path: 'downdocument/:id', component: DownDocumentComponent },
     { path: '**', component: ErrorComponent }
 ];
 

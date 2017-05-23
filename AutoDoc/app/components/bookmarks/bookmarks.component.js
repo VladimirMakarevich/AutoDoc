@@ -12,18 +12,33 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular/core");
 const bookmark_service_1 = require("../../services/bookmark.service");
 const data_service_1 = require("../../services/data.service");
+//import { WebStorageModule, LocalStorageService } from 'angular2-local-storage';
+const router_1 = require("@angular/router");
 let BookmarkComponent = class BookmarkComponent {
-    constructor(bookmarkService, dataservice) {
+    constructor(bookmarkService, dataservice, router) {
         this.bookmarkService = bookmarkService;
         this.dataservice = dataservice;
+        this.router = router;
     }
     ngOnInit() {
         this.document = this.dataservice.getDocument();
     }
     ngOnDestroy() {
     }
+    //navigateToDownload(id: number) {
+    //    this.router.navigate(['/download-document'], id);
+    //}
     uploadBookmarks(id) {
-        this.bookmarkService.uploadBookmarks(this.document);
+        this.bookmarkService.uploadBookmarks(this.document)
+            .then(id => {
+            this.id = id;
+            this.router.navigate(['/downdocument', id]);
+        });
+        //    subscribe((id: string) => {
+        //    if (id != null) {
+        //        this.router.navigate(['/bookmark', id]);
+        //    }
+        //});
     }
 };
 BookmarkComponent = __decorate([
@@ -31,7 +46,7 @@ BookmarkComponent = __decorate([
         selector: 'bookmarks',
         templateUrl: 'app/components/bookmarks/bookmarks.component.html',
     }),
-    __metadata("design:paramtypes", [bookmark_service_1.BookmarkService, data_service_1.DataService])
+    __metadata("design:paramtypes", [bookmark_service_1.BookmarkService, data_service_1.DataService, router_1.Router])
 ], BookmarkComponent);
 exports.BookmarkComponent = BookmarkComponent;
 //# sourceMappingURL=bookmarks.component.js.map
