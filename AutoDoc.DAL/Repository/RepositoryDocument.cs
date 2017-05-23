@@ -17,7 +17,7 @@ namespace AutoDoc.DAL.Repository
 
         public virtual void Add(Document entity)
         {
-            _dataContext.Entry(entity).State = EntityState.Added;
+            _dataContext.Add(entity);
             _dataContext.SaveChanges();
         }
 

@@ -63,12 +63,6 @@ namespace AutoDoc.Controllers
             var document = _documentMapper.ToDocument(file.FileName, filePath, bookmarks);
             _documentService.CreateDocument(document);
 
-            //var bookmark = _bookmarkMapper.ToBookmark(bookmarksJsonModel);
-            //_bookmarkService.CreateBookmark
-
-            //var documentId = _documentService.GetAll().LastOrDefault().Id;
-            //var documentJsonModel = _documentMapper.ToDocumentJsonModel(bookmarksJsonModel, documentId);
-
             var documentLast = _documentService.GetAll().LastOrDefault();
             var documentJsonModel = _documentMapper.ToDocumentJsonModel(documentLast);
 
