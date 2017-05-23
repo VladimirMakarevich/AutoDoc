@@ -22,7 +22,8 @@ let BookmarkComponent = class BookmarkComponent {
     }
     ngOnDestroy() {
     }
-    uploadBookmarks() {
+    uploadBookmarks(id) {
+        this.bookmarkService.uploadBookmarks(this.document);
     }
 };
 BookmarkComponent = __decorate([

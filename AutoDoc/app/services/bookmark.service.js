@@ -25,15 +25,17 @@ let BookmarkService = class BookmarkService {
     constructor(http) {
         this.http = http;
     }
-    upload(obj) {
+    uploadBookmarks(obj) {
         let headers = new http_2.Headers({ 'Content-Type': 'application/json' });
-        headers.append('Accept', 'application/json; charset=utf-8');
-        headers.append('Access-Control-Allow-Methods', 'POST, GET, DELETE, PUT');
-        headers.append('Access-Control-Allow-Headers', "X-Requested-With, Content-Type, Origin, Authorization, Accept, Client-Security-Token, Accept-Encoding");
+        //headers.append('Accept', 'application/json; charset=utf-8');
+        //headers.append('Access-Control-Allow-Methods', 'POST, GET, DELETE, PUT');
+        //headers.append('Access-Control-Allow-Headers', "X-Requested-With, Content-Type, Origin, Authorization, Accept, Client-Security-Token, Accept-Encoding");
         let options = new http_3.RequestOptions({ method: 'POST', headers: headers });
         let body = JSON.stringify(obj);
         let url = "http://localhost:50348/api/Document/ReplaceBookmarks";
-        return this.http.post(url, body, options);
+        return this.http.post(url, body, options)
+            .map(response => response.json())
+            .toPromise();
     }
 };
 BookmarkService = __decorate([

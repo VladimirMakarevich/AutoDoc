@@ -26,6 +26,7 @@ export class BookmarkComponent implements OnInit, OnDestroy {
     ngOnDestroy() {  
     }
 
-    uploadBookmarks() {
+    uploadBookmarks(id: number) {
+        this.bookmarkService.uploadBookmarks(this.document)
     }
 }
