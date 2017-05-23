@@ -19,7 +19,8 @@
             '@angular/forms': 'npm:@angular/forms/bundles/forms.umd.js',
 
             'rxjs': 'npm:rxjs',
-            'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js'
+            'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js',
+            'angular2-local-storage': 'npm:angular2-local-storage/local_storage.js'
         },
 
         packages: {
@@ -28,6 +29,10 @@
                 defaultExtension: 'js'
             },
             rxjs: {
+                defaultExtension: 'js'
+            },
+            'angular2-local-storage': {
+                main: 'node_modules/angular2-local-storage/local_storage.js',
                 defaultExtension: 'js'
             }
         }

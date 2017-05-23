@@ -18,15 +18,11 @@ let DocumentComponent = class DocumentComponent {
         this.documentService = documentService;
         this.dataservice = dataservice;
         this.router = router;
-        this.hero = {
-            name: "Utpal Kumar Das"
-        };
     }
     ngOnInit() {
     }
     ngOnDestroy() {
-        this.dataservice.document = this.document;
-        this.dataservice.hero = this.hero;
+        this.dataservice.setDocument(this.document);
     }
     navigateToBookmarks(document) {
         document = this.document;
@@ -60,7 +56,6 @@ DocumentComponent = __decorate([
     core_1.Component({
         selector: 'document',
         templateUrl: 'app/components/document/upload/document.component.html',
-        providers: [document_service_1.DocumentService, data_service_1.DataService]
     }),
     __metadata("design:paramtypes", [document_service_1.DocumentService, data_service_1.DataService,
         router_1.Router])

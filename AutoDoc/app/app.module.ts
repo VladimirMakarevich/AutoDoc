@@ -28,7 +28,7 @@ const appRoutingProviders: any[] = [
 
 @NgModule({
     imports: [BrowserModule, FormsModule, HttpModule, RouterModule.forRoot(routes)],
-    providers: [{ provide: APP_BASE_HREF, useValue: '/' }],
+    providers: [{ provide: APP_BASE_HREF, useValue: '/' }, DataService, BookmarkService, DocumentService],
     declarations: [AppComponent,
         DocumentComponent,
         DownDocumentComponent,

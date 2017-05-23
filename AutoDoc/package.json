@@ -17,6 +17,7 @@
     "@angular/platform-browser-dynamic": "~4.0.0",
     "@angular/router": "~4.0.0",
     "angular-in-memory-web-api": "~0.1.13",
+    "angular2-local-storage": "~0.2.0",
 
     "systemjs": "0.19.39",
     "core-js": "^2.4.1",

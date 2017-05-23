@@ -3,24 +3,17 @@ import { DocumentService } from '../../../services/document.service';
 import { DataService } from '../../../services/data.service';
 import { Bookmark } from '../../../models/bookmarks/bookmark.type';
 import { Document } from '../../../models/document/document.type';
-import { Hero } from '../../../models/hero.type';
 import { Router } from '@angular/router';
 
 @Component({
     selector: 'document',
     templateUrl: 'app/components/document/upload/document.component.html',
-    providers: [DocumentService, DataService]
 })
 
 export class DocumentComponent implements OnInit, OnDestroy {
-    //@Input() document: Document;
     document: Document;
 
-    hero: Hero = {
-        name: "Utpal Kumar Das"
-    }; 
-
-    constructor(private documentService: DocumentService, public dataservice: DataService,
+    constructor(private documentService: DocumentService, private dataservice: DataService,
         private router: Router) {
     }
 
@@ -28,8 +21,7 @@ export class DocumentComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.dataservice.document = this.document;
-        this.dataservice.hero = this.hero; 
+        this.dataservice.setDocument(this.document);
     }
 
     navigateToBookmarks(document: Document) {

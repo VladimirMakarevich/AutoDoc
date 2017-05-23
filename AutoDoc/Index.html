@@ -7,9 +7,14 @@
     <script src="node_modules/zone.js/dist/zone.js"></script>
     <script src="node_modules/systemjs/dist/system.src.js"></script>
     <script src="systemjs.config.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"></script>
+    <script src="bower_components/js/angular-local-storage.min.js"></script>
+
     <!--<script src="app/boot-client.js"></script>-->
     <script>
         System.import('app').catch(function (err) { console.error(err); });
+        var myApp = angular.module('app', ['LocalStorageModule']);
+
     </script>
 </head>
 <body>
