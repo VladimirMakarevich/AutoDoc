@@ -10,14 +10,10 @@ namespace AutoDoc.Mappers.Profiles
 {
     public class EntityToModel : Profile
     {
-        public string ProfileName
+        public EntityToModel()
         {
-            get { return "EntityToModel"; }
-        }
-
-        protected void Configure()
-        {
-            
+            CreateMap<Bookmark, BookmarksJsonModel>();
+            CreateMap<Document, DocumentJsonModel>();
         }
     }
 }

@@ -3,19 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using AutoDoc.DAL.Entities;
+using AutoDoc.Models;
 
 namespace AutoDoc.Mappers.Profiles
 {
     public class ModelToEntity : Profile
     {
-        public string ProfileName 
+        public ModelToEntity()
         {
-            get { return "ModelToEntity"; }
-        }
-
-        protected void Configure()
-        {
-
+            CreateMap<BookmarksJsonModel, Bookmark>();
+            CreateMap<DocumentJsonModel, Document>();
         }
     }
 }

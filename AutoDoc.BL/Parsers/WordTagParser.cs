@@ -10,9 +10,9 @@ using System.Text.RegularExpressions;
 
 namespace AutoDoc.BL.Parsers
 {
-    public static class WordTagParser
+    public class WordTagParser : IWordTagParser
     {
-        public static void ReplaceTags<T>(WordprocessingDocument doc, T newElement, string tag) where T: OpenXmlElement
+        public void ReplaceTags<T>(WordprocessingDocument doc, T newElement, string tag) where T: OpenXmlElement
         {
             //Regex regex = new Regex("<!(.)*?!>", RegexOptions.Compiled);
             Regex regex = new Regex("<" + tag + ">", RegexOptions.Compiled);
@@ -32,7 +32,7 @@ namespace AutoDoc.BL.Parsers
 
         }
 
-        private static void ReplaceParagraphParts<T>(OpenXmlElement element, Regex regex, T newElement)where T :OpenXmlElement
+        public void ReplaceParagraphParts<T>(OpenXmlElement element, Regex regex, T newElement)where T :OpenXmlElement
         {
             foreach (var paragraph in element.Descendants<Paragraph>())
             {

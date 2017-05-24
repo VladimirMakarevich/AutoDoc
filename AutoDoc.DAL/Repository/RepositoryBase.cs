@@ -11,19 +11,21 @@ namespace AutoDoc.DAL.Repository
 {
     public class RepositoryBase<T> : IRepositoryBase<T>, IDisposable where T : BaseEntity
     {
-        private DbContext _dataContext;
+        private AutoDocContext _dataContext;
         private readonly DbSet<T> _dbSet;
 
-        public RepositoryBase(DbContext dbCont)
+        public RepositoryBase(AutoDocContext dbCont)
         {
             _dataContext = dbCont;
             if (_dataContext != null) _dbSet = _dataContext.Set<T>();
         }
 
-        public virtual void Add(T entity)
+        public virtual int Add(T entity)
         {
             _dataContext.Entry(entity).State = EntityState.Added;
             _dbSet.Add(entity);
+
+            return entity.Id;
         }
 
         public virtual void Update(T entity)

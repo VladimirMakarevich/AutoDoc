@@ -34,10 +34,15 @@ namespace AutoDoc.DAL.Services
 
         public int CreateDocument(Document document)
         {
-            _baseRepository.Add(document);
-            _baseRepository.Commit();
+            var existing = _baseRepository.Get(d => d.Id == document.Id);
 
-            return _baseRepository.Get(d => d.Name == document.Name && d.Path == document.Path).Id;
+            if (existing == null)
+            {
+                int id = _baseRepository.Add(document);
+                _baseRepository.Commit();
+                return id;
+            }
+            else return existing.Id;
         }
 
         public void EditDocument(Document document)

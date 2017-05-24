@@ -1,5 +1,3 @@
 "use strict";
-class Bookmark {
-}
-exports.Bookmark = Bookmark;
+Object.defineProperty(exports, "__esModule", { value: true });
 //# sourceMappingURL=bookmark.js.map

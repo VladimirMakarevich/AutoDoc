@@ -10,21 +10,25 @@ import { BookmarkComponent } from "./components/document/bookmark.component";
 import { DownloadComponent } from "./components/document/download.component";
 import { DocumentService} from "./services/document/document.service";
 import { BookmarkService } from "./services/document/bookmark.service";
+import { Ng2SmartTableModule, LocalDataSource } from 'ng2-smart-table';
 
-const routes: Routes = [
+const appRoutes: Routes = [
+    { path: '', redirectTo: '/upload', pathMatch: 'full' },
+    { path: 'upload', component: UploadComponent, pathMatch: 'full' },
     { path: 'bookmark/:id', component: BookmarkComponent },
-    { path: 'download/:id', component: DownloadComponent },
-    { path: 'upload/', component: UploadComponent }
+    { path: 'download/:id', component: DownloadComponent }
 ];
 
 const appRoutingProviders: any[] = [];
 
 @NgModule({
     imports: [
+        Ng2SmartTableModule,
+        LocalDataSource,
         BrowserModule,
         FormsModule,
         HttpModule,
-        RouterModule.forRoot(routes)],
+        RouterModule.forRoot(appRoutes)],
     providers: [
         { provide: APP_BASE_HREF, useValue: '/' },
         DocumentService,

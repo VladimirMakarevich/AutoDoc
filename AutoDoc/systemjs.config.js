@@ -19,7 +19,9 @@
             '@angular/forms': 'npm:@angular/forms/bundles/forms.umd.js',
 
             'rxjs': 'npm:rxjs',
-            'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js'
+            'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js',
+            //'ng-editable-table': 'npm:ng-editable-table/editable-table/editable-table.module.js'
+            //'ng2-smart-table': 'npm:ng2-smart-table',
         },
 
         packages: {
@@ -28,8 +30,16 @@
                 defaultExtension: 'js'
             },
             rxjs: {
+                main: 'bundles/Rx.js',
                 defaultExtension: 'js'
-            }
+            },
+            /*'ng2-smart-table': {
+                main: './index.js',
+                defaultExtension: 'js'
+            }*/
+            /*'ng-editable-table': {
+                defaultExtension: 'js'
+            }*/
         }
     });
 })(this);

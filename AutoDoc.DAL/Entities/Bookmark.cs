@@ -9,6 +9,7 @@ namespace AutoDoc.DAL.Entities
         public int DocumentId { get; set; }
         public string Name { get; set; }
         public string Message { get; set; }
+        public int Type { get; set; }
 
         public Document Document { get; set; }
     }

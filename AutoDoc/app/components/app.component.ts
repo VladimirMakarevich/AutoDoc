@@ -2,7 +2,7 @@
 
 @Component({
     selector: 'autodoc-app',
-    template: '<upload-component></upload-component>'
+    template: '<router-outlet></router-outlet>'
 })
 
 export class AppComponent {}

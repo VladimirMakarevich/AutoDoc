@@ -8,33 +8,42 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular/core");
 const http_1 = require("@angular/http");
-const Observable_1 = require("rxjs/Observable");
 const http_2 = require("@angular/http");
+require("rxjs/Rx");
 require("rxjs/add/operator/catch");
 require("rxjs/add/operator/map");
+const Observable_1 = require("rxjs/Observable");
 let BookmarkService = class BookmarkService {
     constructor(http) {
         this.http = http;
-        this.bookmarkUrlGet = 'http://localhost:50348/api/Bookmark/GetBookmarks?id=';
-        this.bookmarkUrlPost = 'http://localhost:50348/api/Bookmark/PostBookmarks';
+        this.bookmarkUrlGet = 'http://localhost:50347/api/Bookmark/GetBookmarks?id=';
+        this.bookmarkUrlPost = 'http://localhost:50347/api/Bookmark/PostBookmarks';
     }
     postData(bookmarks) {
         let headers = new http_2.Headers({ 'Content-Type': 'application/json' });
-        let options = new http_2.RequestOptions({ headers: headers });
-        return this.http.post(this.bookmarkUrlPost, { bookmarks }, options)
+        headers.append('Accept', 'application/json; charset=utf-8');
+        headers.append('Access-Control-Allow-Methods', 'POST, GET, DELETE, PUT');
+        headers.append('Access-Control-Allow-Headers', "X-Requested-With, Content-Type, Origin, Authorization, Accept, Client-Security-Token, Accept-Encoding");
+        let options = new http_2.RequestOptions({ method: 'POST', headers: headers });
+        let body = JSON.stringify(bookmarks);
+        return this.http.post(this.bookmarkUrlPost, body, options)
             .map(this.extractData)
             .catch(this.handleError);
     }
     getData(id) {
         return this.http.get(this.bookmarkUrlGet + id)
-            .map(this.extractData)
+            .map((res) => {
+            this.bookmarks = res.json();
+            return this.bookmarks;
+        })
             .catch(this.handleError);
     }
     extractData(res) {
         let body = res.json();
-        return body.data || {};
+        return body;
     }
     handleError(error) {
         // In a real world app, you might use a remote logging infrastructure

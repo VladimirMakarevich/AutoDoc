@@ -3,10 +3,12 @@ import { DocumentService } from "../../services/document/document.service";
 import { ActivatedRoute, Params } from '@angular/router';
 import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
+import { Document } from '../../Models/document';
+import { File } from '../../Models/file';
 
 @Component(({
     selector: 'download-component',
-    template: './download.component.html',
+    templateUrl: 'app/components/document/download.component.html',
     providers: [DocumentService]
 }) as any)
 
@@ -19,7 +21,6 @@ export class DownloadComponent implements OnInit {
     constructor(
         private routeActivated: ActivatedRoute,
         private router: Router,
-        private location: Location,
         private documentService: DocumentService
     ) { }
 
@@ -30,6 +31,12 @@ export class DownloadComponent implements OnInit {
     }
 
     getFile(): void {
-        this.documentService.downloadFile(this.id);
+        this.documentService.downloadFile(this.id)
+            .subscribe((file: File) => {
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(file.fileContents);
+                link.download = "edit_" + file.fileDownloadName;
+                link.click();
+            });
     }
 }

@@ -5,9 +5,9 @@ using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace AutoDoc.BL.ModelsUtilities
 {
-    public static class TextUtil
+    public class TextUtil : ITextUtil
     {
-        public static Text GetText(string text)
+        public Text GetText(string text)
         {
             return new Text(text);
         }

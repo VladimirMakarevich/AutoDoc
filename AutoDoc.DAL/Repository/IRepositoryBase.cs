@@ -8,7 +8,7 @@ namespace AutoDoc.DAL.Repository
 {
     public interface IRepositoryBase<T> : IDisposable where T : BaseEntity 
     {
-        void Add(T entity);
+        int Add(T entity);
 
         void Update(T entity);
 

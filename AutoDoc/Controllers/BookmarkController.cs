@@ -8,67 +8,58 @@ using AutoDoc.DAL.Entities;
 using AutoDoc.DAL.Services;
 using AutoDoc.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Cors;
+using AutoMapper;
+using AutoDoc.BL.ModelsUtilities;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace AutoDoc.Controllers
 {
     [Route("api/Bookmark")]
-    public class BookmarkController
+    public class BookmarkController : Controller
     {
-        public IBookmarkService BookmarkService;
+        private IBookmarkService _bookmarkService;
+        private IDocumentService _documentService;
+        private IMapper _mapper;
+        private ITableUtil _tableUtil;
+        private ITextUtil _textUtil;
+        private IImageUtil _imageUtil;
+        private IDocumentCore _documentCore;
+        private IWordBookmarkParser _bookmarkParser;
+        private IWordTagParser _tagParser;
 
-        public BookmarkController(IBookmarkService bookmarkService)
+        public BookmarkController (
+            IBookmarkService bookmarkService, 
+            IDocumentService documentService, 
+            IMapper mapper,
+            ITableUtil tableUtil,
+            ITextUtil textUtil,
+            IImageUtil imageUtil,
+            IDocumentCore documentCore,
+            IWordBookmarkParser bookmarkParser,
+            IWordTagParser tagParser)
         {
-            BookmarkService = bookmarkService;
-        }
-
-        [HttpGet]
-        [Route("FindBookmarks")]
-        public async Task<List<BookmarksJsonModel>> FindBookmarks(int id, string path)
-        {
-            var doc = DocumentCore.OpenDocument(path);
-            var bookmarkNames = WordBookmarkParser.FindAllBookmarks(doc);
-
-            List<BookmarksJsonModel> responseBookmarksJsonModels = new List<BookmarksJsonModel>();
-
-            foreach (var bookmarkName in bookmarkNames)
-            {
-                Bookmark bookmarkEntity = new Bookmark
-                {
-                    Name = bookmarkName,
-                    Message = string.Empty,
-                    DocumentId = id
-                };
-                int bookmarkId = BookmarkService.CreateBookmark(bookmarkEntity);
-
-                BookmarksJsonModel bookmarkJson = new BookmarksJsonModel
-                {
-                    Id = bookmarkId,
-                    Message = string.Empty,
-                    Name = bookmarkName
-                };
-                responseBookmarksJsonModels.Add(bookmarkJson);
-            }
-
-            return responseBookmarksJsonModels;
+            _bookmarkService = bookmarkService;
+            _documentService = documentService;
+            _mapper = mapper;
+            _tableUtil = tableUtil;
+            _textUtil = textUtil;
+            _imageUtil = imageUtil;
+            _documentCore = documentCore;
+            _bookmarkParser = bookmarkParser;
+            _tagParser = tagParser;
         }
 
         [HttpGet]
         [Route("GetBookmarks")]
         public async Task<List<BookmarksJsonModel>> GetBookmarks(int id)
         {
-            var bookmarksEntities = BookmarkService.GetAllBookmarksByDocument(id);
+            var bookmarksEntities = _bookmarkService.GetAllBookmarksByDocument(id);
             List<BookmarksJsonModel> responceBookmarksJsonModels = new List<BookmarksJsonModel>();
 
             foreach (var bookmartEntity in bookmarksEntities)
             {
-                BookmarksJsonModel bookmarkJsonModel = new BookmarksJsonModel
-                {
-                    Id = bookmartEntity.Id,
-                    Message = bookmartEntity.Message,
-                    Name = bookmartEntity.Name
-                };
-
-                responceBookmarksJsonModels.Add(bookmarkJsonModel);
+                responceBookmarksJsonModels.Add(_mapper.Map<Bookmark, BookmarksJsonModel>(bookmartEntity));
             }
 
             return responceBookmarksJsonModels;
@@ -76,25 +67,27 @@ namespace AutoDoc.Controllers
 
         [HttpPost]
         [Route("PostBookmarks")]
-        public async Task<Boolean> PostBookmarks(List<BookmarksJsonModel> bookmarks)
+        public async Task<Boolean> PostBookmarks([FromBody] List<BookmarksJsonModel> bookmarks)
         {
             try
             {
+                var currentBookmark = _bookmarkService.GetBookmark(bookmarks.First().Id);
+                var documentPath = _documentService.GetDocument(currentBookmark.DocumentId).Path;
+
+                var docFile = _documentCore.OpenDocument(documentPath);
+                var bookmarkNames = _bookmarkParser.FindBookmarks(docFile.MainDocumentPart.Document);
+
+
                 foreach (var bookmark in bookmarks)
                 {
-                    Bookmark bookmarkEntity = new Bookmark
-                    {
-                        Id = bookmark.Id,
-                        Message = bookmark.Message,
-                        Name = bookmark.Name
-                    };
-
-                    BookmarkService.EditBookmark(bookmarkEntity);
+                    _bookmarkService.EditBookmark(_mapper.Map<BookmarksJsonModel, Bookmark>(bookmark));
+                    _bookmarkParser.ReplaceBookmark(bookmarkNames, bookmark.Name, new TextUtil().GetText(bookmark.Message));
                 }
+                docFile.Close();
 
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return false;
             }

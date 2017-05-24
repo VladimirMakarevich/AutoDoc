@@ -10,9 +10,9 @@ using Table = DocumentFormat.OpenXml.InkML.Table;
 
 namespace AutoDoc.BL.ModelsUtilities
 {
-    public static class TableUtil
+    public class TableUtil : ITableUtil
     {
-        public static Table GetTable<T>(List<T> tableData, int[] tableHeadingCount, string[] columnHeadings)
+        public Table GetTable<T>(List<T> tableData, int[] tableHeadingCount, string[] columnHeadings)
         {
             var table = new Table();
             var tableBorderTop = new TopBorder();

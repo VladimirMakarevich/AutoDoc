@@ -1,15 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.6
+VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoDoc", "AutoDoc\AutoDoc.csproj", "{F2E50CDA-F6BA-40C2-8558-B6FE4174B069}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoDoc.DAL", "AutoDoc.DAL\AutoDoc.DAL.csproj", "{6A8A8E8F-57B6-43DA-8C59-C622AD83E819}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoDoc.BL", "AutoDoc.BL\AutoDoc.BL.csproj", "{495E1353-0A64-4D5E-B820-7C752E65E089}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoDoc.DocumentFormat", "AutoDoc.DocumentFormat\AutoDoc.DocumentFormat.csproj", "{0D777C19-8315-41D5-B4A3-587A97ADAD2F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +27,6 @@ Global
 		{495E1353-0A64-4D5E-B820-7C752E65E089}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{495E1353-0A64-4D5E-B820-7C752E65E089}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{495E1353-0A64-4D5E-B820-7C752E65E089}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0D777C19-8315-41D5-B4A3-587A97ADAD2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0D777C19-8315-41D5-B4A3-587A97ADAD2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0D777C19-8315-41D5-B4A3-587A97ADAD2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0D777C19-8315-41D5-B4A3-587A97ADAD2F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

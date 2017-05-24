@@ -8,16 +8,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular/core");
 const document_service_1 = require("../../services/document/document.service");
 const router_1 = require("@angular/router");
 const router_2 = require("@angular/router");
 const core_2 = require("@angular/core");
 let DownloadComponent = class DownloadComponent {
-    constructor(routeActivated, router, location, documentService) {
+    constructor(routeActivated, router, documentService) {
         this.routeActivated = routeActivated;
         this.router = router;
-        this.location = location;
         this.documentService = documentService;
     }
     ngOnInit() {
@@ -26,19 +26,24 @@ let DownloadComponent = class DownloadComponent {
         });
     }
     getFile() {
-        this.documentService.downloadFile(this.id);
+        this.documentService.downloadFile(this.id)
+            .subscribe((file) => {
+            var link = document.createElement('a');
+            link.href = window.URL.createObjectURL(file.fileContents);
+            link.download = "edit_" + file.fileDownloadName;
+            link.click();
+        });
     }
 };
 DownloadComponent = __decorate([
     core_1.Component(({
         selector: 'download-component',
-        template: './download.component.html',
+        templateUrl: 'app/components/document/download.component.html',
         providers: [document_service_1.DocumentService]
     })),
     core_2.Injectable(),
     __metadata("design:paramtypes", [router_1.ActivatedRoute,
         router_2.Router,
-        Location,
         document_service_1.DocumentService])
 ], DownloadComponent);
 exports.DownloadComponent = DownloadComponent;

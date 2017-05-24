@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot/AppData\~%24Letter.docx" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Letter.doc" />
   </ItemGroup>
 
@@ -12,18 +16,33 @@
     <Folder Include="app\components\document\" />
     <Folder Include="wwwroot\AppData\" />
     <Folder Include="wwwroot\AppData\" />
+    <Folder Include="wwwroot\AppData\" />
+    <Folder Include="wwwroot\AppData\" />
+    <Folder Include="wwwroot\AppData\" />
+    <Folder Include="wwwroot\AppData\" />
+    <Folder Include="wwwroot\AppData\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.0.2" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="2.0.1" />
     <PackageReference Include="DocumentFormat.OpenXml" Version="2.8.0-vnext0051" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.3" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="1.1.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="1.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="1.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="1.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational.Design" Version="1.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="1.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.WebSockets" Version="1.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="1.1.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AutoDoc.BL\AutoDoc.BL.csproj" />
-    <ProjectReference Include="..\AutoDoc.DocumentFormat\AutoDoc.DocumentFormat.csproj" />
+    <ProjectReference Include="..\AutoDoc.DAL\AutoDoc.DAL.csproj" />
   </ItemGroup>
 
 </Project>

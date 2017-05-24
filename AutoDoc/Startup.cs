@@ -11,9 +11,15 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Cors.Internal;
+using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using AutoDoc.Mappers;
-using Microsoft.EntityFrameworkCore;
+using AutoDoc.Mappers.Profiles;
+using AutoDoc.BL.Core;
+using AutoDoc.BL.ModelsUtilities;
+using AutoDoc.BL.Parsers;
 
 namespace AutoDoc
 {
@@ -30,40 +36,56 @@ namespace AutoDoc
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
         }
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+       
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<AutoDocContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
-            //services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
-
+            services.AddDbContext<AutoDocContext>(options => options.UseSqlServer(Configuration.GetConnectionString("LocalConnection")));
+   
             services.AddTransient<IDocumentService, DocumentService>();
             services.AddTransient<IBookmarkService, BookmarkService>();
             services.AddTransient<IRepositoryBase<Bookmark>, RepositoryBase<Bookmark>>();
             services.AddTransient<IRepositoryBase<Document>, RepositoryBase<Document>>();
+            services.AddTransient<IDocumentCore, DocumentCore>();
+            services.AddTransient<ITableUtil, TableUtil>();
+            services.AddTransient<IImageUtil, ImageUtil>();
+            services.AddTransient<ITextUtil, TextUtil>();
+            services.AddTransient<IWordTagParser, WordTagParser>();
+            services.AddTransient<IWordBookmarkParser, WordBookmarkParser>();
+
+            var config = new AutoMapper.MapperConfiguration(cfg => {
+                cfg.AddProfile(new EntityToModel());
+                cfg.AddProfile(new ModelToEntity());
+            });
+            //services.AddAutoMapper();
+            var mapper = config.CreateMapper();
+            services.AddSingleton(mapper);
 
             services.AddMvc();
 
-            var config = AutoMapperConfig.GetMapper(services);
-            var mapper = config.GetMappers();
+            services.Configure<MvcOptions>(options =>
+            {
+                options.Filters.Add(new CorsAuthorizationFilterFactory("CorsPolicy"));
+            });
 
-            services.AddSingleton(mapper);
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials());
+            });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            //loggerFactory.AddDebug();
+         
+            app.UseCors("CorsPolicy");
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                //app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
-                //{
-                //    HotModuleReplacement = true
-                //});
             }
             else
             {

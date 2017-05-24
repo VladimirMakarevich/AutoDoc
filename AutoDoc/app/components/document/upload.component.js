@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular/core");
 const document_service_1 = require("../../services/document/document.service");
 const router_1 = require("@angular/router");
@@ -21,12 +22,11 @@ let UploadComponent = class UploadComponent {
         let fi = this.fileInput.nativeElement;
         if (fi.files && fi.files[0]) {
             let fileToUpload = fi.files[0];
-            this.documentService
-                .uploadFile(fileToUpload)
-                .subscribe(((id) => {
-                console.log(id);
-                this.router.navigate(['./bookmark', id]);
-            }));
+            this.documentService.uploadFile(fileToUpload).subscribe((id) => {
+                if (id != null) {
+                    this.router.navigate(['/bookmark', id]);
+                }
+            });
         }
     }
 };
@@ -37,7 +37,7 @@ __decorate([
 UploadComponent = __decorate([
     core_1.Component(({
         selector: 'upload-component',
-        template: './upload.component.html',
+        templateUrl: 'app/components/document/upload.component.html',
         providers: [document_service_1.DocumentService]
     })),
     core_2.Injectable(),

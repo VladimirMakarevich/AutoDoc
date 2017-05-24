@@ -8,19 +8,20 @@ using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace AutoDoc.BL.Parsers
 {
-    public static class WordBookmarkParser
+    public class WordBookmarkParser : IWordBookmarkParser
     {
-        public static List<string> FindAllBookmarks(WordprocessingDocument doc)
+        /*public static List<string> FindAllBookmarks(WordprocessingDocument doc)
         {
             List<string> bookmarkNames = new List<string>();
 
             foreach (BookmarkStart bookmarkStart in doc.MainDocumentPart.RootElement.Descendants<BookmarkStart>())
             {
-                bookmarkNames.Add(bookmarkStart.Name);
+                if (bookmarkStart.Name != "_GoBack") bookmarkNames.Add(bookmarkStart.Name);
             }
 
+            doc.Close();
             return bookmarkNames;
-        }
+        }*/
 
         /*public static IDictionary<String, BookmarkStart> FindAllBookmarks(WordprocessingDocument doc)
         {
@@ -114,7 +115,7 @@ namespace AutoDoc.BL.Parsers
             mainPart.Document.Save();
         }*/
 
-        public static void ReplaceBookmark<T>(WordprocessingDocument doc, string bookmarkName, T newElement) where T : OpenXmlElement
+        /*public static void ReplaceBookmark<T>(WordprocessingDocument doc, string bookmarkName, T newElement) where T : OpenXmlElement
         {
             MainDocumentPart mainPart = doc.MainDocumentPart;
             Body body = mainPart.Document.GetFirstChild<Body>();
@@ -129,6 +130,48 @@ namespace AutoDoc.BL.Parsers
                 parent.InsertAfterSelf(newElement);
                 parent.Remove();
             }
+
+            doc.Close();
+        }*/
+
+        public Dictionary<string, BookmarkEnd> FindBookmarks(OpenXmlElement documentPart, Dictionary<string, BookmarkEnd> results = null, Dictionary<string, string> unmatched = null)
+        {
+            results = results ?? new Dictionary<string, BookmarkEnd>();
+            unmatched = unmatched ?? new Dictionary<string, string>();
+
+            foreach (var child in documentPart.Elements())
+            {
+                if (child is BookmarkStart)
+                {
+                    var bStart = child as BookmarkStart;
+                    if (bStart.Name != "_GoBack") unmatched.Add(bStart.Id, bStart.Name);
+                }
+
+                if (child is BookmarkEnd)
+                {
+                    var bEnd = child as BookmarkEnd;
+                    foreach (var orphanName in unmatched)
+                    {
+                        if (bEnd.Id == orphanName.Key && orphanName.Value != "_GoBack")
+                            results.Add(orphanName.Value, bEnd);
+                    }
+                }
+
+                FindBookmarks(child, results, unmatched);
+            }
+
+            return results;
+        }
+
+        public void ReplaceBookmark<T>(Dictionary<string, BookmarkEnd> bookMarks, string name, T message) where T: OpenXmlElement
+        {
+            var bookmark = bookMarks[name];
+            Run bookmarkEl = bookmark.NextSibling<Run>();
+            if (bookmarkEl != null)
+            {
+                bookmarkEl.GetFirstChild<OpenXmlElement>().InsertAfterSelf(message);
+            }
+
         }
     }
 }

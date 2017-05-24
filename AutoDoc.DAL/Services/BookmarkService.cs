@@ -39,15 +39,26 @@ namespace AutoDoc.DAL.Services
 
         public int CreateBookmark(Bookmark bookmark)
         {
-            _baseRepository.Add(bookmark);
-            _baseRepository.Commit();
+            var existing = _baseRepository.Get(b => b.Name == bookmark.Name && b.DocumentId == bookmark.DocumentId);
 
-            return _baseRepository.Get(b => b.DocumentId == bookmark.DocumentId && b.Name == b.Name).Id;
+            if (existing == null)
+            {
+                bookmark.Type = 1;
+                int id = _baseRepository.Add(bookmark);
+                _baseRepository.Commit();
+
+                return id;
+            }
+            else return existing.Id;
         }
 
         public void EditBookmark(Bookmark bookmark)
         {
-            _baseRepository.Update(bookmark);
+            var buf = _baseRepository.GetById(bookmark.Id);
+            buf.Message = bookmark.Message;
+            buf.Type = bookmark.Type;
+
+            _baseRepository.Update(buf);
             _baseRepository.Commit();
         }
 

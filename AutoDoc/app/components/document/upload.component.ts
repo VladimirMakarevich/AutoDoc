@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 
 @Component(({
     selector: 'upload-component',
-    template: './upload.component.html',
+    templateUrl: 'app/components/document/upload.component.html',
     providers: [DocumentService]
 }) as any)
 
@@ -22,12 +22,12 @@ export class UploadComponent {
         let fi = this.fileInput.nativeElement;
         if (fi.files && fi.files[0]) {
             let fileToUpload = fi.files[0];
-            this.documentService
-                .uploadFile(fileToUpload)
-                .subscribe(((id : string) => {
-                    console.log(id);
-                    this.router.navigate(['./bookmark', id]);
-                }) as any);
+
+            this.documentService.uploadFile(fileToUpload).subscribe((id: string) => {
+                if (id != null) {
+                    this.router.navigate(['/bookmark', id]);
+                }
+            });
         }
     }
 }
