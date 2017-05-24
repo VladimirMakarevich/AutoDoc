@@ -13,22 +13,28 @@ const core_1 = require("@angular/core");
 const document_service_1 = require("../../../services/document.service");
 const router_1 = require("@angular/router");
 let DownDocumentComponent = class DownDocumentComponent {
-    constructor(router, documentService) {
+    constructor(router, documentService, route) {
         this.router = router;
         this.documentService = documentService;
+        this.documentId = route.snapshot.params['id'];
     }
     downloadDocument(id) {
         this.documentService
-            .download(id);
+            .download(id)
+            .subscribe((file) => {
+            var link = document.createElement('a');
+            link.href = window.URL.createObjectURL(file.fileContents);
+            link.download = "edit_" + file.fileDownloadName;
+            link.click();
+        });
     }
-    ;
 };
 DownDocumentComponent = __decorate([
     core_1.Component({
         selector: 'downdocument',
         templateUrl: 'app/components/document/download/downdocument.component.html',
     }),
-    __metadata("design:paramtypes", [router_1.Router, document_service_1.DocumentService])
+    __metadata("design:paramtypes", [router_1.Router, document_service_1.DocumentService, router_1.ActivatedRoute])
 ], DownDocumentComponent);
 exports.DownDocumentComponent = DownDocumentComponent;
 //# sourceMappingURL=downdocument.component.js.map

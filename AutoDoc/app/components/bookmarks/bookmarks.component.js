@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular/core");
 const bookmark_service_1 = require("../../services/bookmark.service");
 const data_service_1 = require("../../services/data.service");
-//import { WebStorageModule, LocalStorageService } from 'angular2-local-storage';
 const router_1 = require("@angular/router");
 let BookmarkComponent = class BookmarkComponent {
     constructor(bookmarkService, dataservice, router) {

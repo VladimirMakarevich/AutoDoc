@@ -20,7 +20,7 @@
 
             'rxjs': 'npm:rxjs',
             'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js',
-            'angular2-local-storage': 'npm:angular2-local-storage/local_storage.js'
+            'file-saver': 'npm:file-saver'
         },
 
         packages: {
@@ -31,8 +31,8 @@
             rxjs: {
                 defaultExtension: 'js'
             },
-            'angular2-local-storage': {
-                main: 'node_modules/angular2-local-storage/local_storage.js',
+            'file-saver': {
+                main: './FileSaver.js',
                 defaultExtension: 'js'
             }
         }

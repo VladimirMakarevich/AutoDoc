@@ -5,7 +5,6 @@ import { DataService } from '../../services/data.service';
 import { Bookmark } from '../../models/bookmarks/bookmark.type';
 import { Document } from '../../models/document/document.type';
 
-//import { WebStorageModule, LocalStorageService } from 'angular2-local-storage';
 import { Router } from '@angular/router';
 
 @Component({

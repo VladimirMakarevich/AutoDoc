@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular/core");
 const http_1 = require("@angular/http");
+const http_2 = require("@angular/http");
 require("rxjs/add/operator/catch");
 require("rxjs/add/operator/debounceTime");
 require("rxjs/add/operator/distinctUntilChanged");
@@ -30,12 +31,20 @@ let DocumentService = class DocumentService {
             .post("http://localhost:50348/api/Document/UploadFile", input)
             .map(response => response.json())
             .toPromise();
-        //localStorage.setItem('currentUser', JSON.stringify({ name: name }));
     }
     download(id) {
-        let body = JSON.stringify(id);
         return this.http
-            .get("http://localhost:50348/api/Document/DownloadDocument", body);
+            .get("http://localhost:50348/api/Document/DownloadDocument/" + id, { responseType: http_2.ResponseContentType.Blob })
+            .map((res) => {
+            var headerSection = res.headers.get('Content-Type');
+            var headerFileName = headerSection.split(';')[1];
+            var fileName = headerFileName.replace(/"/g, '');
+            this.file = {
+                fileContents: res.blob(),
+                fileDownloadName: fileName
+            };
+            return this.file;
+        });
     }
 };
 DocumentService = __decorate([

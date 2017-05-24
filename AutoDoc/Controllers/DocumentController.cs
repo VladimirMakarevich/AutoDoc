@@ -17,6 +17,8 @@ using AutoDoc.Mappers;
 using AutoDoc.DAL.Services;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
+using System.Net.Http;
+using System.Net;
 
 namespace AutoDoc.Controllers
 {
@@ -85,53 +87,25 @@ namespace AutoDoc.Controllers
             foreach (var value in documentJsonModel.Bookmarks)
             {
                 WordBookmarkParser.ReplaceBookmarkSecondMethod(bookMarks, value.Name, value.Message);
-                //var bookmark = bookMarks[value.Name];
-                //Run bookmarkEl = bookmark.NextSibling<Run>();
-                //if (bookmarkEl != null)
-                //{
-                //    //bookmarkText.GetFirstChild<Text>().Text = value.Value;
-                //    bookmarkEl.GetFirstChild<T>().InsertAfterSelf(value.Message);
-                //}
             }
-
-            //foreach (var end in bookMarks)
-            //{
-            //    //WordBookmarkParser.ReplaceBookmarkSecondMethod(doc);
-            //    var textElement = new Text(documentJsonModel.Bookmarks.);
-            //    var runElement = new Run(textElement);
-
-            //    end.Value.InsertAfterSelf(runElement);
-            //}
-
-            //WordBookmarkParser.ReplaceBookmarkSecondMethod(doc);
             DocumentCore.CloseDocument(doc);
-            //using (WordprocessingDocument doc = DocumentCore.OpenDocument(document.Path))
-            //{
-            //    foreach (var bookmarks in documentJsonModel.Bookmarks)
-            //    {
-            //        var wordprocessingText = TextUtil.GetText(bookmarks.Message);
-            //        WordBookmarkParser.ReplaceBookmark(doc, bookmarks.Name, wordprocessingText);
-            //    }
-
-            //    //var doc2 = DocumentCore.OpenDocument("Z:\\DELL\\programming WORKS\\LightPoint\\New folder\\AutoDoc\\wwwroot\\AppData\\home.docx");
-            //    //doc2.Save();
-            //    //doc2.Close();
-            //    DocumentCore.CloseDocument(doc);
-            //}
 
             return document.Id;
         }
 
         [HttpGet]
-        [Route("DownloadDocument")]
-        public IActionResult DownloadDocument(int documentId)
+        [Route("DownloadDocument/{documentId}")]
+        public FileContentResult DownloadDocument(int documentId)
         {
             var document = _documentService.GetDocument(documentId);
 
-            string contentType = "application/octet-stream";
-            string downloadName = document.Name;
+            var fileByteArray = System.IO.File.ReadAllBytes(document.Path);
+            FileContentResult file = new FileContentResult(fileByteArray, "application/x-msdownload; " + document.Name)
+            {
+                FileDownloadName = WebUtility.UrlEncode(document.Name)
+            };
 
-            return File(document.Path, contentType, downloadName);
+            return file;
         }
     }
 }
