@@ -2,8 +2,8 @@
     <h2>My Bookmarks</h2>
     <ul>
         <li *ngFor="let bookmark of bookmarks">
-            <select name="InputSelect" [(ngModel)]="bookmark.type">
-                <option *ngFor="let inputOption of inputOptions" [value]="inputOption.id" [selected]="inputSelect.option.id == bookmark.type">{{inputOption.name}}</option>
+            <select name="InputSelect" [(ngModel)]="bookmark.type" (change)="changeBookmarkType(bookmark)">
+                <option *ngFor="let inputOption of inputOptions" [value]="inputOption.id" [selected]="inputOption.id == bookmark.type">{{inputOption.name}}</option>
             </select><br>
 
             <div *ngIf="bookmark.type == 1">
@@ -12,10 +12,27 @@
             </div>
 
             <div *ngIf="bookmark.type == 2">
-                <ng2-smart-table [settings]="settings" [source]="bookmark.message"></ng2-smart-table>
+                <nv-editable-table [table-headers]="bookmark.message.headers"
+                                   [table-rows]="bookmark.message.data"
+                                   [add-button-label]="''"
+                                   [edit-button-label]="''"
+                                   [save-button-label]="''"
+                                   [delete-button-label]="''"
+                                   [add-icon]="'plus icon'"
+                                   [edit-icon]="'edit icon'"
+                                   [save-icon]="'checkmark icon'"
+                                   [delete-icon]="'remove icon'"
+                                   [add-button-class]="'ui compact icon button'"
+                                   [edit-button-class]="'ui compact blue icon button'"
+                                   [delete-button-class]="'ui compact red icon button'"
+                                   [can-delete-rows]="true"
+                                   [can-edit-rows]="true"
+                                   [can-add-rows]="true"
+                                   class="ui table">
+                </nv-editable-table>
 
                 <input type="text" class="form-control text-input" placeholder="New Header..." [(ngModel)]="newHeaderName">
-                <button (click)="AddNewHeader()">Add</button>
+                <button (click)="addNewHeader(bookmark.id)">Add</button>
             </div>
 
         </li>

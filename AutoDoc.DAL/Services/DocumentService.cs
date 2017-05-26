@@ -39,7 +39,6 @@ namespace AutoDoc.DAL.Services
             if (existing == null)
             {
                 int id = _baseRepository.Add(document);
-                _baseRepository.Commit();
                 return id;
             }
             else return existing.Id;

@@ -8,24 +8,33 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular/core");
 const bookmark_service_1 = require("../../services/document/bookmark.service");
 const router_1 = require("@angular/router");
 const router_2 = require("@angular/router");
 const core_2 = require("@angular/core");
-const ng2_smart_table_1 = require("ng2-smart-table");
+const bookmark_1 = require("../../Models/bookmark");
 let BookmarkComponent = class BookmarkComponent {
     constructor(routeActivated, router, bookmarkService) {
         this.routeActivated = routeActivated;
         this.router = router;
         this.bookmarkService = bookmarkService;
+        this.headers = Array();
         this.inputOptions = Array();
-        this.data = Array();
-        this.source = new ng2_smart_table_1.LocalDataSource(this.data);
     }
-    AddNewHeader() {
-        this.settings.columns.push(new Column(this.newHeaderName, false));
+    changeBookmarkType(bookmark) {
+        if (bookmark.type == 2) {
+            bookmark.message = new bookmark_1.Table();
+            bookmark.message.headers = new Array();
+            bookmark.message.data = new Array();
+        }
+        if (bookmark.type == 1)
+            bookmark.message;
+    }
+    addNewHeader(bookmark) {
+        bookmark.message.headers.push(this.newHeaderName);
+        //this.bookmarks.filter(el => el.id == id)[0].messagetable.headers.push(this.newHeaderName);
+        //this.bookmarks.filter(el => el.id == id)[0].messagetable.data
     }
     uploadNewValues() {
         this.bookmarkService.postData(this.bookmarks).subscribe((ans) => {
@@ -66,17 +75,4 @@ class Option {
     }
 }
 exports.Option = Option;
-class Settings {
-    constructor() {
-        this.columns = Array();
-    }
-}
-exports.Settings = Settings;
-class Column {
-    constructor(title, filter) {
-        this.title = title;
-        this.filter = filter;
-    }
-}
-exports.Column = Column;
 //# sourceMappingURL=bookmark.component.js.map

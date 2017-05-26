@@ -12,6 +12,7 @@ namespace AutoDoc.Mappers.Profiles
     {
         public EntityToModel()
         {
+            //CreateMap<Bookmark, BookmarksJsonModel>().ForMember(d => d.Message, op => op.MapFrom(src => JsonConvert.SerializeObject(src.Message)));
             CreateMap<Bookmark, BookmarksJsonModel>();
             CreateMap<Document, DocumentJsonModel>();
         }

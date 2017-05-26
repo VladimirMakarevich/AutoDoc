@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Cors;
 using AutoMapper;
 using AutoDoc.BL.ModelsUtilities;
 using DocumentFormat.OpenXml.Wordprocessing;
+using Newtonsoft.Json;
 
 namespace AutoDoc.Controllers
 {
@@ -59,7 +60,23 @@ namespace AutoDoc.Controllers
 
             foreach (var bookmartEntity in bookmarksEntities)
             {
-                responceBookmarksJsonModels.Add(_mapper.Map<Bookmark, BookmarksJsonModel>(bookmartEntity));
+                /*switch(bookmartEntity.Type)
+                {
+                    case 1:
+                        var bookmarkJSONText = _mapper.Map<Bookmark, BookmarksJsonModel>(bookmartEntity);
+                        bookmarkJSONText.MessageText = bookmartEntity.Message;
+                        responceBookmarksJsonModels.Add(bookmarkJSONText);
+                        break;
+
+                    case 2:
+                        var bookmarkJSONTable = _mapper.Map<Bookmark, BookmarksJsonModel>(bookmartEntity);
+                        bookmarkJSONTable.MessageTable = JsonConvert.DeserializeObject<Models.Table>(bookmartEntity.Message);
+                        responceBookmarksJsonModels.Add(bookmarkJSONTable);
+                        break;
+                }*/
+                var bookmark = _mapper.Map<Bookmark, BookmarksJsonModel>(bookmartEntity);
+                bookmark.Message = JsonConvert.DeserializeObject(bookmartEntity.MessageJson);
+                responceBookmarksJsonModels.Add(bookmark);
             }
 
             return responceBookmarksJsonModels;
@@ -77,11 +94,29 @@ namespace AutoDoc.Controllers
                 var docFile = _documentCore.OpenDocument(documentPath);
                 var bookmarkNames = _bookmarkParser.FindBookmarks(docFile.MainDocumentPart.Document);
 
-
                 foreach (var bookmark in bookmarks)
                 {
-                    _bookmarkService.EditBookmark(_mapper.Map<BookmarksJsonModel, Bookmark>(bookmark));
-                    _bookmarkParser.ReplaceBookmark(bookmarkNames, bookmark.Name, new TextUtil().GetText(bookmark.Message));
+                    /*switch (bookmark.Type)
+                    {
+                        case 1:
+                            var bookmarkDBText = _mapper.Map<BookmarksJsonModel, Bookmark>(bookmark);
+                            bookmarkDBText.Message = bookmark.MessageText;
+                            _bookmarkService.EditBookmark(bookmarkDBText);
+                            _bookmarkParser.ReplaceBookmark(bookmarkNames, bookmark.Name, new TextUtil().GetText(bookmark.MessageText));
+                            break;
+                        case 2:
+                            var bookmarkDBTable = _mapper.Map<BookmarksJsonModel, Bookmark>(bookmark);
+                            bookmarkDBTable.Message = JsonConvert.SerializeObject(bookmark.MessageTable);
+                            _bookmarkService.EditBookmark(bookmarkDBTable);
+                            _bookmarkParser.ReplaceBookmark(bookmarkNames, bookmark.Name, new TextUtil().GetText(bookmark.MessageText)); //TODO table
+                            break;
+                        default: break;
+                    }*/
+
+                    var bookmarkDb = _mapper.Map<BookmarksJsonModel, Bookmark>(bookmark);
+                    bookmarkDb.MessageJson = JsonConvert.SerializeObject(bookmark.Message);
+                    _bookmarkService.EditBookmark(bookmarkDb);
+                    _bookmarkParser.ReplaceBookmark(bookmarkNames, bookmark.Name, new TextUtil().GetText(bookmark.Message)); //TODO table
                 }
                 docFile.Close();
 

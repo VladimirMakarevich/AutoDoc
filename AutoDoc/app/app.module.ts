@@ -10,7 +10,9 @@ import { BookmarkComponent } from "./components/document/bookmark.component";
 import { DownloadComponent } from "./components/document/download.component";
 import { DocumentService} from "./services/document/document.service";
 import { BookmarkService } from "./services/document/bookmark.service";
-import { Ng2SmartTableModule, LocalDataSource } from 'ng2-smart-table';
+import { Ng2SmartTableModule } from 'ng2-smart-table'; 
+import { EditableTableModule } from 'ng-editable-table';
+import { ButtonsModule } from 'ngx-bootstrap/buttons';
 
 const appRoutes: Routes = [
     { path: '', redirectTo: '/upload', pathMatch: 'full' },
@@ -23,8 +25,9 @@ const appRoutingProviders: any[] = [];
 
 @NgModule({
     imports: [
+        ButtonsModule.forRoot(),
         Ng2SmartTableModule,
-        LocalDataSource,
+        EditableTableModule,
         BrowserModule,
         FormsModule,
         HttpModule,

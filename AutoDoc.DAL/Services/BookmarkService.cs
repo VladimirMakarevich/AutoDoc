@@ -45,8 +45,6 @@ namespace AutoDoc.DAL.Services
             {
                 bookmark.Type = 1;
                 int id = _baseRepository.Add(bookmark);
-                _baseRepository.Commit();
-
                 return id;
             }
             else return existing.Id;
@@ -55,7 +53,7 @@ namespace AutoDoc.DAL.Services
         public void EditBookmark(Bookmark bookmark)
         {
             var buf = _baseRepository.GetById(bookmark.Id);
-            buf.Message = bookmark.Message;
+            buf.MessageJson = bookmark.MessageJson;
             buf.Type = bookmark.Type;
 
             _baseRepository.Update(buf);

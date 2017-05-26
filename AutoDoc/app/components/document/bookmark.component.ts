@@ -4,8 +4,9 @@ import { Router } from '@angular/router';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Injectable } from '@angular/core';
 
-import { Bookmark } from '../../Models/bookmark';
+import { Bookmark, Table } from '../../Models/bookmark';
 import { Ng2SmartTableModule, LocalDataSource } from 'ng2-smart-table';
+import { EditableTableModule } from 'ng-editable-table';
 
 @Component(({
     selector: 'bookmark-component',
@@ -23,20 +24,29 @@ export class BookmarkComponent implements OnInit {
 
     source: LocalDataSource;
     newHeaderName: string;
+    headers = Array<string>();
 
     inputOptions = Array<Option>();
-    data = Array<any>();
-    settings: Settings;
-
+   
     constructor(
         private routeActivated: ActivatedRoute,
         private router: Router,
         private bookmarkService: BookmarkService) {
-    this.source = new LocalDataSource(this.data);
     }
 
-    AddNewHeader(): void {
-        this.settings.columns.push(new Column (this.newHeaderName, false));
+    changeBookmarkType(bookmark: Bookmark): void {
+        if (bookmark.type == 2) {
+            bookmark.message = new Table();
+            bookmark.message.headers = new Array<string>();
+            bookmark.message.data = new Array<Array<string>>();
+        }
+        if (bookmark.type == 1) bookmark.message;
+    }
+
+    addNewHeader(bookmark: Bookmark): void {
+        bookmark.message.headers.push(this.newHeaderName);
+        //this.bookmarks.filter(el => el.id == id)[0].messagetable.headers.push(this.newHeaderName);
+        //this.bookmarks.filter(el => el.id == id)[0].messagetable.data
     }
 
     uploadNewValues(): void {
@@ -73,16 +83,3 @@ export class Option {
     name: string;
 }
 
-export class Settings {
-    columns = Array<Column>();
-}
-
-export class Column {
-    constructor(title: string, filter: boolean) {
-        this.title = title;
-        this.filter = filter;
-    }
-
-    title: string;
-    filter: boolean;
-}

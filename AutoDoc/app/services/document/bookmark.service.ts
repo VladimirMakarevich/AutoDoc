@@ -25,6 +25,8 @@ export class BookmarkService {
         headers.append('Access-Control-Allow-Headers', "X-Requested-With, Content-Type, Origin, Authorization, Accept, Client-Security-Token, Accept-Encoding");
         let options = new RequestOptions({ method: 'POST', headers: headers });
 
+
+
         let body = JSON.stringify(bookmarks);
         return this.http.post(this.bookmarkUrlPost, body, options)
             .map(this.extractData)

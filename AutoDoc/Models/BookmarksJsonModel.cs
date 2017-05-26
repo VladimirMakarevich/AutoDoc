@@ -9,7 +9,22 @@ namespace AutoDoc.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Message { get; set; }
+        public dynamic Message { get; set; }
         public int Type { get; set; }
     }
+
+    /*public class BookmarksJsonModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public Table MessageTable { get; set; }
+        public string MessageText { get; set; }
+        public int Type { get; set; }
+    }*/
+
+    /*public class Table
+    {
+        public string[] Headers { get; set; }
+        public string[][] Data { get; set; }
+    }*/
 }

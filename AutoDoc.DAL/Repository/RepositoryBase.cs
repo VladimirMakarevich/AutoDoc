@@ -24,6 +24,7 @@ namespace AutoDoc.DAL.Repository
         {
             _dataContext.Entry(entity).State = EntityState.Added;
             _dbSet.Add(entity);
+            this.Commit();
 
             return entity.Id;
         }

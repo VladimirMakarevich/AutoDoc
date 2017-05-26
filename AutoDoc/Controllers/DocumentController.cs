@@ -92,7 +92,7 @@ namespace AutoDoc.Controllers
                 if (props != null)
                 {
                     var prop = props.Where(p => ((CustomDocumentProperty)p).Name.Value == "ParentId").FirstOrDefault();
-                    if (prop != null) ParentId = ((CustomDocumentProperty)prop).PropertyId; //Int32.TryParse(prop.InnerText, out ParentId);
+                    if (prop != null) Int32.TryParse(((CustomDocumentProperty)prop).InnerText, out ParentId); //Int32.TryParse(prop.InnerText, out ParentId);
                 }
             }
 
@@ -106,28 +106,41 @@ namespace AutoDoc.Controllers
             int id = _documentService.CreateDocument(doc);
             if (id != ParentId)
             {
-                var customFilePropPart = docFile.AddCustomFilePropertiesPart();
-                customFilePropPart.Properties = new DocumentFormat.OpenXml.CustomProperties.Properties();
+                var customPropsAdd = docFile.CustomFilePropertiesPart;
+                if (customPropsAdd == null)
+                {
+                    var customFilePropPart = docFile.AddCustomFilePropertiesPart();
 
-                var customProp = new CustomDocumentProperty();
-                customProp.Name = "ParentId";
-                customProp.PropertyId = id;
+                    customFilePropPart.Properties = new DocumentFormat.OpenXml.CustomProperties.Properties();
+                    var customProp = new CustomDocumentProperty();
+                    customProp.Name = "ParentId";
+                    customProp.FormatId = "{D5CDD505-2E9C-101B-9397-08002B2CF9AE}";
+                    customProp.VTLPWSTR = new VTLPWSTR(id.ToString());
 
-                customFilePropPart.Properties.ToList().Add(customProp);
+                    customFilePropPart.Properties.AppendChild(customProp);
+                    int pid = 2;
+                    foreach (CustomDocumentProperty item in customFilePropPart.Properties)
+                    {
+                        item.PropertyId = pid++;
+                    }
+                    customFilePropPart.Properties.Save();
+
+                    //customFilePropPart.Properties.ToList().Add(customProp);
+                    //customFilePropPart.Properties.Save();
+
+                }
             }
 
             var bookmarkNames = new Dictionary<string, BookmarkEnd>();
 
             bookmarkNames = _bookmarkParser.FindBookmarks(docFile.MainDocumentPart.Document);
-            docFile.Close();
-
 
             foreach (var bookmarkName in bookmarkNames.Keys)
             {
                 Bookmark bookmarkEntity = new Bookmark
                 {
                     Name = bookmarkName,
-                    Message = string.Empty,
+                    MessageJson = string.Empty,
                     DocumentId = id
                 };
                 int bookmarkId = _bookmarkService.CreateBookmark(bookmarkEntity);
@@ -140,7 +153,7 @@ namespace AutoDoc.Controllers
                 Id = id
             };
 
-            docFile.Close();
+            _documentCore.CloseDocument(docFile);
 
             return docJson;
         }

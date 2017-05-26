@@ -23,7 +23,7 @@ namespace AutoDoc.DAL.Migrations
 
                     b.Property<int>("DocumentId");
 
-                    b.Property<string>("Message")
+                    b.Property<string>("MessageJson")
                         .IsRequired();
 
                     b.Property<string>("Name")

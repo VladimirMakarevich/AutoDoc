@@ -20,8 +20,14 @@
 
             'rxjs': 'npm:rxjs',
             'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js',
-            //'ng-editable-table': 'npm:ng-editable-table/editable-table/editable-table.module.js'
-            //'ng2-smart-table': 'npm:ng2-smart-table',
+            
+            'ng-editable-table': 'npm:ng-editable-table',
+
+            'ng2-smart-table': 'npm:ng2-smart-table',
+            'ng2-smart-table/lib': 'npm:ng2-smart-table/build/src/ng2-smart-table/lib',
+            'ng2-completer': 'npm:ng2-completer',
+            'traceur': 'npm:traceur/bin/traceur.js',
+            'lodash': 'npm:lodash',
         },
 
         packages: {
@@ -34,12 +40,39 @@
                 defaultExtension: 'js'
             },
             /*'ng2-smart-table': {
+                main: 'build/ng2-smart-table.js',
+                meta: {
+                    '*.html': {},
+                    '*.scss': {}
+                }
+            },
+            'ng2-smart-table/lib': {
+                main: 'index.js'
+            },
+            'angular2-in-memory-web-api': {
                 main: './index.js',
                 defaultExtension: 'js'
             }*/
-            /*'ng-editable-table': {
+            /*'ng2-smart-table': {
+                main: './index.js',
                 defaultExtension: 'js'
             }*/
+            'ng-editable-table': {
+                main: 'index.js',
+                defaultExtension: 'js'
+            },
+            lodash: {
+                main: 'index.js',
+                defaultExtension: 'js'
+            },
+            'ng2-completer': {
+                main: 'index.js',
+                defaultExtension: 'js'
+            },
+            'ng2-smart-table': {
+                main: 'index.js',
+                defaultExtension: 'js'
+            }
         }
     });
 })(this);

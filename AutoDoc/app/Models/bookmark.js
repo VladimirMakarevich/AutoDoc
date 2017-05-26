@@ -1,3 +1,12 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+/*export interface Bookmark {
+    id: string;
+    name: string;
+    messagetable: Table;
+    messagetext: string;
+    type: number;
+}*/
+class Table {
+}
+exports.Table = Table;
 //# sourceMappingURL=bookmark.js.map
