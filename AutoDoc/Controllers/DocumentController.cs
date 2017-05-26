@@ -86,7 +86,12 @@ namespace AutoDoc.Controllers
 
             foreach (var value in documentJsonModel.Bookmarks)
             {
-                WordBookmarkParser.ReplaceBookmarkSecondMethod(bookMarks, value.Name, value.Message);
+                Table table = WordBookmarkParser.CreateTableMain();
+                var text = TextUtil.GetText(value.Message);
+
+                //WordBookmarkParser.ReplaceBookmarkSecondMethod(bookMarks, value.Name, text, doc.MainDocumentPart);
+
+                WordBookmarkParser.ReplaceBookmarkSecondMethod(bookMarks, value.Name, table, doc.MainDocumentPart);
             }
             DocumentCore.CloseDocument(doc);
 

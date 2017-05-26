@@ -96,74 +96,51 @@ namespace AutoDoc.BL.Parsers
             }
         }
 
-        public static void ReplaceBookmarkSecondMethod(Dictionary<string, BookmarkEnd> bookMarks, string name, string message)
+        public static void ReplaceBookmarkSecondMethod<T>(Dictionary<string, BookmarkEnd> bookMarks, string name, T element,
+            MainDocumentPart doc) where T : OpenXmlElement
         {
             var bookmark = bookMarks[name];
             Run bookmarkEl = bookmark.NextSibling<Run>();
+
             if (bookmarkEl != null)
             {
-                //bookmarkText.GetFirstChild<Text>().Text = value.Value;
-                var newValue = new Text(message);
-                var table = CreateTableMain();
-                //bookmarkEl.GetFirstChild<OpenXmlElement>().InsertAfterSelf(newValue);
-                //bookmarkStart.Parent.InsertAfter<Run>(new Run(newElement), bookmarkStart);
-                //bookmarkEl
-                //ReplaceTable(bookmarkEl);
-                bookmarkEl.GetFirstChild<OpenXmlElement>().InsertAfter<Run>(new Run(table), bookmarkEl);
-                //doc.MainDocumentPart.Document.Body.Append(table);
-            }
-        }
+                var bmstart = (from b in doc.Document.Body.Descendants<BookmarkStart>()
+                               where b.Name.ToString().StartsWith(name)
+                               select b).FirstOrDefault();
 
-        public static void ReplaceTable(BookmarkEnd bmend, BookmarkStart bmstart, 
-            string bookmarkName, string text, Table table)
-        {
-            string idBm = bmstart.Id;
+                BookmarkEnd bmend = null;
+                string idBm = bmstart.Id;
 
-            OpenXmlElement sliblingElement = bmstart.Parent.PreviousSibling();
-            //Table should be replaced
-            //Replace table with paragraph
-            Paragraph parentPara = (Paragraph)bmend.Parent.ElementsBefore()
-                .Where(e => e.GetType() == typeof(Paragraph))
-                .LastOrDefault();
+                bmend = (from b in doc.RootElement.Descendants<BookmarkEnd>()
+                         where b.Id == idBm
+                         select b).FirstOrDefault();
 
-            bmend.Parent.Remove();
-            sliblingElement = parentPara;
+                OpenXmlElement sliblingElement = bookmark.Parent.NextSibling<OpenXmlElement>();
 
-            //Set new start of bookmark
-            BookmarkStart nBmStart = new BookmarkStart()
-            {
-                Name = bookmarkName,
-                Id = idBm
-            };
-            //New paragraph
-            Paragraph nPara = new Paragraph();
-            if (parentPara.Descendants<ParagraphProperties>().Select(z => z) != null)
-            {
-                foreach (var props in parentPara.Descendants<ParagraphProperties>())
+                BookmarkStart nBmStart = new BookmarkStart()
                 {
-                    nPara.AppendChild<ParagraphProperties>((ParagraphProperties)props.Clone());
-                }
+                    Name = name,
+                    Id = idBm
+                };
+
+                Paragraph nPara = new Paragraph();
+
+                nPara.Append(nBmStart);
+
+                Run nRun = new Run();
+
+                nRun.Append(element);
+                nPara.Append(nRun);
+
+                BookmarkEnd nBmEnd = new BookmarkEnd()
+                {
+                    Id = idBm
+                };
+
+                nPara.Append(nBmEnd);
+
+                sliblingElement.InsertAfterSelf(nPara);
             }
-            nPara.Append(nBmStart);
-            //New Run
-            Run nRun = new Run();
-            //New text
-            //Text nText = new Text()
-            //{
-            //    Text = text
-            //};
-
-            //nRun.Append(nText);
-            nRun.Append(table);
-            nPara.Append(nRun);
-            //New end of bookmark
-            BookmarkEnd nBmEnd = new BookmarkEnd()
-            {
-                Id = idBm
-            };
-            nPara.Append(nBmEnd);
-
-            sliblingElement.InsertAfterSelf(nPara);
         }
 
         public static Table CreateTableMain()
@@ -177,38 +154,38 @@ namespace AutoDoc.BL.Parsers
                     new TopBorder()
                     {
                         Val =
-                        new EnumValue<BorderValues>(BorderValues.Dashed),
+                        new EnumValue<BorderValues>(BorderValues.BasicThinLines),
                         Size = 10
                     },
                     new BottomBorder()
                     {
                         Val =
-                        new EnumValue<BorderValues>(BorderValues.Dashed),
+                        new EnumValue<BorderValues>(BorderValues.BasicThinLines),
                         Size = 10
                     },
                     new LeftBorder()
                     {
                         Val =
-                        new EnumValue<BorderValues>(BorderValues.Dashed),
-                        Size = 24
+                        new EnumValue<BorderValues>(BorderValues.BasicThinLines),
+                        Size = 10
                     },
                     new RightBorder()
                     {
                         Val =
-                        new EnumValue<BorderValues>(BorderValues.Dashed),
-                        Size = 24
+                        new EnumValue<BorderValues>(BorderValues.BasicThinLines),
+                        Size = 10
                     },
                     new InsideHorizontalBorder()
                     {
                         Val =
-                        new EnumValue<BorderValues>(BorderValues.Dashed),
-                        Size = 24
+                        new EnumValue<BorderValues>(BorderValues.BasicThinLines),
+                        Size = 10
                     },
                     new InsideVerticalBorder()
                     {
                         Val =
-                        new EnumValue<BorderValues>(BorderValues.Dashed),
-                        Size = 24
+                        new EnumValue<BorderValues>(BorderValues.BasicThinLines),
+                        Size = 10
                     }
                 )
             );
@@ -227,7 +204,7 @@ namespace AutoDoc.BL.Parsers
                 new TableCellWidth() { Type = TableWidthUnitValues.Dxa, Width = "2400" }));
 
             // Specify the table cell content.
-            tc1.Append(new Paragraph(new Run(new Text("some text"))));
+            tc1.Append(new Paragraph(new Run(new Text("Run text, RUN!"))));
 
             // Append the table cell to the table row.
             tr.Append(tc1);
@@ -284,7 +261,9 @@ namespace AutoDoc.BL.Parsers
         }
 
 
-        public static Dictionary<string, BookmarkEnd> FindBookmarks(OpenXmlElement documentPart, Dictionary<string, BookmarkEnd> results = null, Dictionary<string, string> unmatched = null)
+        public static Dictionary<string, BookmarkEnd> FindBookmarks(OpenXmlElement documentPart,
+            Dictionary<string, BookmarkEnd> results = null,
+            Dictionary<string, string> unmatched = null)
         {
             results = results ?? new Dictionary<string, BookmarkEnd>();
             unmatched = unmatched ?? new Dictionary<string, string>();
@@ -304,6 +283,7 @@ namespace AutoDoc.BL.Parsers
                     {
                         if (bEnd.Id == orphanName.Key)
                             results.Add(orphanName.Value, bEnd);
+
                     }
                 }
 
@@ -313,17 +293,47 @@ namespace AutoDoc.BL.Parsers
             return results;
         }
 
-        public static void ReplaceBookmarkSecondMethod(WordprocessingDocument doc)
+        //public static void ReplaceBookmarkSecondMethod(WordprocessingDocument doc)
+        //{
+        //    var bookMarks = FindBookmarks(doc.MainDocumentPart.Document);
+
+        //    foreach (var end in bookMarks)
+        //    {
+        //        var textElement = new Text("asdfasdf");
+        //        var runElement = new Run(textElement);
+
+        //        end.Value.InsertAfterSelf(runElement);
+        //    }
+        //}
+
+        public static BookmarkStart FindBookmarkStart(OpenXmlElement documentPart)
         {
-            var bookMarks = FindBookmarks(doc.MainDocumentPart.Document);
+            BookmarkStart bStart = null;
 
-            foreach (var end in bookMarks)
+            foreach (var child in documentPart.Elements())
             {
-                var textElement = new Text("asdfasdf");
-                var runElement = new Run(textElement);
-
-                end.Value.InsertAfterSelf(runElement);
+                if (child is BookmarkStart)
+                {
+                    bStart = child as BookmarkStart;
+                }
             }
+
+            return bStart;
+        }
+
+        public static BookmarkEnd FindBookmarkEnd(OpenXmlElement documentPart)
+        {
+            BookmarkEnd bEnd = null;
+
+            foreach (var child in documentPart.Elements())
+            {
+                if (child is BookmarkEnd)
+                {
+                    bEnd = child as BookmarkEnd;
+                }
+            }
+
+            return bEnd;
         }
     }
 }

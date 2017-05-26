@@ -87,6 +87,9 @@ namespace AutoDoc.BL.Parsers
                         bmstart = (from b in footer.RootElement.Descendants<BookmarkStart>()
                                    where b.Name.ToString().StartsWith(bookmarkName)
                                    select b).FirstOrDefault();
+                        bmstart = footer.RootElement.Descendants<BookmarkStart>()
+                            .Where(b => b.Name.ToString()
+                        .StartsWith(bookmarkName)).FirstOrDefault();
                         break;
                     }
             }
