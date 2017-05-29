@@ -11,28 +11,36 @@
                 <input [(ngModel)]="bookmark.message" placeholder="New Value" />
             </div>
 
+            <!--[add-button-label]="''"
+                           [edit-button-label]="''"
+                           [save-button-label]="''"
+                           [delete-button-label]="''"
+                           [add-icon]="'plus icon'"
+                           [edit-icon]="'edit icon'"
+                           [save-icon]="'checkmark icon'"
+                           [delete-icon]="'remove icon'"
+                           [add-button-class]="'ui compact icon button'"
+                           [edit-button-class]="'ui compact blue icon button'"
+                           [delete-button-class]="'ui compact red icon button'"-->
+
+
             <div *ngIf="bookmark.type == 2">
-                <nv-editable-table [table-headers]="bookmark.message.headers"
-                                   [table-rows]="bookmark.message.data"
-                                   [add-button-label]="''"
-                                   [edit-button-label]="''"
-                                   [save-button-label]="''"
-                                   [delete-button-label]="''"
-                                   [add-icon]="'plus icon'"
-                                   [edit-icon]="'edit icon'"
-                                   [save-icon]="'checkmark icon'"
-                                   [delete-icon]="'remove icon'"
-                                   [add-button-class]="'ui compact icon button'"
-                                   [edit-button-class]="'ui compact blue icon button'"
-                                   [delete-button-class]="'ui compact red icon button'"
+                <!--<nv-editable-table [table-headers]="bookmark.message.headers"
+                                   [table-rows]="bookmark.message.data"  
+                                   [edit-button-label]="'Edit'"
+                                   [add-button-label]="'Add'"
+                                   [save-button-label]="'Save'"
+                                   [delete-button-label]="'Delete'"
+                                   [cancel-button-label]="'Cancel'"
                                    [can-delete-rows]="true"
                                    [can-edit-rows]="true"
                                    [can-add-rows]="true"
                                    class="ui table">
-                </nv-editable-table>
+                </nv-editable-table>-->
+                <ng2-smart-table [settings]="bookmark.message.settings" [source]="bookmark.message.data"></ng2-smart-table>
 
                 <input type="text" class="form-control text-input" placeholder="New Header..." [(ngModel)]="newHeaderName">
-                <button (click)="addNewHeader(bookmark.id)">Add</button>
+                <button (click)="addNewHeader(bookmark)">Add</button>
             </div>
 
         </li>

@@ -7,6 +7,7 @@ namespace AutoDoc.BL.ModelsUtilities
 {
     public interface ITableUtil
     {
-        Table GetTable<T>(List<T> tableData, int[] tableHeadingCount, string[] columnHeadings);
+        //Table GetTable<T>(List<T> tableData, int[] tableHeadingCount, string[] columnHeadings);
+        Table GetTable(AutoDoc.DAL.Models.Table tableData);
     }
 }

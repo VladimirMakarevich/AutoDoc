@@ -163,7 +163,7 @@ namespace AutoDoc.BL.Parsers
             return results;
         }
 
-        public void ReplaceBookmark<T>(Dictionary<string, BookmarkEnd> bookMarks, string name, T message) where T: OpenXmlElement
+        /*public void ReplaceBookmark<T>(Dictionary<string, BookmarkEnd> bookMarks, string name, T message) where T: OpenXmlElement
         {
             var bookmark = bookMarks[name];
             Run bookmarkEl = bookmark.NextSibling<Run>();
@@ -172,6 +172,54 @@ namespace AutoDoc.BL.Parsers
                 bookmarkEl.GetFirstChild<OpenXmlElement>().InsertAfterSelf(message);
             }
 
+        }*/
+
+
+        public void ReplaceBookmark<T>(Dictionary<string, BookmarkEnd> bookMarks, string name, T element,
+           MainDocumentPart doc) where T : OpenXmlElement
+        {
+            var bookmark = bookMarks[name];
+            Run bookmarkEl = bookmark.NextSibling<Run>();
+
+            if (bookmarkEl != null)
+            {
+                var bmstart = (from b in doc.Document.Body.Descendants<BookmarkStart>()
+                               where b.Name.ToString().StartsWith(name)
+                               select b).FirstOrDefault();
+
+                BookmarkEnd bmend = null;
+                string idBm = bmstart.Id;
+
+                bmend = (from b in doc.RootElement.Descendants<BookmarkEnd>()
+                         where b.Id == idBm
+                         select b).FirstOrDefault();
+
+                OpenXmlElement sliblingElement = bookmark.Parent.NextSibling<OpenXmlElement>();
+
+                BookmarkStart nBmStart = new BookmarkStart()
+                {
+                    Name = name,
+                    Id = idBm
+                };
+
+                Paragraph nPara = new Paragraph();
+
+                nPara.Append(nBmStart);
+
+                Run nRun = new Run();
+
+                nRun.Append(element);
+                nPara.Append(nRun);
+
+                BookmarkEnd nBmEnd = new BookmarkEnd()
+                {
+                    Id = idBm
+                };
+
+                nPara.Append(nBmEnd);
+
+                sliblingElement.InsertAfterSelf(nPara);
+            }
         }
     }
 }

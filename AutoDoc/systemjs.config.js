@@ -28,6 +28,9 @@
             'ng2-completer': 'npm:ng2-completer',
             'traceur': 'npm:traceur/bin/traceur.js',
             'lodash': 'npm:lodash',
+
+            'ngx-bootstrap': 'npm:ngx-bootstrap',
+            'ngx-bootstrap/buttons': 'npm:ngx-bootstrap/buttons',
         },
 
         packages: {
@@ -70,6 +73,14 @@
                 defaultExtension: 'js'
             },
             'ng2-smart-table': {
+                main: 'index.js',
+                defaultExtension: 'js'
+            },
+            'ngx-bootstrap': {
+                main: 'index.js',
+                defaultExtension: 'js'
+            },
+            'ngx-bootstrap/buttons': {
                 main: 'index.js',
                 defaultExtension: 'js'
             }

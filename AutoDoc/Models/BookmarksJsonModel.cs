@@ -21,10 +21,4 @@ namespace AutoDoc.Models
         public string MessageText { get; set; }
         public int Type { get; set; }
     }*/
-
-    /*public class Table
-    {
-        public string[] Headers { get; set; }
-        public string[][] Data { get; set; }
-    }*/
 }

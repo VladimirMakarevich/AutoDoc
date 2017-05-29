@@ -96,27 +96,28 @@ namespace AutoDoc.Controllers
 
                 foreach (var bookmark in bookmarks)
                 {
-                    /*switch (bookmark.Type)
+                    switch (bookmark.Type)
                     {
                         case 1:
-                            var bookmarkDBText = _mapper.Map<BookmarksJsonModel, Bookmark>(bookmark);
-                            bookmarkDBText.Message = bookmark.MessageText;
-                            _bookmarkService.EditBookmark(bookmarkDBText);
-                            _bookmarkParser.ReplaceBookmark(bookmarkNames, bookmark.Name, new TextUtil().GetText(bookmark.MessageText));
+                            var bookmarkDb = _mapper.Map<BookmarksJsonModel, Bookmark>(bookmark);
+
+                            if (bookmark.Message.GetType() != typeof(string)) throw new Exception("Not my type!");
+                            bookmarkDb.MessageJson = bookmark.Message;
+
+                            _bookmarkService.EditBookmark(bookmarkDb);
+                            _bookmarkParser.ReplaceBookmark(bookmarkNames, bookmark.Name, new TextUtil().GetText(bookmark.Message.ToString()), docFile.MainDocumentPart);
                             break;
                         case 2:
-                            var bookmarkDBTable = _mapper.Map<BookmarksJsonModel, Bookmark>(bookmark);
-                            bookmarkDBTable.Message = JsonConvert.SerializeObject(bookmark.MessageTable);
-                            _bookmarkService.EditBookmark(bookmarkDBTable);
-                            _bookmarkParser.ReplaceBookmark(bookmarkNames, bookmark.Name, new TextUtil().GetText(bookmark.MessageText)); //TODO table
+                            var bookmarkDbTable = _mapper.Map<BookmarksJsonModel, Bookmark>(bookmark);
+
+                            AutoDoc.DAL.Models.Table table = JsonConvert.DeserializeObject<AutoDoc.DAL.Models.Table>(bookmark.Message);
+                            bookmarkDbTable.MessageJson = JsonConvert.SerializeObject(table);
+
+                            _bookmarkService.EditBookmark(bookmarkDbTable);
+                            _bookmarkParser.ReplaceBookmark(bookmarkNames, bookmark.Name, new TableUtil().GetTable(table), docFile.MainDocumentPart); //TODO table
                             break;
                         default: break;
-                    }*/
-
-                    var bookmarkDb = _mapper.Map<BookmarksJsonModel, Bookmark>(bookmark);
-                    bookmarkDb.MessageJson = JsonConvert.SerializeObject(bookmark.Message);
-                    _bookmarkService.EditBookmark(bookmarkDb);
-                    _bookmarkParser.ReplaceBookmark(bookmarkNames, bookmark.Name, new TextUtil().GetText(bookmark.Message)); //TODO table
+                    }
                 }
                 docFile.Close();
 

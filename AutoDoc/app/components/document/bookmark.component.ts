@@ -2,11 +2,12 @@
 import { BookmarkService } from "../../services/document/bookmark.service";
 import { Router } from '@angular/router';
 import { ActivatedRoute, Params } from '@angular/router';
-import { Injectable } from '@angular/core';
+import { Injectable, ApplicationRef, NgZone } from '@angular/core';
 
-import { Bookmark, Table } from '../../Models/bookmark';
+import { Bookmark, Table, Settings, Header } from '../../Models/bookmark';
 import { Ng2SmartTableModule, LocalDataSource } from 'ng2-smart-table';
 import { EditableTableModule } from 'ng-editable-table';
+import { EditableTableService } from 'ng-editable-table';
 
 @Component(({
     selector: 'bookmark-component',
@@ -22,34 +23,59 @@ export class BookmarkComponent implements OnInit {
     errorMessage: string;
     id: any;
 
-    source: LocalDataSource;
     newHeaderName: string;
-    headers = Array<string>();
-
+    mySettings: any;
+    
     inputOptions = Array<Option>();
-   
+
     constructor(
         private routeActivated: ActivatedRoute,
         private router: Router,
-        private bookmarkService: BookmarkService) {
+        private bookmarkService: BookmarkService,
+        private tableService: EditableTableService,
+        private ref: ApplicationRef,
+        private ngZone: NgZone) {
+
+        this.mySettings = new Settings();
     }
 
     changeBookmarkType(bookmark: Bookmark): void {
         if (bookmark.type == 2) {
             bookmark.message = new Table();
-            bookmark.message.headers = new Array<string>();
-            bookmark.message.data = new Array<Array<string>>();
+            //bookmark.message.headers = new Array<string>();
+            //bookmark.message.data = new Array<Array<string>>();
+
+            /*bookmark.message.headers = ['qqq', 'www', 'zzz'];
+            bookmark.message.data = [
+                ['qqq', 'www', 'zzz'],
+                ['qqq', 'www', 'zzz'],
+                ['qqq', 'www', 'zzz']
+            ];*/
+
         }
         if (bookmark.type == 1) bookmark.message;
     }
 
     addNewHeader(bookmark: Bookmark): void {
-        bookmark.message.headers.push(this.newHeaderName);
+        /*this.ngZone.run(() => {
+            //bookmark.message.headers.push(this.newHeaderName);
+            //bookmark.message.data.push(new Array<string>());
+        });*/
+
+        this.mySettings.columns[this.newHeaderName] = { title: this.newHeaderName };
+        bookmark.message.settings = Object.assign({}, this.mySettings);
+
+        //this.ref.tick();
+        //NgZone.run(() => this.currentUser.next(user));
+        console.log(bookmark.message);
+        //this.tableService.tableHeadersObjects.push(this.newHeaderName);
+        //this.tableService.tableHeadersObjects.values.apply();
         //this.bookmarks.filter(el => el.id == id)[0].messagetable.headers.push(this.newHeaderName);
         //this.bookmarks.filter(el => el.id == id)[0].messagetable.data
     }
 
     uploadNewValues(): void {
+        console.log(this.bookmarks[0].message);
         this.bookmarkService.postData(this.bookmarks).subscribe((ans : string) => {
             //console.log(ans);
             this.router.navigate(['./download', this.id]);

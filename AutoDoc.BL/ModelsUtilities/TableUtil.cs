@@ -12,7 +12,7 @@ namespace AutoDoc.BL.ModelsUtilities
 {
     public class TableUtil : ITableUtil
     {
-        public Table GetTable<T>(List<T> tableData, int[] tableHeadingCount, string[] columnHeadings)
+        public Table GetTable(AutoDoc.DAL.Models.Table tableContext)
         {
             var table = new Table();
             var tableBorderTop = new TopBorder();
@@ -57,7 +57,9 @@ namespace AutoDoc.BL.ModelsUtilities
             var tableRowHeader = new TableRow();
             tableRowHeader.Append(new TableRowHeight() {Val = 2000});
 
-            for (int i = 0; i < tableHeadingCount.Length; i++)
+            List<AutoDoc.DAL.Models.Header> tableHeading = tableContext.Settings.Columns;
+
+            for (int i = 0; i < tableHeading.Count; i++)
             {
                 var tableCellHeader = new TableCell();
 
@@ -73,7 +75,7 @@ namespace AutoDoc.BL.ModelsUtilities
 
                 var columnHeader = new Text();
                 //Assign the Pay Rule Name to the Run
-                columnHeader = new Text(columnHeadings[i]);
+                columnHeader = new Text(tableHeading[i].Title);
 
                 runHeader.Append(columnHeader);
 
@@ -127,10 +129,12 @@ namespace AutoDoc.BL.ModelsUtilities
 
             //Create New Row in Table for Each Record
 
+            string[][] tableData = tableContext.Data;
+
             foreach (var record in tableData)
             {
                 var tableRow = new TableRow();
-                for (int i = 0; i < tableHeadingCount.Length; i++)
+                for (int i = 0; i < tableHeading.Count; i++)
                 {
 
                     //**** This is where I dynamically want to iterate through selected properties and output the value ****
