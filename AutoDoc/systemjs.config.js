@@ -18,9 +18,15 @@
             '@angular/router': 'npm:@angular/router/bundles/router.umd.js',
             '@angular/forms': 'npm:@angular/forms/bundles/forms.umd.js',
 
+            'ng2-smart-table': 'npm:ng2-smart-table',
+            'ng2-smart-table/lib': 'npm:ng2-smart-table/build/src/ng2-smart-table/lib',
+
             'rxjs': 'npm:rxjs',
             'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js',
-            'file-saver': 'npm:file-saver'
+            'rxjs': 'node_modules/rxjs',
+            'traceur': 'npm:traceur/bin/traceur.js',
+            '@angular': 'node_modules/@angular',
+            'lodash': 'npm:lodash',
         },
 
         packages: {
@@ -31,8 +37,20 @@
             rxjs: {
                 defaultExtension: 'js'
             },
-            'file-saver': {
-                main: './FileSaver.js',
+            'angular2-in-memory-web-api': {
+                main: './index.js',
+                defaultExtension: 'js'
+            },
+            lodash: {
+                main: 'index.js',
+                defaultExtension: 'js'
+            },
+            'ng2-completer': {
+                main: 'index.js',
+                defaultExtension: 'js'
+            },
+            'ng2-smart-table': {
+                main: 'index.js',
                 defaultExtension: 'js'
             }
         }

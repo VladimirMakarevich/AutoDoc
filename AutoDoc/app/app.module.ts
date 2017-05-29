@@ -10,6 +10,7 @@ import { DocumentComponent } from './components/document/upload/document.compone
 import { DownDocumentComponent } from './components/document/download/downdocument.component';
 import { BookmarkComponent } from './components/bookmarks/bookmarks.component';
 import { ErrorComponent } from './components/error/error.component';
+import { Ng2SmartTableModule } from 'ng2-smart-table';
 
 import { DocumentService } from './services/document.service';
 import { BookmarkService } from './services/bookmark.service';
@@ -27,7 +28,7 @@ const appRoutingProviders: any[] = [
 ];
 
 @NgModule({
-    imports: [BrowserModule, FormsModule, HttpModule, RouterModule.forRoot(routes)],
+    imports: [BrowserModule, FormsModule, HttpModule, RouterModule.forRoot(routes), Ng2SmartTableModule],
     providers: [{ provide: APP_BASE_HREF, useValue: '/' }, DataService, BookmarkService, DocumentService],
     declarations: [AppComponent,
         DocumentComponent,

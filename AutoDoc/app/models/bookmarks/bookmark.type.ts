@@ -1,5 +1,6 @@
 ﻿export class Bookmark {
     id: number;
     name: string;
-    message: string;
+    message: any;
+    type: number;
 }

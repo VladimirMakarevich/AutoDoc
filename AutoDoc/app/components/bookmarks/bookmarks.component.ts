@@ -1,6 +1,7 @@
 ﻿import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { BookmarkService } from '../../services/bookmark.service';
 import { DataService } from '../../services/data.service';
+import { Ng2SmartTableModule } from 'ng2-smart-table';
 
 import { Bookmark } from '../../models/bookmarks/bookmark.type';
 import { Document } from '../../models/document/document.type';
@@ -19,6 +20,23 @@ export class BookmarkComponent implements OnInit, OnDestroy {
     constructor(private bookmarkService: BookmarkService, public dataservice: DataService, private router: Router) {
     }
 
+    settings = {
+        columns: {
+            id: {
+                title: 'ID'
+            },
+            name: {
+                title: 'Full Name'
+            },
+            username: {
+                title: 'User Name'
+            },
+            email: {
+                title: 'Email'
+            }
+        }
+    };
+
     ngOnInit() {
         this.document = this.dataservice.getDocument();
     }
@@ -26,21 +44,11 @@ export class BookmarkComponent implements OnInit, OnDestroy {
     ngOnDestroy() {  
     }
 
-    //navigateToDownload(id: number) {
-    //    this.router.navigate(['/download-document'], id);
-    //}
-
     uploadBookmarks(id: number) {
         this.bookmarkService.uploadBookmarks(this.document)                
             .then(id => {
                 this.id = id;
                 this.router.navigate(['/downdocument', id]);
         });
-
-        //    subscribe((id: string) => {
-        //    if (id != null) {
-        //        this.router.navigate(['/bookmark', id]);
-        //    }
-        //});
     }
 }
