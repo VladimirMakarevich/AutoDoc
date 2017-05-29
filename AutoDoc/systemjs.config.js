@@ -18,14 +18,15 @@
             '@angular/router': 'npm:@angular/router/bundles/router.umd.js',
             '@angular/forms': 'npm:@angular/forms/bundles/forms.umd.js',
 
-            'ng2-smart-table': 'npm:ng2-smart-table',
-            'ng2-smart-table/lib': 'npm:ng2-smart-table/build/src/ng2-smart-table/lib',
-
             'rxjs': 'npm:rxjs',
             'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js',
-            'rxjs': 'node_modules/rxjs',
+
+            'ng-editable-table': 'npm:ng-editable-table',
+
+            'ng2-smart-table': 'npm:ng2-smart-table',
+            'ng2-smart-table/lib': 'npm:ng2-smart-table/build/src/ng2-smart-table/lib',
+            'ng2-completer': 'npm:ng2-completer',
             'traceur': 'npm:traceur/bin/traceur.js',
-            '@angular': 'node_modules/@angular',
             'lodash': 'npm:lodash',
         },
 
@@ -35,10 +36,7 @@
                 defaultExtension: 'js'
             },
             rxjs: {
-                defaultExtension: 'js'
-            },
-            'angular2-in-memory-web-api': {
-                main: './index.js',
+                main: 'bundles/Rx.js',
                 defaultExtension: 'js'
             },
             lodash: {
