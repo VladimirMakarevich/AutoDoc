@@ -33,7 +33,7 @@ let AppModule = class AppModule {
 };
 AppModule = __decorate([
     core_1.NgModule({
-        imports: [platform_browser_1.BrowserModule, forms_1.FormsModule, http_1.HttpModule, router_1.RouterModule.forRoot(routes), ng2_smart_table_1.Ng2SmartTableModule],
+        imports: [platform_browser_1.BrowserModule, forms_1.FormsModule, http_1.HttpModule, router_1.RouterModule.forRoot(routes), ng2_smart_table_1.Ng2SmartTableModule, forms_1.ReactiveFormsModule],
         providers: [{ provide: common_1.APP_BASE_HREF, useValue: '/' }, data_service_1.DataService, bookmark_service_1.BookmarkService, document_service_1.DocumentService],
         declarations: [app_component_1.AppComponent,
             document_component_1.DocumentComponent,

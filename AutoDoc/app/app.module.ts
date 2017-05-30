@@ -1,6 +1,6 @@
 ﻿import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule }   from '@angular/forms';
+import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 import { APP_BASE_HREF } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpModule } from '@angular/http';
@@ -28,7 +28,7 @@ const appRoutingProviders: any[] = [
 ];
 
 @NgModule({
-    imports: [BrowserModule, FormsModule, HttpModule, RouterModule.forRoot(routes), Ng2SmartTableModule],
+    imports: [BrowserModule, FormsModule, HttpModule, RouterModule.forRoot(routes), Ng2SmartTableModule, ReactiveFormsModule],
     providers: [{ provide: APP_BASE_HREF, useValue: '/' }, DataService, BookmarkService, DocumentService],
     declarations: [AppComponent,
         DocumentComponent,

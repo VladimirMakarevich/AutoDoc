@@ -19,6 +19,7 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using System.Net.Http;
 using System.Net;
+using Newtonsoft.Json;
 
 namespace AutoDoc.Controllers
 {
@@ -83,6 +84,41 @@ namespace AutoDoc.Controllers
 
             WordprocessingDocument doc = DocumentCore.OpenDocument(document.Path);
             var bookMarks = WordBookmarkParser.FindBookmarks(doc.MainDocumentPart.Document);
+
+            foreach (var bookmark in documentJsonModel.Bookmarks)
+            {
+                switch (bookmark.Type)
+                {
+                    case 1:
+                        if (bookmark.Message.GetType() != typeof(string)) throw new Exception("Not my type!");
+
+                        Text text = TextUtil.GetText(bookmark.Message);
+                        WordBookmarkParser.ReplaceBookmarkSecondMethod(bookMarks, bookmark.Name, text, doc.MainDocumentPart);
+
+                        //bookmarkDb.MessageJson = bookmark.Message;
+
+                        //_bookmarkService.EditBookmark(bookmarkDb);
+                        //_bookmarkParser.ReplaceBookmark(bookmarkNames, bookmark.Name, new TextUtil().GetText(bookmark.Message.ToString()), docFile.MainDocumentPart);
+                        break;
+                    case 2:
+                        var dnmk = bookmark.Message;
+
+                        //var tableData = JsonConvert.SerializeObject(bookmark.Message);
+                        var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
+                        var serializeObject = JsonConvert.SerializeObject(bookmark.Message, settings);
+
+                        Table table = WordBookmarkParser.CreateTableMain();
+                        WordBookmarkParser.ReplaceBookmarkSecondMethod(bookMarks, bookmark.Name, table, doc.MainDocumentPart);
+
+                        //AutoDoc.DAL.Models.Table table = JsonConvert.DeserializeObject<AutoDoc.DAL.Models.Table>(bookmark.Message);
+                        //bookmarkDbTable.MessageJson = JsonConvert.SerializeObject(table);
+
+                        //_bookmarkService.EditBookmark(bookmarkDbTable);
+                        //_bookmarkParser.ReplaceBookmark(bookmarkNames, bookmark.Name, new TableUtil().GetTable(table), docFile.MainDocumentPart); //TODO table
+                        break;
+                    default: break;
+                }
+            }
 
             foreach (var value in documentJsonModel.Bookmarks)
             {
