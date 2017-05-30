@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const ng2_smart_table_1 = require("ng2-smart-table");
 /*export interface Bookmark {
     id: string;
