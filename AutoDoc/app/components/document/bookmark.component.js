@@ -8,7 +8,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular/core");
 const bookmark_service_1 = require("../../services/document/bookmark.service");
 const router_1 = require("@angular/router");
@@ -24,20 +23,13 @@ let BookmarkComponent = class BookmarkComponent {
         this.tableService = tableService;
         this.ref = ref;
         this.ngZone = ngZone;
+        //mySettings: any;
         this.inputOptions = Array();
-        this.mySettings = new bookmark_1.Settings();
+        //this.mySettings = new Settings();
     }
     changeBookmarkType(bookmark) {
         if (bookmark.type == 2) {
             bookmark.message = new bookmark_1.Table();
-            //bookmark.message.headers = new Array<string>();
-            //bookmark.message.data = new Array<Array<string>>();
-            /*bookmark.message.headers = ['qqq', 'www', 'zzz'];
-            bookmark.message.data = [
-                ['qqq', 'www', 'zzz'],
-                ['qqq', 'www', 'zzz'],
-                ['qqq', 'www', 'zzz']
-            ];*/
         }
         if (bookmark.type == 1)
             bookmark.message;
@@ -47,11 +39,12 @@ let BookmarkComponent = class BookmarkComponent {
             //bookmark.message.headers.push(this.newHeaderName);
             //bookmark.message.data.push(new Array<string>());
         });*/
-        this.mySettings.columns[this.newHeaderName] = { title: this.newHeaderName };
-        bookmark.message.settings = Object.assign({}, this.mySettings);
+        let buf = bookmark.message.settings;
+        buf.columns[this.newHeaderName] = { title: this.newHeaderName, sort: false, filter: false };
+        bookmark.message.settings = Object.assign({}, buf);
+        buf.dispose();
         //this.ref.tick();
         //NgZone.run(() => this.currentUser.next(user));
-        console.log(bookmark.message);
         //this.tableService.tableHeadersObjects.push(this.newHeaderName);
         //this.tableService.tableHeadersObjects.values.apply();
         //this.bookmarks.filter(el => el.id == id)[0].messagetable.headers.push(this.newHeaderName);

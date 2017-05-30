@@ -8,7 +8,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular/core");
 const http_1 = require("@angular/http");
 const http_2 = require("@angular/http");
@@ -28,6 +27,7 @@ let BookmarkService = class BookmarkService {
         headers.append('Access-Control-Allow-Methods', 'POST, GET, DELETE, PUT');
         headers.append('Access-Control-Allow-Headers', "X-Requested-With, Content-Type, Origin, Authorization, Accept, Client-Security-Token, Accept-Encoding");
         let options = new http_2.RequestOptions({ method: 'POST', headers: headers });
+        console.log(bookmarks);
         let body = JSON.stringify(bookmarks);
         return this.http.post(this.bookmarkUrlPost, body, options)
             .map(this.extractData)

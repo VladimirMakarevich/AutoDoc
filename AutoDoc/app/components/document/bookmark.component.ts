@@ -24,7 +24,7 @@ export class BookmarkComponent implements OnInit {
     id: any;
 
     newHeaderName: string;
-    mySettings: any;
+    //mySettings: any;
     
     inputOptions = Array<Option>();
 
@@ -36,7 +36,7 @@ export class BookmarkComponent implements OnInit {
         private ref: ApplicationRef,
         private ngZone: NgZone) {
 
-        this.mySettings = new Settings();
+        //this.mySettings = new Settings();
     }
 
     changeBookmarkType(bookmark: Bookmark): void {
@@ -61,13 +61,13 @@ export class BookmarkComponent implements OnInit {
             //bookmark.message.headers.push(this.newHeaderName);
             //bookmark.message.data.push(new Array<string>());
         });*/
+        let buf = bookmark.message.settings;
+        buf.columns[this.newHeaderName] = { title: this.newHeaderName, sort: false, filter: false };
+        bookmark.message.settings = Object.assign({}, buf);
 
-        this.mySettings.columns[this.newHeaderName] = { title: this.newHeaderName };
-        bookmark.message.settings = Object.assign({}, this.mySettings);
-
+        buf.dispose();
         //this.ref.tick();
         //NgZone.run(() => this.currentUser.next(user));
-        console.log(bookmark.message);
         //this.tableService.tableHeadersObjects.push(this.newHeaderName);
         //this.tableService.tableHeadersObjects.values.apply();
         //this.bookmarks.filter(el => el.id == id)[0].messagetable.headers.push(this.newHeaderName);

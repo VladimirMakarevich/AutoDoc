@@ -40,7 +40,8 @@ export class Settings {
 
 export class Header {
     title: string;
-    filter: string;
+    filter: boolean;
+    sort: boolean;
 }
 
 export interface Bookmark {
