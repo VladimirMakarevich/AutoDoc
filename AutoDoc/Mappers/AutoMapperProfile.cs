@@ -14,7 +14,7 @@ namespace AutoDoc.Mappers
         {
             CreateMap<Document, DocumentJsonModel>().ReverseMap();
 
-            CreateMap<Bookmark, BookmarkJsonModel>();
+            CreateMap<Bookmark, BookmarkJsonModel>().ReverseMap();
             CreateMap<BookmarkJsonModel, string>();
             CreateMap<Bookmark, string>();
         }

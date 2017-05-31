@@ -1,10 +1,8 @@
 ﻿using AutoDoc.DAL.Entities;
 using AutoDoc.Models;
 using AutoMapper;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace AutoDoc.Mappers
 {
@@ -19,14 +17,19 @@ namespace AutoDoc.Mappers
 
         public List<Bookmark> ToBookmarks(List<string> bookmarksList)
         {
-            var bookmarks = bookmarksList.Select(ToBookmark).ToList();
+            var bookmarks = bookmarksList.Select(ToMapNameBookmark).ToList();
 
             return bookmarks;
         }
 
-        public Bookmark ToBookmark(BookmarkJsonModel bookmark)
+        public Bookmark ToMapNameBookmark(string bookmark)
         {
             return new Bookmark { Name = bookmark };
+        }
+
+        public Bookmark ToBookmark(BookmarkJsonModel bookmark)
+        {
+            return _mapper.Map<BookmarkJsonModel, Bookmark>(bookmark);
         }
     }
 }
