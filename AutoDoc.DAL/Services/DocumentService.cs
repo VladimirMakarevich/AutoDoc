@@ -19,9 +19,16 @@ namespace AutoDoc.DAL.Services
             return document;
         }
 
-        public void CreateDocument(Document document)
+        public int CreateDocument(Document document)
         {
-            _documentRepository.Add(document);
+            var existing = _documentRepository.Get(d => d.Id == document.Id);
+
+            if (existing == null)
+            {
+                return _documentRepository.Add(document);
+            }
+            else
+                return existing.Id;
         }
 
         public IEnumerable<Document> GetAll()

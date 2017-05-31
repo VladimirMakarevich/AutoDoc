@@ -8,5 +8,6 @@ namespace AutoDoc.DAL.Repository
         void Add(T entity);
         T GetById(int id);
         IEnumerable<T> GetAll();
+        void Update(Bookmark bookmark);
     }
 }

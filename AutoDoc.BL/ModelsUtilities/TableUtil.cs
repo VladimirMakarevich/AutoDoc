@@ -1,185 +1,74 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using DocumentFormat.OpenXml.Packaging;
+﻿using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Wordprocessing;
-using Table = DocumentFormat.OpenXml.InkML.Table;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Paragraph = DocumentFormat.OpenXml.Wordprocessing.Paragraph;
+using Run = DocumentFormat.OpenXml.Wordprocessing.Run;
+using RunProperties = DocumentFormat.OpenXml.Wordprocessing.RunProperties;
+using Text = DocumentFormat.OpenXml.Wordprocessing.Text;
 
 namespace AutoDoc.BL.ModelsUtilities
 {
-    public static class TableUtil
+    public class TableUtil : ITableUtil
     {
-        public static Table GetTable<T>(List<T> tableData, int[] tableHeadingCount, string[] columnHeadings)
+        public Table GetTable(string tableContext)
         {
-            var table = new Table();
-            var tableBorderTop = new TopBorder();
-            var tableBorderBottom = new BottomBorder();
-            var tableBorderLeft = new LeftBorder();
-            var tableBorderRight = new RightBorder();
-            var tableBorderHorizontal = new InsideHorizontalBorder();
-            var tableBorderVertical = new InsideVerticalBorder();
-            var tableProperties = new TableProperties();
-            var borders = new TableBorders();
+            Table tbl = new Table();
 
+            TableProperties properties = new TableProperties();
+            TableBorders borders = new TableBorders();
 
-            // Set Border Styles for Table
-            tableBorderTop.Val = BorderValues.Single;
-            tableBorderTop.Size = 6;
-            tableBorderBottom.Val = BorderValues.Single;
-            tableBorderBottom.Size = 6;
-            tableBorderLeft.Val = BorderValues.Single;
-            tableBorderLeft.Size = 6;
-            tableBorderRight.Val = BorderValues.Single;
-            tableBorderRight.Size = 6;
-            tableBorderHorizontal.Val = BorderValues.Single;
-            tableBorderHorizontal.Size = 6;
-            tableBorderVertical.Val = BorderValues.Single;
-            tableBorderVertical.Size = 6;
+            borders.TopBorder = new TopBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single) };
+            borders.BottomBorder = new BottomBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single) };
+            borders.LeftBorder = new LeftBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single) };
+            borders.RightBorder = new RightBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single) };
+            borders.InsideHorizontalBorder = new InsideHorizontalBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single) };
+            borders.InsideVerticalBorder = new InsideVerticalBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single) };
 
-            // Assign Border Styles to Table Borders
-            borders.TopBorder = tableBorderTop;
-            borders.BottomBorder = tableBorderBottom;
-            borders.LeftBorder = tableBorderLeft;
-            borders.RightBorder = tableBorderRight;
-            borders.InsideHorizontalBorder = tableBorderHorizontal;
-            borders.InsideVerticalBorder = tableBorderVertical;
+            TableWidth tableWidth = new TableWidth() { Width = "5000", Type = TableWidthUnitValues.Pct };
+            properties.Append(tableWidth);
+            properties.Append(borders);
 
+            tbl.Append(properties);
 
-            // Append Border Styles to Table Properties
-            tableProperties.Append(borders);
+            dynamic Structure = JsonConvert.DeserializeObject(tableContext) as JObject;
 
-            // Assign Table Properties to Table
-            table.Append(tableProperties);
+            dynamic tableHeading = Structure.settings.columns;
+            dynamic tableData = Structure.data;
 
-            var tableRowHeader = new TableRow();
-            tableRowHeader.Append(new TableRowHeight() {Val = 2000});
-
-            for (int i = 0; i < tableHeadingCount.Length; i++)
+            TableRow headingsTableRow = new TableRow();
+            foreach (var header in tableHeading)
             {
-                var tableCellHeader = new TableCell();
+                Run headerRun = new Run(new Text(header.Name));
 
-                //Assign Font Properties to Run
-                var runPropHeader = new RunProperties();
-                runPropHeader.Append(new Bold());
-                runPropHeader.Append(new Color() {Val = "000000"});
+                RunProperties headerRunProperties = new RunProperties();
+                headerRunProperties.Append(new Bold());
+                headerRunProperties.Append(new Justification() { Val = JustificationValues.Center });
+                headerRunProperties.Append(new Color() { Val = "FF0000" });
 
-                //Create New Run
-                var runHeader = new Run();
-                //Assign Font Properties to Run
-                runHeader.Append(runPropHeader);
+                headerRun.Append(headerRunProperties);
 
-                var columnHeader = new Text();
-                //Assign the Pay Rule Name to the Run
-                columnHeader = new Text(columnHeadings[i]);
+                TableCell cell = new TableCell(new Paragraph(headerRun));
 
-                runHeader.Append(columnHeader);
 
-                //Create Properties for Paragraph
-                var justificationHeader = new Justification();
-                justificationHeader.Val = JustificationValues.Left;
-
-                var paraPropsHeader = new ParagraphProperties(justificationHeader);
-                SpacingBetweenLines spacing = new SpacingBetweenLines()
-                {
-                    Line = "240",
-                    LineRule = LineSpacingRuleValues.Auto,
-                    Before = "0",
-                    After = "0"
-                };
-                paraPropsHeader.Append(spacing);
-
-                var paragraphHeader = new Paragraph();
-
-                paragraphHeader.Append(paraPropsHeader);
-                paragraphHeader.Append(runHeader);
-                tableCellHeader.Append(paragraphHeader);
-
-                var tableCellPropertiesHeader = new TableCellProperties();
-                var tableCellWidthHeader = new TableCellWidth();
-
-                tableCellPropertiesHeader.Append(new Shading()
-                {
-                    Val = ShadingPatternValues.Clear,
-                    Color = "auto",
-                    Fill = "#C0C0C0"
-                });
-
-                var textDirectionHeader = new TextDirection();
-                textDirectionHeader.Val = TextDirectionValues.BottomToTopLeftToRight;
-                tableCellPropertiesHeader.Append(textDirectionHeader);
-
-                tableCellWidthHeader.Type = TableWidthUnitValues.Dxa;
-                tableCellWidthHeader.Width = "2000";
-
-                tableCellPropertiesHeader.Append(tableCellWidthHeader);
-
-                tableCellHeader.Append(tableCellPropertiesHeader);
-                tableRowHeader.Append(tableCellHeader);
-
+                headingsTableRow.Append(cell);
             }
+            tbl.AppendChild(headingsTableRow);
 
-            tableRowHeader.AppendChild(new TableHeader());
-
-            table.Append(tableRowHeader);
-
-            //Create New Row in Table for Each Record
-
-            foreach (var record in tableData)
+            foreach (dynamic record in tableData)
             {
-                var tableRow = new TableRow();
-                for (int i = 0; i < tableHeadingCount.Length; i++)
+                TableRow recordTableRow = new TableRow();
+                foreach (var recordCell in tableHeading)
                 {
+                    string value = record[recordCell.Name.ToString()];
+                    TableCell cell = new TableCell(new Paragraph(new Run(new Text(value.ToString()))));
 
-                    //**** This is where I dynamically want to iterate through selected properties and output the value ****
-
-                    var propertyText = "Test";
-
-                    var tableCell = new TableCell();
-
-                    //Assign Font Properties to Run
-                    var runProp = new RunProperties();
-                    runProp.Append(new Bold());
-                    runProp.Append(new Color() {Val = "000000"});
-
-
-                    //Create New Run
-                    var run = new Run();
-                    //Assign Font Properties to Run
-                    run.Append(runProp);
-
-                    //Assign the text to the Run
-                    var text = new Text(propertyText);
-                    run.Append(text);
-
-                    //Create Properties for Paragraph
-                    var justification = new Justification();
-                    justification.Val = JustificationValues.Left;
-                    var paraProps = new ParagraphProperties(justification);
-
-                    var paragraph = new Paragraph();
-
-                    paragraph.Append(paraProps);
-                    paragraph.Append(run);
-                    tableCell.Append(paragraph);
-
-                    var tableCellProperties = new TableCellProperties();
-                    var tableCellWidth = new TableCellWidth();
-                    tableCellWidth.Type = TableWidthUnitValues.Dxa;
-                    tableCellWidth.Width = "2000";
-                    tableCellProperties.Append(tableCellWidth);
-                    tableCell.Append(tableCellProperties);
-                    tableRow.Append(tableCell);
+                    recordTableRow.Append(cell);
                 }
-
-                table.Append(tableRow);
+                tbl.Append(recordTableRow);
             }
 
-            return table;
-
-
+            return tbl;
         }
     }
 

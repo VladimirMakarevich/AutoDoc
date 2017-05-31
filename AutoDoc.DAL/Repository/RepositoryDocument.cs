@@ -2,7 +2,8 @@
 using System.Linq;
 using AutoDoc.DAL.Context;
 using AutoDoc.DAL.Entities;
-using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+using System;
 
 namespace AutoDoc.DAL.Repository
 {
@@ -15,10 +16,12 @@ namespace AutoDoc.DAL.Repository
             _dataContext = dbCont;
         }
 
-        public virtual void Add(Document entity)
+        public virtual int Add(Document entity)
         {
             _dataContext.Add(entity);
             _dataContext.SaveChanges();
+
+            return entity.Id;
         }
 
         public IEnumerable<Document> GetAll()
@@ -29,6 +32,11 @@ namespace AutoDoc.DAL.Repository
         public virtual Document GetById(int id)
         {
             return _dataContext.Documents.Find(id);
+        }
+
+        public Document Get(Expression<Func<Document, bool>> expres)
+        {
+            return _dataContext.Documents.Where(expres).FirstOrDefault<Document>();
         }
     }
 }

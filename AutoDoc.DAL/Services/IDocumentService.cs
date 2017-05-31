@@ -7,6 +7,6 @@ namespace AutoDoc.DAL.Services
     {
         IEnumerable<Document> GetAll();
         Document GetDocument(int id);
-        void CreateDocument(Document document);
+        int CreateDocument(Document document);
     }
 }

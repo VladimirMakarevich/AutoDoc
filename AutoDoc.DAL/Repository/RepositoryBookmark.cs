@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoDoc.DAL.Context;
 using AutoDoc.DAL.Entities;
@@ -15,9 +16,9 @@ namespace AutoDoc.DAL.Repository
             _dataContext = dbCont;
         }
 
-        public virtual void Add(Bookmark entity)
+        public virtual void Add(Bookmark bookmark)
         {
-            _dataContext.Entry(entity).State = EntityState.Added;
+            _dataContext.Entry(bookmark).State = EntityState.Added;
             _dataContext.SaveChanges();
         }
 
@@ -29,6 +30,13 @@ namespace AutoDoc.DAL.Repository
         public virtual Bookmark GetById(int id)
         {
             return _dataContext.Bookmarks.Find(id);
+        }
+
+        public void Update(Bookmark bookmark)
+        {
+            _dataContext.Attach(bookmark);
+            _dataContext.Entry(bookmark).State = EntityState.Modified;
+            _dataContext.SaveChanges();
         }
     }
 }

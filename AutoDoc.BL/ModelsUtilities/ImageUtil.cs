@@ -8,9 +8,9 @@ using PIC = DocumentFormat.OpenXml.Drawing.Pictures;
 
 namespace AutoDoc.BL.ModelsUtilities
 {
-    public static class ImageUtil
+    public class ImageUtil : IImageUtil
     {
-        public static Drawing GetPicture(WordprocessingDocument doc, string path)
+        public Drawing GetPicture(WordprocessingDocument doc, string path)
         {
             MainDocumentPart mainPart = doc.MainDocumentPart;
 
@@ -25,7 +25,7 @@ namespace AutoDoc.BL.ModelsUtilities
 
         }
 
-        private static Drawing AddImageToBody(WordprocessingDocument wordDoc, string relationshipId)
+        public Drawing AddImageToBody(WordprocessingDocument wordDoc, string relationshipId)
         {
             // Define the reference of the image.
             var element =
@@ -42,7 +42,7 @@ namespace AutoDoc.BL.ModelsUtilities
                          new DW.DocProperties()
                          {
                              Id = (UInt32Value)1U,
-                             Name = "Picture 1"
+                             Name = "Picture"
                          },
                          new DW.NonVisualGraphicFrameDrawingProperties(
                              new A.GraphicFrameLocks() { NoChangeAspect = true }),
@@ -90,9 +90,6 @@ namespace AutoDoc.BL.ModelsUtilities
                          DistanceFromRight = (UInt32Value)0U,
                          EditId = "50D07946"
                      });
-
-            // Append the reference to body, the element should be in a Run.
-            //wordDoc.MainDocumentPart.Document.Body.AppendChild(new Paragraph(new Run(element)));
 
             return element;
         }

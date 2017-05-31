@@ -22,5 +22,14 @@ namespace AutoDoc.DAL.Services
         {
             _bookmarkRepository.Add(bookmark);
         }
+
+        public void EditBookmark(Bookmark bookmark)
+        {
+            //var buf = _bookmarkRepository.GetById(bookmark.Id);
+            //buf.MessageJson = bookmark.MessageJson;
+            //buf.Type = bookmark.Type;
+
+            _bookmarkRepository.Update(bookmark);
+        }
     }
 }

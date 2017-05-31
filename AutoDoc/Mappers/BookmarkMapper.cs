@@ -24,7 +24,7 @@ namespace AutoDoc.Mappers
             return bookmarks;
         }
 
-        public Bookmark ToBookmark(string bookmark)
+        public Bookmark ToBookmark(BookmarkJsonModel bookmark)
         {
             return new Bookmark { Name = bookmark };
         }

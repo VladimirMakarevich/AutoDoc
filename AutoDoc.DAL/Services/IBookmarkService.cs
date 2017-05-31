@@ -6,5 +6,6 @@ namespace AutoDoc.DAL.Services
     {
         Bookmark GetBookmark(int id);
         void CreateBookmark(Bookmark bookmark);
+        void EditBookmark(Bookmark bookmark);
     }
 }

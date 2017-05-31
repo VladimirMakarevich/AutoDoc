@@ -14,6 +14,7 @@ using AutoDoc.DAL.Entities;
 using AutoDoc.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using AutoDoc.DAL.Services;
+using AutoDoc.BL.Core;
 
 namespace AutoDoc
 {
@@ -42,6 +43,7 @@ namespace AutoDoc
             services.AddSingleton<BookmarkMapper, BookmarkMapper>();
             services.AddSingleton<DocumentMapper, DocumentMapper>();
 
+            services.AddTransient<IDocumentCore, DocumentCore>();
             services.AddTransient<IRepositoryDocument<Document>, RepositoryDocument>();
             services.AddTransient<IDocumentService, DocumentService>();
             services.AddTransient<IRepositoryBookmark<Bookmark>, RepositoryBookmark>();
