@@ -29,6 +29,14 @@ let BookmarkComponent = class BookmarkComponent {
     changeBookmarkType(bookmark) {
         if (bookmark.type == 2) {
             bookmark.message = new bookmark_1.Table();
+            //bookmark.message.headers = new Array<string>();
+            //bookmark.message.data = new Array<Array<string>>();
+            /*bookmark.message.headers = ['qqq', 'www', 'zzz'];
+            bookmark.message.data = [
+                ['qqq', 'www', 'zzz'],
+                ['qqq', 'www', 'zzz'],
+                ['qqq', 'www', 'zzz']
+            ];*/
         }
         if (bookmark.type == 1)
             bookmark.message = '';
@@ -81,9 +89,7 @@ BookmarkComponent = __decorate([
     core_2.Injectable(),
     __metadata("design:paramtypes", [router_2.ActivatedRoute,
         router_1.Router,
-        bookmark_service_1.BookmarkService,
-        ng_editable_table_1.EditableTableService,
-        core_2.ApplicationRef,
+        bookmark_service_1.BookmarkService, typeof (_a = typeof ng_editable_table_1.EditableTableService !== "undefined" && ng_editable_table_1.EditableTableService) === "function" && _a || Object, core_2.ApplicationRef,
         core_2.NgZone])
 ], BookmarkComponent);
 exports.BookmarkComponent = BookmarkComponent;
@@ -94,4 +100,5 @@ class Option {
     }
 }
 exports.Option = Option;
+var _a;
 //# sourceMappingURL=bookmark.component.js.map
