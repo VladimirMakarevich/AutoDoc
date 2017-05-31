@@ -45,7 +45,7 @@ namespace AutoDoc.BL.ModelsUtilities
                 headerRunProperties.Append(new Bold());
                 headerRunProperties.Append(new Justification() { Val = JustificationValues.Center });
                 headerRunProperties.Append(new Color() { Val = "FF0000" });
-
+                `
                 headerRun.Append(headerRunProperties);
 
                 TableCell cell = new TableCell(new Paragraph(headerRun));

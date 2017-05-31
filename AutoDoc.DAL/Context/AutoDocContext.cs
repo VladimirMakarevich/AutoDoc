@@ -16,6 +16,14 @@ namespace AutoDoc.DAL.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Bookmark>(entity =>
+            {
+                entity.HasOne(b => b.Document)
+                    .WithMany(d => d.Bookmarks)
+                    .HasForeignKey(b => b.DocumentId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
             base.OnModelCreating(modelBuilder);
         }
     }

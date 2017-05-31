@@ -8,9 +8,10 @@ using AutoDoc.DAL.Context;
 namespace AutoDoc.DAL.Migrations
 {
     [DbContext(typeof(AutoDocContext))]
-    partial class AutoDocContextModelSnapshot : ModelSnapshot
+    [Migration("20170531134619_added-propery-to-bookmark-entity")]
+    partial class addedproperytobookmarkentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")

@@ -9,14 +9,14 @@ namespace AutoDoc.BL.Parsers
 {
     public class WordBookmarkParser : IWordBookmarkParser
     {
-        public static List<string> FindAllBookmarks(WordprocessingDocument doc)
+        public List<string> FindAllBookmarks(WordprocessingDocument doc)
         {
             List<string> bookmarkNames = new List<string>();
             foreach (BookmarkStart bookmarkStart in doc.MainDocumentPart.RootElement.Descendants<BookmarkStart>())
             {
                 if (bookmarkStart.Name != "_GoBack") bookmarkNames.Add(bookmarkStart.Name);
             }
-            doc.Close();
+
             return bookmarkNames;
         }
 
