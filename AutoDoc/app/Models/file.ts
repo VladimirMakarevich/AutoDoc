@@ -1,6 +1,6 @@
 ﻿import { Injectable } from "@angular/core";
 
-export interface File {
+export class File {
     fileDownloadName: string;
     fileContents: Blob;
 }

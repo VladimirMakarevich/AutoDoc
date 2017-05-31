@@ -8,7 +8,6 @@ namespace AutoDoc.BL.ModelsUtilities
 {
     public interface IImageUtil
     {
-        Drawing GetPicture(WordprocessingDocument doc, string path);
-        Drawing AddImageToBody(WordprocessingDocument wordDoc, string relationshipId);
+        Drawing GetPicture(string path);
     }
 }

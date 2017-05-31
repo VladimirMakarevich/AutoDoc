@@ -31,6 +31,11 @@
 
             'ngx-bootstrap': 'npm:ngx-bootstrap',
             'ngx-bootstrap/buttons': 'npm:ngx-bootstrap/buttons',
+
+            'ng2-file-upload': 'npm:ng2-file-upload',
+            'ng2-file-uploader': 'npm:ng2-file-uploader',
+            'ng2-uploader': 'npm:ng2-uploader',
+            'ng2-uploader/src/classes': 'npm:ng2-uploader/src/classes',
         },
 
         packages: {
@@ -81,6 +86,22 @@
                 defaultExtension: 'js'
             },
             'ngx-bootstrap/buttons': {
+                main: 'index.js',
+                defaultExtension: 'js'
+            },
+            'ng2-file-upload': {
+                main: 'index.js',
+                defaultExtension: 'js'
+            },
+            'ng2-file-uploader': {
+                format: 'register',
+                defaultExtension: 'js'
+            },
+            'ng2-uploader': {
+                main: 'index.js',
+                defaultExtension: 'js'
+            },
+            'ng2-uploader/src/classes': {
                 main: 'index.js',
                 defaultExtension: 'js'
             }

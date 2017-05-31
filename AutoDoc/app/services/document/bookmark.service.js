@@ -21,6 +21,8 @@ let BookmarkService = class BookmarkService {
         this.http = http;
         this.bookmarkUrlGet = 'http://localhost:50347/api/Bookmark/GetBookmarks?id=';
         this.bookmarkUrlPost = 'http://localhost:50347/api/Bookmark/PostBookmarks';
+        this.bookmarkPicUrlPost = 'http://localhost:50347/api/Bookmark/PostBookmarkPictures';
+        this.bookmarkPicUrlGet = 'http://localhost:50347/api/Bookmark/GetBookmarkPictures?name=';
     }
     postData(bookmarks) {
         let headers = new http_2.Headers({ 'Content-Type': 'application/json' });
@@ -28,7 +30,6 @@ let BookmarkService = class BookmarkService {
         headers.append('Access-Control-Allow-Methods', 'POST, GET, DELETE, PUT');
         headers.append('Access-Control-Allow-Headers', "X-Requested-With, Content-Type, Origin, Authorization, Accept, Client-Security-Token, Accept-Encoding");
         let options = new http_2.RequestOptions({ method: 'POST', headers: headers });
-        console.log(bookmarks);
         let body = JSON.stringify(bookmarks);
         return this.http.post(this.bookmarkUrlPost, body, options)
             .map(this.extractData)
@@ -39,6 +40,37 @@ let BookmarkService = class BookmarkService {
             .map((res) => {
             this.bookmarks = res.json();
             return this.bookmarks;
+        })
+            .catch(this.handleError);
+    }
+    postImageFile(fileToUpload) {
+        let input = new FormData();
+        input.append("file", fileToUpload);
+        return this.http
+            .post(this.bookmarkPicUrlPost, input)
+            .toPromise()
+            .then((res) => {
+            return res.text();
+        })
+            .catch(this.handleError);
+    }
+    getImageFile(name) {
+        let headers = new http_2.Headers({ 'Content-Type': 'application/json', 'MyApp-Application': 'AppName', 'Accept': 'application/jpeg' });
+        let options = new http_2.RequestOptions({ headers: headers });
+        return this.http.get(this.bookmarkPicUrlGet + name, { responseType: http_2.ResponseContentType.Blob })
+            .toPromise()
+            .then((res) => {
+            var headerSection = res.headers.get('Content-Type');
+            var headerFileName = headerSection.split(';')[1];
+            var fileName = headerFileName.replace(/"/g, '');
+            //console.log(headerSection);
+            //console.log(headerFileName);
+            //console.log(fileName);
+            let file = {
+                fileContents: res.blob(),
+                fileDownloadName: fileName
+            };
+            return file;
         })
             .catch(this.handleError);
     }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using AutoDoc.BL.Core;
 using AutoDoc.BL.Parsers;
@@ -12,6 +14,8 @@ using Microsoft.AspNetCore.Cors;
 using AutoMapper;
 using AutoDoc.BL.ModelsUtilities;
 using DocumentFormat.OpenXml.Wordprocessing;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -20,6 +24,7 @@ namespace AutoDoc.Controllers
     [Route("api/Bookmark")]
     public class BookmarkController : Controller
     {
+        private IHostingEnvironment _hostingEnvironment;
         private IBookmarkService _bookmarkService;
         private IDocumentService _documentService;
         private IMapper _mapper;
@@ -31,6 +36,7 @@ namespace AutoDoc.Controllers
         private IWordTagParser _tagParser;
 
         public BookmarkController (
+            IHostingEnvironment hostingEnvironment,
             IBookmarkService bookmarkService, 
             IDocumentService documentService, 
             IMapper mapper,
@@ -41,6 +47,7 @@ namespace AutoDoc.Controllers
             IWordBookmarkParser bookmarkParser,
             IWordTagParser tagParser)
         {
+            _hostingEnvironment = hostingEnvironment;
             _bookmarkService = bookmarkService;
             _documentService = documentService;
             _mapper = mapper;
@@ -74,6 +81,12 @@ namespace AutoDoc.Controllers
                         bookmarkTable.Message = JObject.Parse(bookmartEntity.MessageJson) as JObject;
                         responceBookmarksJsonModels.Add(bookmarkTable);
                         break;
+                    case 3:
+                        var bookmarkPic = _mapper.Map<Bookmark, BookmarksJsonModel>(bookmartEntity);
+                        bookmarkPic.Message = bookmartEntity.MessageJson;
+                        responceBookmarksJsonModels.Add(bookmarkPic);
+                        break;
+                    default: break;
                 }
                 
             }
@@ -114,6 +127,19 @@ namespace AutoDoc.Controllers
                             _bookmarkService.EditBookmark(bookmarkDbTable);
                             _bookmarkParser.ReplaceBookmark(bookmarkNames, bookmark.Name, new TableUtil().GetTable(bookmark.Message.ToString()), docFile.MainDocumentPart); 
                             break;
+                        case 3:
+                            var bookmarkDbPic = _mapper.Map<BookmarksJsonModel, Bookmark>(bookmark);
+
+                            if (bookmark.Message.GetType() != typeof(string)) throw new Exception("Not my type!");
+
+                            var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "AppData");
+                            var filePath = Path.Combine(uploads, bookmark.Message);
+
+                            bookmarkDbPic.MessageJson = bookmark.Message;
+
+                            _bookmarkService.EditBookmark(bookmarkDbPic);
+                            _bookmarkParser.ReplaceBookmark(bookmarkNames, bookmark.Name, new ImageUtil().GetPicture(filePath), docFile.MainDocumentPart);
+                            break;
                         default: break;
                     }
                 }
@@ -125,6 +151,40 @@ namespace AutoDoc.Controllers
             {
                 return false;
             }
+        }
+
+        [HttpPost]
+        [Route("PostBookmarkPictures")]
+        public async Task<string> UploadPic(IFormFile file)
+        {
+            if (file == null) throw new Exception("File is null");
+            if (file.Length == 0) throw new Exception("File is empty");
+
+            var fileHashName = file.GetHashCode().ToString();
+            var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "AppData");
+            var filePath = Path.Combine(uploads, fileHashName + file.FileName);
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(fileStream);
+            }
+
+            return fileHashName + file.FileName;
+        }
+
+        [HttpGet]
+        [Route("GetBookmarkPictures")]
+        public FileContentResult DownloadFiles(string name)
+        {
+            var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "AppData");
+            var filePath = Path.Combine(uploads, name);
+
+            var fileByteArray = System.IO.File.ReadAllBytes(filePath);
+            FileContentResult file = new FileContentResult(fileByteArray, "application/x-msdownload; " + name)
+            {
+                FileDownloadName = WebUtility.UrlEncode(name)
+            };
+            return file;
         }
     }
 }

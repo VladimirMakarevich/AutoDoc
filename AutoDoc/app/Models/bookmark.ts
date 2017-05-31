@@ -44,7 +44,7 @@ export class Header {
     sort: boolean;
 }
 
-export interface Bookmark {
+export class Bookmark {
     id: string;
     name: string;
     message: any;

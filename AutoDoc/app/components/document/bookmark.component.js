@@ -16,6 +16,7 @@ const router_2 = require("@angular/router");
 const core_2 = require("@angular/core");
 const bookmark_1 = require("../../Models/bookmark");
 const ng_editable_table_1 = require("ng-editable-table");
+const file_1 = require("../../Models/file");
 let BookmarkComponent = class BookmarkComponent {
     constructor(routeActivated, router, bookmarkService, tableService, ref, ngZone) {
         this.routeActivated = routeActivated;
@@ -27,32 +28,48 @@ let BookmarkComponent = class BookmarkComponent {
         this.inputOptions = Array();
     }
     changeBookmarkType(bookmark) {
-        if (bookmark.type == 2) {
+        if (bookmark.type == 2)
             bookmark.message = new bookmark_1.Table();
-            //bookmark.message.headers = new Array<string>();
-            //bookmark.message.data = new Array<Array<string>>();
-            /*bookmark.message.headers = ['qqq', 'www', 'zzz'];
-            bookmark.message.data = [
-                ['qqq', 'www', 'zzz'],
-                ['qqq', 'www', 'zzz'],
-                ['qqq', 'www', 'zzz']
-            ];*/
-        }
         if (bookmark.type == 1)
             bookmark.message = '';
+        if (bookmark.type == 3)
+            bookmark.message = new file_1.File();
     }
     addNewHeader(bookmark) {
         let buf = bookmark.message.settings;
         buf.columns[this.newHeaderName] = { title: this.newHeaderName, sort: false, filter: false };
         bookmark.message.settings = Object.assign({}, buf);
     }
+    fileSelected(file, bookmark) {
+        bookmark.message.fileContents = file;
+    }
     uploadNewValues() {
+        let bufIterator = new Array();
         for (var i = 0; i < this.bookmarks.length; i++) {
             if (this.bookmarks[i].type == 2) {
                 let dataTable = this.bookmarks[i].message.data.data;
                 this.bookmarks[i].message.data = dataTable;
             }
+            if (this.bookmarks[i].type == 3) {
+                bufIterator.push(i);
+                this.bookmarkService.postImageFile(this.bookmarks[i].message.fileContents).then((name) => {
+                    if (name != null) {
+                        let buf = new bookmark_1.Bookmark();
+                        buf.id = this.bookmarks[bufIterator[0]].id;
+                        buf.name = this.bookmarks[bufIterator[0]].name;
+                        buf.type = 3;
+                        buf.message = name;
+                        //this.bookmarks[bufIterator[0]].message = null;
+                        //this.bookmarks[bufIterator[0]].message = new String(name);
+                        //this.bookmarks[bufIterator[0]].message = name;
+                        this.bookmarks[bufIterator[0]] = null;
+                        this.bookmarks[bufIterator[0]] = buf;
+                        bufIterator.splice(0, 1);
+                    }
+                });
+            }
         }
+        console.log(this.bookmarks);
         this.bookmarkService.postData(this.bookmarks).subscribe((ans) => {
             this.router.navigate(['./download', this.id]);
         });
@@ -62,13 +79,23 @@ let BookmarkComponent = class BookmarkComponent {
             this.id = params['id'];
             if (this.id != '') {
                 this.bookmarkService.getData(this.id).subscribe((bookmarks) => {
+                    let bufIterator = new Array();
                     for (var i = 0; i < bookmarks.length; i++) {
                         if (bookmarks[i].type == 2) {
                             let buf = new bookmark_1.Table();
-                            console.log(bookmarks[i].message);
                             buf.settings = bookmarks[i].message.settings;
                             buf.data.load(bookmarks[i].message.data);
                             bookmarks[i].message = buf;
+                        }
+                        if (bookmarks[i].type == 3) {
+                            bufIterator.push(i);
+                            this.bookmarkService.getImageFile(bookmarks[i].message).then((file) => {
+                                if (file != null) {
+                                    bookmarks[bufIterator[0]].message = new file_1.File();
+                                    bookmarks[bufIterator[0]].message = file;
+                                    bufIterator.splice(0, 1);
+                                }
+                            });
                         }
                     }
                     this.bookmarks = bookmarks;
@@ -78,6 +105,7 @@ let BookmarkComponent = class BookmarkComponent {
         this.inputOptions = Array();
         this.inputOptions.push(new Option(1, 'Text'));
         this.inputOptions.push(new Option(2, 'Table'));
+        this.inputOptions.push(new Option(3, 'Image'));
     }
 };
 BookmarkComponent = __decorate([
@@ -89,7 +117,9 @@ BookmarkComponent = __decorate([
     core_2.Injectable(),
     __metadata("design:paramtypes", [router_2.ActivatedRoute,
         router_1.Router,
-        bookmark_service_1.BookmarkService, typeof (_a = typeof ng_editable_table_1.EditableTableService !== "undefined" && ng_editable_table_1.EditableTableService) === "function" && _a || Object, core_2.ApplicationRef,
+        bookmark_service_1.BookmarkService,
+        ng_editable_table_1.EditableTableService,
+        core_2.ApplicationRef,
         core_2.NgZone])
 ], BookmarkComponent);
 exports.BookmarkComponent = BookmarkComponent;
@@ -100,5 +130,4 @@ class Option {
     }
 }
 exports.Option = Option;
-var _a;
 //# sourceMappingURL=bookmark.component.js.map

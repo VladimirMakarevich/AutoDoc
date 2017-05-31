@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Drawing;
+using System.IO;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
@@ -10,22 +11,7 @@ namespace AutoDoc.BL.ModelsUtilities
 {
     public class ImageUtil : IImageUtil
     {
-        public Drawing GetPicture(WordprocessingDocument doc, string path)
-        {
-            MainDocumentPart mainPart = doc.MainDocumentPart;
-
-            ImagePart imagePart = mainPart.AddImagePart(ImagePartType.Jpeg);
-
-            using (FileStream stream = new FileStream(path, FileMode.Open))
-            {
-                imagePart.FeedData(stream);
-            }
-
-            return AddImageToBody(doc, mainPart.GetIdOfPart(imagePart));
-
-        }
-
-        public Drawing AddImageToBody(WordprocessingDocument wordDoc, string relationshipId)
+        public Drawing GetPicture(string path)
         {
             // Define the reference of the image.
             var element =
@@ -66,7 +52,6 @@ namespace AutoDoc.BL.ModelsUtilities
                                                  })
                                          )
                                          {
-                                             Embed = relationshipId,
                                              CompressionState =
                                              A.BlipCompressionValues.Print
                                          },
@@ -81,7 +66,7 @@ namespace AutoDoc.BL.ModelsUtilities
                                          )
                                          { Preset = A.ShapeTypeValues.Rectangle }))
                              )
-                             { Uri = "http://schemas.openxmlformats.org/drawingml/2006/picture" })
+                             { Uri = path })
                      )
                      {
                          DistanceFromTop = (UInt32Value)0U,

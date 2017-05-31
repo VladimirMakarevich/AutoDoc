@@ -34,4 +34,7 @@ exports.Settings = Settings;
 class Header {
 }
 exports.Header = Header;
+class Bookmark {
+}
+exports.Bookmark = Bookmark;
 //# sourceMappingURL=bookmark.js.map
