@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -11,13 +10,10 @@ using AutoDoc.BL.Parsers;
 using Microsoft.AspNetCore.Cors;
 using AutoDoc.Models;
 using AutoDoc.BL.ModelsUtilities;
-using AutoDoc.DAL.Repository;
-using AutoDoc.DAL.Entities;
 using AutoDoc.Mappers;
 using AutoDoc.DAL.Services;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
-using System.Net.Http;
 using System.Net;
 using Newtonsoft.Json;
 
@@ -54,7 +50,9 @@ namespace AutoDoc.Controllers
             if (file.Length == 0) throw new Exception("File is empty");
 
             var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "AppData");
-            var filePath = Path.Combine(uploads, file.FileName);
+            var fileHashName = file.GetHashCode().ToString();
+            var filePath = Path.Combine(uploads, fileHashName + ".docx");
+            int ParentId = 0;
 
             using (var fileStream = new FileStream(filePath, FileMode.Create))
             {
@@ -74,6 +72,102 @@ namespace AutoDoc.Controllers
             DocumentCore.CloseDocument(doc);
 
             return documentJsonModel;
+        }
+
+        [HttpPost]
+        [Route("UploadFiles")]
+        public async Task<DocumentJsonModel> UploadFiles(IFormFile file)
+        {
+            //if (file == null) throw new Exception("File is null");
+            //if (file.Length == 0) throw new Exception("File is empty");
+
+            //var fileHashName = file.GetHashCode().ToString();
+            //var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "AppData");
+            //var filePath = Path.Combine(uploads, fileHashName + ".docx");
+            //int ParentId = 0;
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(fileStream);
+            }
+
+            var docFile = _documentCore.OpenDocument(filePath);
+
+
+            var customProps = docFile.CustomFilePropertiesPart;
+            if (customProps != null)
+            {
+                var props = customProps.Properties;
+                if (props != null)
+                {
+                    var prop = props.Where(p => ((CustomDocumentProperty)p).Name.Value == "ParentId").FirstOrDefault();
+                    if (prop != null) Int32.TryParse(((CustomDocumentProperty)prop).InnerText, out ParentId); //Int32.TryParse(prop.InnerText, out ParentId);
+                }
+            }
+
+
+            var doc = new DAL.Entities.Document
+            {
+                Id = ParentId,
+                Name = file.FileName,
+                Path = filePath
+            };
+            int id = _documentService.CreateDocument(doc);
+            if (id != ParentId)
+            {
+                var customPropsAdd = docFile.CustomFilePropertiesPart;
+                if (customPropsAdd == null)
+                {
+                    var customFilePropPart = docFile.AddCustomFilePropertiesPart();
+
+                    customFilePropPart.Properties = new DocumentFormat.OpenXml.CustomProperties.Properties();
+                    var customProp = new CustomDocumentProperty();
+                    customProp.Name = "ParentId";
+                    customProp.FormatId = "{D5CDD505-2E9C-101B-9397-08002B2CF9AE}";
+                    customProp.VTLPWSTR = new VTLPWSTR(id.ToString());
+
+                    customFilePropPart.Properties.AppendChild(customProp);
+                    int pid = 2;
+                    foreach (CustomDocumentProperty item in customFilePropPart.Properties)
+                    {
+                        item.PropertyId = pid++;
+                    }
+                    customFilePropPart.Properties.Save();
+
+                    //customFilePropPart.Properties.ToList().Add(customProp);
+                    //customFilePropPart.Properties.Save();
+
+                }
+            }
+
+            var bookmarkNames = new Dictionary<string, BookmarkEnd>();
+
+            bookmarkNames = _bookmarkParser.FindBookmarks(docFile.MainDocumentPart.Document);
+
+            if (bookmarkNames != null)
+            {
+                foreach (var bookmarkName in bookmarkNames.Keys)
+                {
+                    Bookmark bookmarkEntity = new Bookmark
+                    {
+                        Name = bookmarkName,
+                        MessageJson = string.Empty,
+                        DocumentId = id
+                    };
+                    int bookmarkId = _bookmarkService.CreateBookmark(bookmarkEntity);
+                }
+            }
+
+            var docJson = new DocumentJsonModel
+            {
+                Name = doc.Name,
+                Path = doc.Path,
+                Id = id
+            };
+
+            _documentCore.CloseDocument(docFile);
+
+            return docJson;
         }
 
         [HttpPost]
