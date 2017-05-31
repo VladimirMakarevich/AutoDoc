@@ -29,6 +29,7 @@ namespace AutoDoc.Controllers
         private IDocumentService _documentService;
         private IBookmarkService _bookmarkService;
         private IDocumentCore _documentCore;
+        public IWordBookmarkParser _bookmarkParser;
         public DocumentMapper _documentMapper;
         public BookmarkMapper _bookmarkMapper;
         private int parentId = 0;
@@ -39,7 +40,8 @@ namespace AutoDoc.Controllers
             IBookmarkService bookmarkService,
             DocumentMapper documentMapper,
             BookmarkMapper bookmarkMapper,
-            IDocumentCore documentCore)
+            IDocumentCore documentCore,
+            IWordBookmarkParser bookmarkParser)
         {
             _hostingEnvironment = hostingEnvironment;
             _documentService = documentService;
@@ -47,6 +49,7 @@ namespace AutoDoc.Controllers
             _documentMapper = documentMapper;
             _bookmarkMapper = bookmarkMapper;
             _documentCore = documentCore;
+            _bookmarkParser = bookmarkParser;
         }
 
         [HttpPost]
@@ -124,7 +127,6 @@ namespace AutoDoc.Controllers
             var document = _documentService.GetDocument(documentJsonModel.Id);
 
             WordprocessingDocument doc = _documentCore.OpenDocument(document.Path);
-            var bookMarks = WordBookmarkParser.FindBookmarks(doc.MainDocumentPart.Document);
             var bookmarkNames = _bookmarkParser.FindBookmarks(doc.MainDocumentPart.Document);
 
             foreach (var bookmark in documentJsonModel.Bookmarks)
@@ -181,13 +183,13 @@ namespace AutoDoc.Controllers
                 }
             }
 
-            foreach (var value in documentJsonModel.Bookmarks)
-            {
-                Table table = WordBookmarkParser.CreateTableMain();
-                var text = TextUtil.GetText(value.Message);
+            //foreach (var value in documentJsonModel.Bookmarks)
+            //{
+            //    Table table = WordBookmarkParser.CreateTableMain();
+            //    var text = TextUtil.GetText(value.Message);
 
-                WordBookmarkParser.ReplaceBookmarkSecondMethod(bookMarks, value.Name, table, doc.MainDocumentPart);
-            }
+            //    WordBookmarkParser.ReplaceBookmarkSecondMethod(bookMarks, value.Name, table, doc.MainDocumentPart);
+            //}
 
             _documentCore.CloseDocument(doc);
 

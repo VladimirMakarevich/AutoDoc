@@ -15,6 +15,8 @@ using AutoDoc.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using AutoDoc.DAL.Services;
 using AutoDoc.BL.Core;
+using AutoDoc.BL.ModelsUtilities;
+using AutoDoc.BL.Parsers;
 
 namespace AutoDoc
 {
@@ -44,6 +46,13 @@ namespace AutoDoc
             services.AddSingleton<DocumentMapper, DocumentMapper>();
 
             services.AddTransient<IDocumentCore, DocumentCore>();
+            services.AddTransient<ITableUtil, TableUtil>();
+            services.AddTransient<ITextUtil, TextUtil>();
+            services.AddTransient<IImageUtil, ImageUtil>();
+            services.AddTransient<IWordBookmarkParser, WordBookmarkParser>();
+
+
+
             services.AddTransient<IRepositoryDocument<Document>, RepositoryDocument>();
             services.AddTransient<IDocumentService, DocumentService>();
             services.AddTransient<IRepositoryBookmark<Bookmark>, RepositoryBookmark>();
