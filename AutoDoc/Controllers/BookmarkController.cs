@@ -13,6 +13,7 @@ using AutoMapper;
 using AutoDoc.BL.ModelsUtilities;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace AutoDoc.Controllers
 {
@@ -60,23 +61,21 @@ namespace AutoDoc.Controllers
 
             foreach (var bookmartEntity in bookmarksEntities)
             {
-                /*switch(bookmartEntity.Type)
+                switch(bookmartEntity.Type)
                 {
                     case 1:
-                        var bookmarkJSONText = _mapper.Map<Bookmark, BookmarksJsonModel>(bookmartEntity);
-                        bookmarkJSONText.MessageText = bookmartEntity.Message;
-                        responceBookmarksJsonModels.Add(bookmarkJSONText);
+                        var bookmark = _mapper.Map<Bookmark, BookmarksJsonModel>(bookmartEntity);
+                        bookmark.Message = bookmartEntity.MessageJson;
+                        responceBookmarksJsonModels.Add(bookmark);
                         break;
 
                     case 2:
-                        var bookmarkJSONTable = _mapper.Map<Bookmark, BookmarksJsonModel>(bookmartEntity);
-                        bookmarkJSONTable.MessageTable = JsonConvert.DeserializeObject<Models.Table>(bookmartEntity.Message);
-                        responceBookmarksJsonModels.Add(bookmarkJSONTable);
+                        var bookmarkTable = _mapper.Map<Bookmark, BookmarksJsonModel>(bookmartEntity);
+                        bookmarkTable.Message = JObject.Parse(bookmartEntity.MessageJson) as JObject;
+                        responceBookmarksJsonModels.Add(bookmarkTable);
                         break;
-                }*/
-                var bookmark = _mapper.Map<Bookmark, BookmarksJsonModel>(bookmartEntity);
-                bookmark.Message = JsonConvert.DeserializeObject(bookmartEntity.MessageJson);
-                responceBookmarksJsonModels.Add(bookmark);
+                }
+                
             }
 
             return responceBookmarksJsonModels;
@@ -110,11 +109,10 @@ namespace AutoDoc.Controllers
                         case 2:
                             var bookmarkDbTable = _mapper.Map<BookmarksJsonModel, Bookmark>(bookmark);
 
-                            AutoDoc.DAL.Models.Table table = JsonConvert.DeserializeObject<AutoDoc.DAL.Models.Table>(bookmark.Message);
-                            bookmarkDbTable.MessageJson = JsonConvert.SerializeObject(table);
+                            bookmarkDbTable.MessageJson = bookmark.Message.ToString();
 
                             _bookmarkService.EditBookmark(bookmarkDbTable);
-                            _bookmarkParser.ReplaceBookmark(bookmarkNames, bookmark.Name, new TableUtil().GetTable(table), docFile.MainDocumentPart); //TODO table
+                            _bookmarkParser.ReplaceBookmark(bookmarkNames, bookmark.Name, new TableUtil().GetTable(bookmark.Message.ToString()), docFile.MainDocumentPart); 
                             break;
                         default: break;
                     }

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace AutoDoc.DAL.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class newPCInitDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -30,8 +30,9 @@ namespace AutoDoc.DAL.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     DocumentId = table.Column<int>(nullable: false),
-                    Message = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(nullable: false)
+                    MessageJson = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    Type = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {

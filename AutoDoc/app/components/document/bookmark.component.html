@@ -11,19 +11,6 @@
                 <input [(ngModel)]="bookmark.message" placeholder="New Value" />
             </div>
 
-            <!--[add-button-label]="''"
-                           [edit-button-label]="''"
-                           [save-button-label]="''"
-                           [delete-button-label]="''"
-                           [add-icon]="'plus icon'"
-                           [edit-icon]="'edit icon'"
-                           [save-icon]="'checkmark icon'"
-                           [delete-icon]="'remove icon'"
-                           [add-button-class]="'ui compact icon button'"
-                           [edit-button-class]="'ui compact blue icon button'"
-                           [delete-button-class]="'ui compact red icon button'"-->
-
-
             <div *ngIf="bookmark.type == 2">
                 <!--<nv-editable-table [table-headers]="bookmark.message.headers"
                                    [table-rows]="bookmark.message.data"  
@@ -38,12 +25,17 @@
                                    class="ui table">
                 </nv-editable-table>-->
                 <ng2-smart-table [settings]="bookmark.message.settings" [source]="bookmark.message.data"></ng2-smart-table>
-
-                <input type="text" class="form-control text-input" placeholder="New Header..." [(ngModel)]="newHeaderName">
-                <button (click)="addNewHeader(bookmark)">Add</button>
+                
+                <form>
+                    <div class="form-group">
+                        <label for="header">New Table Header</label>
+                        <input type="text" [(ngModel)]="newHeaderName" class="form-control text-input" id="header" name="header" required placeholder="New Header...">
+                    </div>
+                    <button type="submit" class="btn btn-success" (click)="addNewHeader(bookmark)">Add</button>
+                </form>
             </div>
 
         </li>
     </ul>
-    <button (click)="uploadNewValues()">Upload</button>
+    <button type="submit" class="btn btn-success" (click)="uploadNewValues()">Upload</button>
 </div>

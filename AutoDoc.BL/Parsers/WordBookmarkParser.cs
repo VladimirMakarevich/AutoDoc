@@ -136,31 +136,38 @@ namespace AutoDoc.BL.Parsers
 
         public Dictionary<string, BookmarkEnd> FindBookmarks(OpenXmlElement documentPart, Dictionary<string, BookmarkEnd> results = null, Dictionary<string, string> unmatched = null)
         {
-            results = results ?? new Dictionary<string, BookmarkEnd>();
-            unmatched = unmatched ?? new Dictionary<string, string>();
-
-            foreach (var child in documentPart.Elements())
+            try
             {
-                if (child is BookmarkStart)
-                {
-                    var bStart = child as BookmarkStart;
-                    if (bStart.Name != "_GoBack") unmatched.Add(bStart.Id, bStart.Name);
-                }
+                results = results ?? new Dictionary<string, BookmarkEnd>();
+                unmatched = unmatched ?? new Dictionary<string, string>();
 
-                if (child is BookmarkEnd)
+                foreach (var child in documentPart.Elements())
                 {
-                    var bEnd = child as BookmarkEnd;
-                    foreach (var orphanName in unmatched)
+                    if (child is BookmarkStart)
                     {
-                        if (bEnd.Id == orphanName.Key && orphanName.Value != "_GoBack")
-                            results.Add(orphanName.Value, bEnd);
+                        var bStart = child as BookmarkStart;
+                        if (bStart.Name != "_GoBack") unmatched.Add(bStart.Id, bStart.Name);
                     }
+
+                    if (child is BookmarkEnd)
+                    {
+                        var bEnd = child as BookmarkEnd;
+                        foreach (var orphanName in unmatched)
+                        {
+                            if (bEnd.Id == orphanName.Key && orphanName.Value != "_GoBack")
+                                results.Add(orphanName.Value, bEnd);
+                        }
+                    }
+
+                    FindBookmarks(child, results, unmatched);
                 }
 
-                FindBookmarks(child, results, unmatched);
+                return results;
             }
-
-            return results;
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         /*public void ReplaceBookmark<T>(Dictionary<string, BookmarkEnd> bookMarks, string name, T message) where T: OpenXmlElement

@@ -135,15 +135,18 @@ namespace AutoDoc.Controllers
 
             bookmarkNames = _bookmarkParser.FindBookmarks(docFile.MainDocumentPart.Document);
 
-            foreach (var bookmarkName in bookmarkNames.Keys)
+            if (bookmarkNames != null)
             {
-                Bookmark bookmarkEntity = new Bookmark
+                foreach (var bookmarkName in bookmarkNames.Keys)
                 {
-                    Name = bookmarkName,
-                    MessageJson = string.Empty,
-                    DocumentId = id
-                };
-                int bookmarkId = _bookmarkService.CreateBookmark(bookmarkEntity);
+                    Bookmark bookmarkEntity = new Bookmark
+                    {
+                        Name = bookmarkName,
+                        MessageJson = string.Empty,
+                        DocumentId = id
+                    };
+                    int bookmarkId = _bookmarkService.CreateBookmark(bookmarkEntity);
+                }
             }
 
             var docJson = new DocumentJsonModel

@@ -8,8 +8,8 @@ using AutoDoc.DAL.Context;
 namespace AutoDoc.DAL.Migrations
 {
     [DbContext(typeof(AutoDocContext))]
-    [Migration("20170526135603_updateBookmarkModel")]
-    partial class updateBookmarkModel
+    [Migration("20170530102508_newPCInitDb")]
+    partial class newPCInitDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

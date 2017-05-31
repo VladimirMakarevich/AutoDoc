@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular/core");
 const bookmark_service_1 = require("../../services/document/bookmark.service");
 const router_1 = require("@angular/router");
@@ -23,37 +24,28 @@ let BookmarkComponent = class BookmarkComponent {
         this.tableService = tableService;
         this.ref = ref;
         this.ngZone = ngZone;
-        //mySettings: any;
         this.inputOptions = Array();
-        //this.mySettings = new Settings();
     }
     changeBookmarkType(bookmark) {
         if (bookmark.type == 2) {
             bookmark.message = new bookmark_1.Table();
         }
         if (bookmark.type == 1)
-            bookmark.message;
+            bookmark.message = '';
     }
     addNewHeader(bookmark) {
-        /*this.ngZone.run(() => {
-            //bookmark.message.headers.push(this.newHeaderName);
-            //bookmark.message.data.push(new Array<string>());
-        });*/
         let buf = bookmark.message.settings;
         buf.columns[this.newHeaderName] = { title: this.newHeaderName, sort: false, filter: false };
         bookmark.message.settings = Object.assign({}, buf);
-        buf.dispose();
-        //this.ref.tick();
-        //NgZone.run(() => this.currentUser.next(user));
-        //this.tableService.tableHeadersObjects.push(this.newHeaderName);
-        //this.tableService.tableHeadersObjects.values.apply();
-        //this.bookmarks.filter(el => el.id == id)[0].messagetable.headers.push(this.newHeaderName);
-        //this.bookmarks.filter(el => el.id == id)[0].messagetable.data
     }
     uploadNewValues() {
-        console.log(this.bookmarks[0].message);
+        for (var i = 0; i < this.bookmarks.length; i++) {
+            if (this.bookmarks[i].type == 2) {
+                let dataTable = this.bookmarks[i].message.data.data;
+                this.bookmarks[i].message.data = dataTable;
+            }
+        }
         this.bookmarkService.postData(this.bookmarks).subscribe((ans) => {
-            //console.log(ans);
             this.router.navigate(['./download', this.id]);
         });
     }
@@ -62,6 +54,15 @@ let BookmarkComponent = class BookmarkComponent {
             this.id = params['id'];
             if (this.id != '') {
                 this.bookmarkService.getData(this.id).subscribe((bookmarks) => {
+                    for (var i = 0; i < bookmarks.length; i++) {
+                        if (bookmarks[i].type == 2) {
+                            let buf = new bookmark_1.Table();
+                            console.log(bookmarks[i].message);
+                            buf.settings = bookmarks[i].message.settings;
+                            buf.data.load(bookmarks[i].message.data);
+                            bookmarks[i].message = buf;
+                        }
+                    }
                     this.bookmarks = bookmarks;
                 });
             }

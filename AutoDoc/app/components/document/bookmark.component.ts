@@ -24,7 +24,6 @@ export class BookmarkComponent implements OnInit {
     id: any;
 
     newHeaderName: string;
-    //mySettings: any;
     
     inputOptions = Array<Option>();
 
@@ -35,49 +34,31 @@ export class BookmarkComponent implements OnInit {
         private tableService: EditableTableService,
         private ref: ApplicationRef,
         private ngZone: NgZone) {
-
-        //this.mySettings = new Settings();
     }
 
     changeBookmarkType(bookmark: Bookmark): void {
         if (bookmark.type == 2) {
             bookmark.message = new Table();
-            //bookmark.message.headers = new Array<string>();
-            //bookmark.message.data = new Array<Array<string>>();
-
-            /*bookmark.message.headers = ['qqq', 'www', 'zzz'];
-            bookmark.message.data = [
-                ['qqq', 'www', 'zzz'],
-                ['qqq', 'www', 'zzz'],
-                ['qqq', 'www', 'zzz']
-            ];*/
-
         }
-        if (bookmark.type == 1) bookmark.message;
+        if (bookmark.type == 1) bookmark.message = '';
     }
 
-    addNewHeader(bookmark: Bookmark): void {
-        /*this.ngZone.run(() => {
-            //bookmark.message.headers.push(this.newHeaderName);
-            //bookmark.message.data.push(new Array<string>());
-        });*/
+    addNewHeader(bookmark: Bookmark): void {     
         let buf = bookmark.message.settings;
         buf.columns[this.newHeaderName] = { title: this.newHeaderName, sort: false, filter: false };
         bookmark.message.settings = Object.assign({}, buf);
-
-        buf.dispose();
-        //this.ref.tick();
-        //NgZone.run(() => this.currentUser.next(user));
-        //this.tableService.tableHeadersObjects.push(this.newHeaderName);
-        //this.tableService.tableHeadersObjects.values.apply();
-        //this.bookmarks.filter(el => el.id == id)[0].messagetable.headers.push(this.newHeaderName);
-        //this.bookmarks.filter(el => el.id == id)[0].messagetable.data
     }
 
     uploadNewValues(): void {
-        console.log(this.bookmarks[0].message);
+
+        for (var i = 0; i < this.bookmarks.length; i++) {
+            if (this.bookmarks[i].type == 2) {
+                let dataTable = this.bookmarks[i].message.data.data;
+                this.bookmarks[i].message.data = dataTable;
+            }
+        }
+
         this.bookmarkService.postData(this.bookmarks).subscribe((ans : string) => {
-            //console.log(ans);
             this.router.navigate(['./download', this.id]);
         });
     }
@@ -87,6 +68,17 @@ export class BookmarkComponent implements OnInit {
            this.id = params['id'];
            if (this.id != '') {
                this.bookmarkService.getData(this.id).subscribe((bookmarks: Bookmark[]) => {
+
+                   for (var i = 0; i < bookmarks.length; i++) {
+                       if (bookmarks[i].type == 2) {
+                           let buf = new Table();
+                           console.log(bookmarks[i].message);
+                           buf.settings = bookmarks[i].message.settings; 
+                           buf.data.load(bookmarks[i].message.data);
+                           bookmarks[i].message = buf;
+                       }
+                   }
+
                    this.bookmarks = bookmarks;
                });
             }
