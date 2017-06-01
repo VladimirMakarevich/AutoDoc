@@ -1,14 +1,63 @@
-﻿<div>
-    <h1>AutDoc App</h1>
-    <div class="form-group">
-        <div class="col-md-10">
-            <p>Upload one or more files using this form:</p>
-            <input #fileInput type="file" name="files" multiple />
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-10">
-            <input type="submit" value="Upload" (click)="addFile()" />
+﻿
+
+
+
+
+<style>
+    body {
+        height: 100%;
+    }
+    .container-table { 
+        display: table;
+        min-height: 100%; 
+        min-height: 100vh; 
+        align-items: center;
+    }
+
+    .vertical-center-row {
+        display: table-cell;
+        vertical-align: middle;
+    }
+</style>
+
+<div class="container container-table">
+    <div class="row vertical-center-row ">
+        <div class="col-md-4 col-md-offset-4 text-center">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h1 class="panel-title">AutDoc App</h1>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <h5>Upload one or more files using this form:</h5>
+                                <div class="input-group">
+                                    <label class="input-group-btn">
+                                        <span class="btn btn-primary">
+                                            Browse&hellip; <input #fileInput type="file" (change)="fileChangeEvent($event)" style="display: none;" multiple>
+                                        </span>
+                                    </label>
+                                    <input #fileNameInput [(ngModel)]="fileName" type="text" class="form-control" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <h1>
+                                    <button type="submit" class="btn btn-block btn-success" (click)="addFile()">
+                                        <span class="glyphicon glyphicon-upload"></span>
+                                    </button>
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+

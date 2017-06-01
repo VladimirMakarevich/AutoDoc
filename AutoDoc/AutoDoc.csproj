@@ -5,25 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot/AppData\~%24Letter.docx" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Letter.doc" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="app\components\document\" />
-    <Folder Include="Styles\" />
-    <Folder Include="wwwroot\AppData\" />
-    <Folder Include="wwwroot\AppData\" />
-    <Folder Include="wwwroot\AppData\" />
-    <Folder Include="wwwroot\AppData\" />
-    <Folder Include="wwwroot\AppData\" />
-    <Folder Include="wwwroot\AppData\" />
-    <Folder Include="wwwroot\AppData\" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.0.2" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="2.0.1" />
     <PackageReference Include="DocumentFormat.OpenXml" Version="2.8.0-vnext0051" />

@@ -2,12 +2,13 @@
 using DocumentFormat.OpenXml.Wordprocessing;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
 
 namespace AutoDoc.BL.ModelsUtilities
 {
     public interface IImageUtil
     {
-        Drawing GetPicture(string path);
+        Drawing ReplaceTextWithImage(string find, string filepath, Bitmap bitmap, int incremental);
     }
 }

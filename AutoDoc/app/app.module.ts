@@ -12,7 +12,7 @@ import { DocumentService} from "./services/document/document.service";
 import { BookmarkService } from "./services/document/bookmark.service";
 import { Ng2SmartTableModule } from 'ng2-smart-table'; 
 import { EditableTableModule } from 'ng-editable-table';
-import { ButtonsModule } from 'ngx-bootstrap/buttons';
+import { ButtonsModule } from 'ngx-bootstrap/buttons'; 
 
 const appRoutes: Routes = [
     { path: '', redirectTo: '/upload', pathMatch: 'full' },

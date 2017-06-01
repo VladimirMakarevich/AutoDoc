@@ -18,6 +18,11 @@ let UploadComponent = class UploadComponent {
         this.documentService = documentService;
         this.router = router;
     }
+    fileChangeEvent(fileInput) {
+        if (fileInput.target.files && fileInput.target.files[0]) {
+            this.fileName = fileInput.target.files[0].name;
+        }
+    }
     addFile() {
         let fi = this.fileInput.nativeElement;
         if (fi.files && fi.files[0]) {
@@ -34,6 +39,10 @@ __decorate([
     core_1.ViewChild('fileInput'),
     __metadata("design:type", Object)
 ], UploadComponent.prototype, "fileInput", void 0);
+__decorate([
+    core_1.ViewChild('fileNameInput'),
+    __metadata("design:type", Object)
+], UploadComponent.prototype, "textInput", void 0);
 UploadComponent = __decorate([
     core_1.Component(({
         selector: 'upload-component',

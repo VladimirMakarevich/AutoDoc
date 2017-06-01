@@ -40,15 +40,29 @@ let BookmarkComponent = class BookmarkComponent {
         buf.columns[this.newHeaderName] = { title: this.newHeaderName, sort: false, filter: false };
         bookmark.message.settings = Object.assign({}, buf);
     }
-    fileSelected(file, bookmark) {
-        bookmark.message.fileContents = file;
+    fileSelected(fileInput, bookmark) {
+        if (fileInput.target.files && fileInput.target.files[0]) {
+            bookmark.message.fileContents = fileInput.target.files[0];
+            bookmark.message.fileDownloadName = fileInput.target.files[0].name;
+        }
     }
     uploadNewValues() {
+        console.log(this.bookmarks);
+        console.log(this.bookmarks[0].message);
+        this.bookmarkService.postData(this.bookmarks).subscribe((ans) => {
+            this.router.navigate(['./download', this.id]);
+        });
+    }
+    prepareNewValues() {
         let bufIterator = new Array();
-        for (var i = 0; i < this.bookmarks.length; i++) {
+        let allPromiseOperations = this.bookmarks.filter(el => el.type == 3).length;
+        let donePromiseOperations = 0;
+        let i = 0;
+        while (i < this.bookmarks.length) {
             if (this.bookmarks[i].type == 2) {
                 let dataTable = this.bookmarks[i].message.data.data;
                 this.bookmarks[i].message.data = dataTable;
+                i++;
             }
             if (this.bookmarks[i].type == 3) {
                 bufIterator.push(i);
@@ -66,13 +80,15 @@ let BookmarkComponent = class BookmarkComponent {
                         this.bookmarks[bufIterator[0]] = buf;
                         bufIterator.splice(0, 1);
                     }
+                    donePromiseOperations++;
+                    if (donePromiseOperations == allPromiseOperations && i >= this.bookmarks.length)
+                        this.uploadNewValues();
                 });
             }
+            i++;
         }
-        console.log(this.bookmarks);
-        this.bookmarkService.postData(this.bookmarks).subscribe((ans) => {
-            this.router.navigate(['./download', this.id]);
-        });
+        if (donePromiseOperations == allPromiseOperations && i >= this.bookmarks.length)
+            this.uploadNewValues();
     }
     ngOnInit() {
         this.routeActivated.params.subscribe((params) => {

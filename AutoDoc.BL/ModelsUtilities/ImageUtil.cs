@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.IO;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
@@ -11,75 +12,84 @@ namespace AutoDoc.BL.ModelsUtilities
 {
     public class ImageUtil : IImageUtil
     {
-        public Drawing GetPicture(string path)
+        public Drawing ReplaceTextWithImage(string find, string filepath, Bitmap bitmap, int incremental)
         {
-            // Define the reference of the image.
-            var element =
-                 new Drawing(
-                     new DW.Inline(
-                         new DW.Extent() { Cx = 990000L, Cy = 792000L },
-                         new DW.EffectExtent()
-                         {
-                             LeftEdge = 0L,
-                             TopEdge = 0L,
-                             RightEdge = 0L,
-                             BottomEdge = 0L
-                         },
-                         new DW.DocProperties()
-                         {
-                             Id = (UInt32Value)1U,
-                             Name = "Picture"
-                         },
-                         new DW.NonVisualGraphicFrameDrawingProperties(
-                             new A.GraphicFrameLocks() { NoChangeAspect = true }),
-                         new A.Graphic(
-                             new A.GraphicData(
-                                 new PIC.Picture(
-                                     new PIC.NonVisualPictureProperties(
-                                         new PIC.NonVisualDrawingProperties()
-                                         {
-                                             Id = (UInt32Value)0U,
-                                             Name = "New Bitmap Image.jpg"
-                                         },
-                                         new PIC.NonVisualPictureDrawingProperties()),
-                                     new PIC.BlipFill(
-                                         new A.Blip(
-                                             new A.BlipExtensionList(
-                                                 new A.BlipExtension()
-                                                 {
-                                                     Uri =
-                                                        "{28A0092B-C50C-407E-A947-70E740481C1C}"
-                                                 })
-                                         )
-                                         {
-                                             CompressionState =
-                                             A.BlipCompressionValues.Print
-                                         },
-                                         new A.Stretch(
-                                             new A.FillRectangle())),
-                                     new PIC.ShapeProperties(
-                                         new A.Transform2D(
-                                             new A.Offset() { X = 0L, Y = 0L },
-                                             new A.Extents() { Cx = 990000L, Cy = 792000L }),
-                                         new A.PresetGeometry(
-                                             new A.AdjustValueList()
-                                         )
-                                         { Preset = A.ShapeTypeValues.Rectangle }))
-                             )
-                             { Uri = path })
-                     )
-                     {
-                         DistanceFromTop = (UInt32Value)0U,
-                         DistanceFromBottom = (UInt32Value)0U,
-                         DistanceFromLeft = (UInt32Value)0U,
-                         DistanceFromRight = (UInt32Value)0U,
-                         EditId = "50D07946"
-                     });
+            using (WordprocessingDocument doc = WordprocessingDocument.Open(filepath, true))
+            {
+                MainDocumentPart mainPart = doc.MainDocumentPart;
+                ImagePart imagePart = mainPart.AddImagePart(ImagePartType.Jpeg);
 
-            // Append the reference to body, the element should be in a Run.
-            //wordDoc.MainDocumentPart.Document.Body.AppendChild(new Paragraph(new Run(element)));
+                using (var ms = new MemoryStream())
+                {
+                    bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+                    ms.Position = 0;
+                    imagePart.FeedData(ms);
+                }
 
-            return element;
+                var relID = mainPart.GetIdOfPart(imagePart);
+
+                var element =
+                     new Drawing(
+                         new DW.Inline(
+                             new DW.Extent() { Cx = 990000L * (long)(7.13 / 1.08), Cy = 792000L * (long)(8.51 / 0.87) },
+                             new DW.EffectExtent()
+                             {
+                                 LeftEdge = 0L,
+                                 TopEdge = 0L,
+                                 RightEdge = 0L,
+                                 BottomEdge = 0L
+                             },
+                             new DW.DocProperties()
+                             {
+                                 Id = (UInt32Value)1U,
+                                 Name = "img" + incremental
+                             },
+                             new DW.NonVisualGraphicFrameDrawingProperties(
+                                 new A.GraphicFrameLocks() { NoChangeAspect = true }),
+                             new A.Graphic(
+                                 new A.GraphicData(
+                                     new PIC.Picture(
+                                         new PIC.NonVisualPictureProperties(
+                                             new PIC.NonVisualDrawingProperties()
+                                             {
+                                                 Id = (UInt32Value)0U,
+                                                 Name = "img" + incremental + ".jpg"
+                                             },
+                                             new PIC.NonVisualPictureDrawingProperties()),
+                                         new PIC.BlipFill(
+                                             new A.Blip(
+                                                 new A.BlipExtensionList(
+                                                     new A.BlipExtension()
+                                                     {
+                                                         Uri = Guid.NewGuid().ToString()
+                                                     })
+                                             )
+                                             {
+                                                 Embed = relID,
+                                                 CompressionState = A.BlipCompressionValues.Print
+                                             },
+                                             new A.Stretch(new A.FillRectangle())),
+                                         new PIC.ShapeProperties(
+                                             new A.Transform2D(
+                                                 new A.Offset() { X = 0L, Y = 0L },
+                                                 new A.Extents() { Cx = 990000L * (long)(7.13 / 1.08), Cy = 792000L * (long)(8.51 / 0.87) }),
+                                             new A.PresetGeometry(
+                                                 new A.AdjustValueList()
+                                             )
+                                             { Preset = A.ShapeTypeValues.Rectangle }))
+                                 )
+                                 { Uri = "http://schemas.openxmlformats.org/drawingml/2006/picture" })
+                         )
+                         {
+                             DistanceFromTop = (UInt32Value)0U,
+                             DistanceFromBottom = (UInt32Value)0U,
+                             DistanceFromLeft = (UInt32Value)0U,
+                             DistanceFromRight = (UInt32Value)0U,
+                             EditId = "50D07946"
+                         });
+
+                return element;
+            }
         }
     }
 }

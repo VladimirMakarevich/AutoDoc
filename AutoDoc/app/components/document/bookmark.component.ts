@@ -51,23 +51,43 @@ export class BookmarkComponent implements OnInit {
         bookmark.message.settings = Object.assign({}, buf);
     }
 
-    fileSelected(file: any, bookmark: Bookmark) {
-        bookmark.message.fileContents = file;
+    fileSelected(fileInput: any, bookmark: Bookmark) {
+        if (fileInput.target.files && fileInput.target.files[0]) {
+            bookmark.message.fileContents = fileInput.target.files[0];
+            bookmark.message.fileDownloadName = fileInput.target.files[0].name;
+        }
     }
 
     uploadNewValues(): void {
+        console.log(this.bookmarks);
+        console.log(this.bookmarks[0].message);
+        this.bookmarkService.postData(this.bookmarks).subscribe((ans: string) => {
+            this.router.navigate(['./download', this.id]);
+        });
+    }
+
+    prepareNewValues(): void {
 
         let bufIterator = new Array<number>();
 
-        for (var i = 0; i < this.bookmarks.length; i++) {
+        let allPromiseOperations: number = this.bookmarks.filter(el => el.type == 3).length;
+        let donePromiseOperations: number = 0;
+
+        let i: number = 0;
+        while(i < this.bookmarks.length) {
+
             if (this.bookmarks[i].type == 2) {
                 let dataTable = this.bookmarks[i].message.data.data;
                 this.bookmarks[i].message.data = dataTable;
+                i++;
             }
+
             if (this.bookmarks[i].type == 3) {
                 bufIterator.push(i);
+
                 this.bookmarkService.postImageFile(this.bookmarks[i].message.fileContents).then((name: string) => {
                     if (name != null) {
+
                         let buf = new Bookmark();
 
                         buf.id = this.bookmarks[bufIterator[0]].id;
@@ -84,15 +104,16 @@ export class BookmarkComponent implements OnInit {
 
                         bufIterator.splice(0, 1);
                     }
+
+                    donePromiseOperations++;
+                    if (donePromiseOperations == allPromiseOperations && i >= this.bookmarks.length) this.uploadNewValues();
+
                 });
             }
+            i++;
         }
 
-        console.log(this.bookmarks);
-
-        this.bookmarkService.postData(this.bookmarks).subscribe((ans : string) => {
-            this.router.navigate(['./download', this.id]);
-        });
+        if (donePromiseOperations == allPromiseOperations && i >= this.bookmarks.length) this.uploadNewValues();
     }
 
     ngOnInit() {

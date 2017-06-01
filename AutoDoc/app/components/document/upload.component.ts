@@ -17,6 +17,15 @@ export class UploadComponent {
     constructor(private documentService: DocumentService, private router: Router) { }
 
     @ViewChild('fileInput') fileInput: any;
+    @ViewChild('fileNameInput') textInput: any;
+
+    public fileName: string;
+
+    fileChangeEvent(fileInput: any) {
+        if (fileInput.target.files && fileInput.target.files[0]) {
+            this.fileName = fileInput.target.files[0].name;
+        }
+    }
 
     addFile(): void {
         let fi = this.fileInput.nativeElement;
