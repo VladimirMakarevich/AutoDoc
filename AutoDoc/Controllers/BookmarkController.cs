@@ -138,7 +138,7 @@ namespace AutoDoc.Controllers
                             bookmarkDbPic.MessageJson = bookmark.Message;
 
                             _bookmarkService.EditBookmark(bookmarkDbPic);
-                            _bookmarkParser.ReplaceBookmark(bookmarkNames, bookmark.Name, new ImageUtil().GetPicture(filePath), docFile.MainDocumentPart);
+                            //_bookmarkParser.ReplaceBookmark(bookmarkNames, bookmark.Name, new ImageUtil().ReplaceTextWithImage(filePath), docFile.MainDocumentPart);
                             break;
                         default: break;
                     }
