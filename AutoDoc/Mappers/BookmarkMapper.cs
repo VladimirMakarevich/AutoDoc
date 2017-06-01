@@ -31,5 +31,10 @@ namespace AutoDoc.Mappers
         {
             return _mapper.Map<BookmarkJsonModel, Bookmark>(bookmark);
         }
+
+        public BookmarkJsonModel ToBookmarkJsonModel(Bookmark bookmark)
+        {
+            return _mapper.Map<Bookmark, BookmarkJsonModel>(bookmark);
+        }
     }
 }

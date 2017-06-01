@@ -18,6 +18,7 @@
     <Folder Include="wwwroot\AppData\" />
     <Folder Include="wwwroot\AppData\" />
     <Folder Include="wwwroot\AppData\" />
+    <Folder Include="wwwroot\AppData\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.0.2" />

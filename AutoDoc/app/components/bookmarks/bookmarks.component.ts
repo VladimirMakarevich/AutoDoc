@@ -34,20 +34,30 @@ export class BookmarkComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.document = this.dataservice.getDocument();
+
+        let bufIterator = new Array<number>();
+
+        for (var i = 0; i < this.document.bookmarks.length; i++) {
+            if (this.document.bookmarks[i].type == 2) {
+                let buf = new Table();
+                buf.settings = this.document.bookmarks[i].message.settings;
+                buf.data.load(this.document.bookmarks[i].message.data);
+                this.document.bookmarks[i].message = buf;
+            }
+        }
+
         this.inputOptions = Array<Option>();
         this.inputOptions.push(new Option(1, 'Text'));
         this.inputOptions.push(new Option(2, 'Table'));
         this.renderValue = this.value;
     }
 
-    ngOnDestroy() {  
+    ngOnDestroy() {
     }
 
     changeBookmarkType(bookmark: Bookmark): void {
-        if (bookmark.type == 2) {
-            bookmark.message = new Table();
-        }
-        if (bookmark.type == 1) bookmark.message;
+        if (bookmark.type == 2) { bookmark.message = new Table(); }
+        if (bookmark.type == 1) { bookmark.message; }
     }
 
 
@@ -59,18 +69,18 @@ export class BookmarkComponent implements OnInit, OnDestroy {
 
     uploadBookmarks(id: number) {
         let data = this.getTable(this.document);
-        this.bookmarkService.uploadBookmarks(data)                
+        this.bookmarkService.uploadBookmarks(data)
             .then(id => {
                 this.id = id;
                 this.router.navigate(['/downdocument', id]);
-        });
+            });
     }
 
     getTable(obj: any): Document {
         for (var i = 0; i < obj.bookmarks.length; i++) {
             if (obj.bookmarks[i].type == "2") {
-                let dataTable = JSON.stringify(obj.bookmarks[i].message.data.data);
-                obj.bookmarks[i].message = dataTable;
+                let dataTable = obj.bookmarks[i].message.data.data;
+                obj.bookmarks[i].message.data = dataTable;
             }
         }
 

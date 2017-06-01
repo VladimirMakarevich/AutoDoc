@@ -18,9 +18,9 @@ namespace AutoDoc.Mappers
             _mapper = mapper;
         }
 
-        public Document ToDocument(string fileName, string filePath, List<Bookmark> bookmarks)
+        public Document ToDocument(string fileName, string filePath, int parentId)
         {
-            return new Document() { Name = fileName, Path = filePath, Bookmarks = bookmarks };
+            return new Document() { Id = parentId, Name = fileName, Path = filePath };
         }
 
         public DocumentJsonModel ToDocumentJsonModel(List<BookmarkJsonModel> bookmarksJsonModel, int documentId)

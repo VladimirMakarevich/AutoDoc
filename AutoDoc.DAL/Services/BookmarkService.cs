@@ -1,5 +1,8 @@
-﻿using AutoDoc.DAL.Entities;
+﻿using System;
+using System.Collections.Generic;
+using AutoDoc.DAL.Entities;
 using AutoDoc.DAL.Repository;
+using System.Linq;
 
 namespace AutoDoc.DAL.Services
 {
@@ -30,6 +33,13 @@ namespace AutoDoc.DAL.Services
             buf.Type = bookmark.Type;
 
             _bookmarkRepository.Update(buf);
+        }
+
+        public IEnumerable<Bookmark> GetAllBookmarksByDocument(int id)
+        {
+            var bookmarks = _bookmarkRepository.GetAll();
+
+            return bookmarks.Where(c => c.DocumentId == id).ToList();
         }
     }
 }
