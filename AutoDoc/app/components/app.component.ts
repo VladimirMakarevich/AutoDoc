@@ -4,7 +4,7 @@
     selector: 'autodoc-app',
     template: `<div>
                     <router-outlet></router-outlet>
-                </div>`,
+                </div>`
 })
 
 export class AppComponent {

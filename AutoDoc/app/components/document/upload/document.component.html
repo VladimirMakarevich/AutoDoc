@@ -1,14 +1,16 @@
-﻿<div class="form-group">
-    <h3>Page One </h3>
-    <br />
-    <div class="col-md-10">
-        <p>Upload one or more files using this form:</p>
-        <input #fileInput type="file" name="files" multiple />
+﻿<div>
+    <div>
+        <br />
+        <div>
+            <p>Upload one file using this form:</p>
+        </div>
+        <!--<label class="control-label">Select File</label>
+        <input #fileInput name="input" type="file" class="file" multiple data-show-upload="false" data-show-caption="true">-->
+        <input #fileInput class="form-control" type="file" name="files" />
     </div>
 </div>
-<div class="form-group">
-    <div class="col-md-10">
-        <input type="submit" value="Upload" (click)="addFile()" />
-    </div>
+<br />
+<div>
+    <input class="btn btn-default" type="submit" value="Upload" (click)="addFile()" />
 </div>
 
