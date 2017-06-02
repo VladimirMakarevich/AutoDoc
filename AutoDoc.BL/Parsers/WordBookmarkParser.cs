@@ -164,51 +164,101 @@ namespace AutoDoc.BL.Parsers
         }*/
 
 
-        public void ReplaceBookmark<T>(Dictionary<string, BookmarkEnd> bookMarks, string name, T element,
+        public void ReplaceBookmark<T>(Dictionary<string, BookmarkStart> bookMarks, string name, T element,
            MainDocumentPart doc) where T : OpenXmlElement
         {
-            var bookmark = bookMarks[name];
-            Run bookmarkEl = bookmark.NextSibling<Run>();
 
-            if (bookmarkEl != null)
-            {
-                var bmstart = (from b in doc.Document.Body.Descendants<BookmarkStart>()
-                               where b.Name.ToString().StartsWith(name)
-                               select b).FirstOrDefault();
+            var valueElement = bookMarks[name];
 
-                BookmarkEnd bmend = null;
-                string idBm = bmstart.Id;
+            string idBm = valueElement.Id;
 
-                bmend = (from b in doc.RootElement.Descendants<BookmarkEnd>()
+            var bmend = (from b in doc.RootElement.Descendants<BookmarkEnd>()
                          where b.Id == idBm
                          select b).FirstOrDefault();
 
-                OpenXmlElement sliblingElement = bookmark.Parent.NextSibling<OpenXmlElement>();
+            if (bmend.Parent.InnerText != "")
+            {
 
-                BookmarkStart nBmStart = new BookmarkStart()
+                string modifiedString = "";
+
+                string innerText = bmend.Parent.InnerText;
+                modifiedString = bmend.Parent.InnerText.Replace(innerText, "");
+
+                if (modifiedString != bmend.Parent.InnerText)
                 {
-                    Name = name,
-                    Id = idBm
-                };
-
-                Paragraph nPara = new Paragraph();
-
-                nPara.Append(nBmStart);
-
-                Run nRun = new Run();
-
-                nRun.Append(element);
-                nPara.Append(nRun);
-
-                BookmarkEnd nBmEnd = new BookmarkEnd()
-                {
-                    Id = idBm
-                };
-
-                nPara.Append(nBmEnd);
-
-                sliblingElement.InsertAfterSelf(nPara);
+                    bmend.RemoveAllChildren<T>();
+                    bmend.Parent.RemoveAllChildren<T>();
+                    bmend.AppendChild<T>(element);
+                    bmend.Parent.AppendChild<T>(element);
+                }
             }
+            else
+            {
+                var runElement = new Run(element);
+
+                valueElement.InsertAfterSelf(runElement);
+            }
+            //valueElement.InnerText.Remove();
+            //valueElement.Remove();
+            //var newValueElement = valueElement;
+            //valueElement.Repla
+            //valueElement.Parent.OuterXml.
+            //valueElement.FirstChild.OuterXml;
+
+
+            //if (bmend.Parent.InnerText != "")
+            //{
+            //    //var count = bmend.Parent.InnerText.Count();
+            //    var oldInnerText = bmend.Parent.InnerText;
+            //}
+
+
+            //var runElement = new Run(element);
+
+            //valueElement.InsertAfterSelf(runElement);
+
+            //var bookmark = bookMarks[name];
+            //Run bookmarkEl = bookmark.NextSibling<Run>();
+
+            //if (bookmarkEl != null)
+            //{
+            //    var bmstart = (from b in doc.Document.Body.Descendants<BookmarkStart>()
+            //                   where b.Name.ToString().StartsWith(name)
+            //                   select b).FirstOrDefault();
+
+            //    BookmarkEnd bmend = null;
+            //    string idBm = bmstart.Id;
+
+            //    bmend = (from b in doc.RootElement.Descendants<BookmarkEnd>()
+            //             where b.Id == idBm
+            //             select b).FirstOrDefault();
+
+            //    OpenXmlElement sliblingElement = bookmark.Parent.NextSibling<OpenXmlElement>();
+
+            //    BookmarkStart nBmStart = new BookmarkStart()
+            //    {
+            //        Name = name,
+            //        Id = idBm
+            //    };
+
+            //    Paragraph nPara = new Paragraph();
+
+            //    nPara.Append(nBmStart);
+
+            //    Run nRun = new Run();
+
+            //    nRun.Append(element);
+            //    nPara.Append(nRun);
+
+            //    BookmarkEnd nBmEnd = new BookmarkEnd()
+            //    {
+            //        Id = idBm
+            //    };
+
+            //    nPara.Append(nBmEnd);
+
+            //    sliblingElement.InsertAfterSelf(nPara);
+            //}
         }
     }
 }

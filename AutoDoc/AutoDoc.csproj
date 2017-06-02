@@ -5,6 +5,10 @@
     <UserSecretsId>0185b5dd-0f1f-4d02-8e0c-ae6c56b7583a</UserSecretsId>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+
   <ItemGroup>
     <Content Remove="wwwroot/AppData\Magistratura.docx" />
   </ItemGroup>

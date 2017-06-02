@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using DocumentFormat.OpenXml.Wordprocessing;
 using AutoDoc.DAL.Entities;
 using Newtonsoft.Json.Linq;
+using DocumentFormat.OpenXml;
 
 namespace AutoDoc.Controllers
 {
@@ -112,35 +113,56 @@ namespace AutoDoc.Controllers
 
                 }
             }
-            Dictionary<string, BookmarkEnd> bookmarkNames = new Dictionary<string, BookmarkEnd>();
-            try
+
+            Dictionary<string, BookmarkStart> bookmarkNames = new Dictionary<string, BookmarkStart>();
+            List<KeyValue<string, BookmarkStart>> list = new List<KeyValue<string, BookmarkStart>>();
+            //KeyValue<string, BookmarkStart> KeyValue = new KeyValue<string, BookmarkStart>();
+            //List<string, BookmarkStart> customList = new List<string, BookmarkStart>()
+            foreach (BookmarkStart bookmarkStart in docFile.MainDocumentPart.RootElement.Descendants<BookmarkStart>())
             {
-                bookmarkNames = _bookmarkParser.FindBookmarks(docFile.MainDocumentPart.Document);
+                bookmarkNames[bookmarkStart.Name] = bookmarkStart;
+                //KeyValue<string, BookmarkStart> keyValue = new KeyValue<string, BookmarkStart>
+                //{
+                //    Key = bookmarkStart.Name,
+                //    Value = bookmarkStart
+                //};
+
+                //list.Add(new KeyValue<string, BookmarkStart>(bookmarkStart.Name, bookmarkStart);
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
+            //Dictionary<string, BookmarkEnd> bookmarkNames = new Dictionary<string, BookmarkEnd>();
+            //try
+            //{
+            //    bookmarkNames = _bookmarkParser.FindBookmarks(docFile.MainDocumentPart.Document);
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw ex;
+            //}
             //var bookmarkNames = new Dictionary<string, BookmarkEnd>();
 
             //Dictionary<string, BookmarkEnd> bookmarkNames = _bookmarkParser.FindMainBookmarks(docFile);
 
+            var bookmarksEntitiesCheck = _bookmarkService.GetAllBookmarksByDocument(id).ToList();
 
-            if (bookmarkNames != null)
+            if (!bookmarksEntitiesCheck.Any())
             {
-                foreach (var bookmarkName in bookmarkNames.Keys)
+                if (bookmarkNames != null)
                 {
-                    if (bookmarkName != "_GoBack")
+                    foreach (var bookmarkName in bookmarkNames.Keys)
                     {
-                        Bookmark bookmarkEntity = new Bookmark
+                        if (bookmarkName != "_GoBack")
                         {
-                            Name = bookmarkName,
-                            MessageJson = string.Empty,
-                            Type = 1,
-                            DocumentId = id
-                        };
+                            Bookmark bookmarkEntity = new Bookmark
+                            {
+                                Name = bookmarkName,
+                                MessageJson = string.Empty,
+                                Type = 1,
+                                DocumentId = id
+                            };
 
-                        _bookmarkService.CreateBookmark(bookmarkEntity);
+                            _bookmarkService.CreateBookmark(bookmarkEntity);
+                        }
                     }
                 }
             }
@@ -307,7 +329,22 @@ namespace AutoDoc.Controllers
             var document = _documentService.GetDocument(documentJsonModel.Id);
 
             WordprocessingDocument doc = _documentCore.OpenDocument(document.Path);
-            var bookmarkNames = _bookmarkParser.FindBookmarks(doc.MainDocumentPart.Document);
+            //var bookmarkNames = _bookmarkParser.FindBookmarks(doc.MainDocumentPart.Document);
+
+            Dictionary<string, BookmarkStart> bookmarkNames = new Dictionary<string, BookmarkStart>();
+
+            foreach (BookmarkStart bookmarkStart in doc.MainDocumentPart.RootElement.Descendants<BookmarkStart>())
+            {
+                bookmarkNames[bookmarkStart.Name] = bookmarkStart;
+            }
+
+            //foreach (var end in bookmarkNames)
+            //{
+            //    var textElement = new Text("asdfasdf");
+            //    var runElement = new Run(textElement);
+
+            //    end.Value.InsertAfterSelf(runElement);
+            //}
 
             foreach (var bookmark in documentJsonModel.Bookmarks)
             {
@@ -359,5 +396,20 @@ namespace AutoDoc.Controllers
 
             return file;
         }
+    }
+
+    public class KeyValue<Tkey, TValue>
+    {
+        private StringValue name;
+        private BookmarkStart bookmarkStart;
+
+        public KeyValue(StringValue name, BookmarkStart bookmarkStart)
+        {
+            this.name = name;
+            this.bookmarkStart = bookmarkStart;
+        }
+
+        private Tkey Key { get; set; }
+        private TValue Value { get; set; }
     }
 }
