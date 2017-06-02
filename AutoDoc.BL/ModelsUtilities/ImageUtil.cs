@@ -28,12 +28,36 @@ namespace AutoDoc.BL.ModelsUtilities
                 imagePart.FeedData(ms);
             }
 
+            var widthPx = bitmap.Width;
+            var heightPx = bitmap.Height;
+
+            var horzRezDpi = bitmap.HorizontalResolution;
+            var vertRezDpi = bitmap.VerticalResolution;
+
+            const int emusPerInch = 914400;
+            const int emusPerCm = 360000;
+
+            var maxWidthCm = 16.51;
+
+            var widthEmus = (long)(widthPx / horzRezDpi * emusPerInch);
+            var heightEmus = (long)(heightPx / vertRezDpi * emusPerInch);
+
+            var maxWidthEmus = (long)(maxWidthCm * emusPerCm);
+
+            if (widthEmus > maxWidthEmus)
+            {
+                var ratio = (heightEmus * 1.0m) / widthEmus;
+                widthEmus = maxWidthEmus;
+                heightEmus = (long)(widthEmus * ratio);
+            }
+
             var relID = mainPart.GetIdOfPart(imagePart);
 
             var element =
                 new Drawing(
                     new DW.Inline(
-                        new DW.Extent() {Cx = 990000L * (long) (7.13 / 1.08), Cy = 792000L * (long) (8.51 / 0.87)},
+                        //new DW.Extent() {Cx = 990000L * (long) (7.13 / 1.08), Cy = 792000L * (long) (8.51 / 0.87)},
+                        new DW.Extent() { Cx = 990000L, Cy = 792000L },
                         new DW.EffectExtent()
                         {
                             LeftEdge = 0L,
@@ -76,8 +100,10 @@ namespace AutoDoc.BL.ModelsUtilities
                                                 new A.Offset() {X = 0L, Y = 0L},
                                                 new A.Extents()
                                                 {
-                                                    Cx = 990000L * (long) (7.13 / 1.08),
-                                                    Cy = 792000L * (long) (8.51 / 0.87)
+                                                    //Cx = 990000L * (long) (7.13 / 1.08),
+                                                    //Cy = 792000L * (long) (8.51 / 0.87)
+                                                    Cx = widthEmus,
+                                                    Cy = heightEmus
                                                 }),
                                             new A.PresetGeometry(
                                                     new A.AdjustValueList()
