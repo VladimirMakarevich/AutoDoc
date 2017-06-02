@@ -178,6 +178,7 @@ namespace AutoDoc.BL.Parsers
             bookmarkInfo.BookmarkType = 1;
             bookmarkInfo.Message = string.Empty;
 
+
             return bookmarkInfo;
         }
 
