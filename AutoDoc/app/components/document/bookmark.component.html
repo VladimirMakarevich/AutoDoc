@@ -25,7 +25,7 @@
                                         <label for="text">New Message:</label>
                                         <div class="input-group">
                                             <span class="input-group-addon"><i class="glyphicon glyphicon-comment"></i></span>
-                                            <input [(ngModel)]="bookmark.message" type="text" id="text" class="form-control" placeholder="New Value" required="true"/>
+                                            <input [(ngModel)]="bookmark.message" type="text" id="text" class="form-control" placeholder="New Value" required="true" autofocus/>
                                         </div>
                                     </div>
                                 </div>
@@ -43,7 +43,7 @@
 
                                         <form class="form-inline">
                                             <div class="form-group">
-                                                <input type="text" [(ngModel)]="newHeaderName" class="form-control text-input" id="header" name="header" required placeholder="New Header...">
+                                                <input type="text" [(ngModel)]="newHeaderName" class="form-control text-input" id="header" name="header" required placeholder="New Header..." autofocus>
                                             </div>
                                             <button type="submit" class="btn btn-success" (click)="addNewHeader(bookmark)">Add</button>
                                         </form>

@@ -134,7 +134,7 @@ namespace AutoDoc.BL.Parsers
             doc.Close();
         }*/
 
-        public Dictionary<string, BookmarkEnd> FindBookmarks(OpenXmlElement documentPart, Dictionary<string, BookmarkEnd> results = null, Dictionary<string, string> unmatched = null)
+        /*public Dictionary<string, BookmarkEnd> FindBookmarks(OpenXmlElement documentPart, Dictionary<string, BookmarkEnd> results = null, Dictionary<string, string> unmatched = null)
         {
             try
             {
@@ -168,6 +168,18 @@ namespace AutoDoc.BL.Parsers
             {
                 return null;
             }
+        }*/
+
+        public List<KeyValuePair<string, BookmarkStart>> FindBookmarks(WordprocessingDocument doc)
+        {
+            List<KeyValuePair<string, BookmarkStart>> bookmarkNames = new List<KeyValuePair<string, BookmarkStart>>();
+          
+            foreach (BookmarkStart bookmarkStart in doc.MainDocumentPart.RootElement.Descendants<BookmarkStart>())
+            {
+                if (bookmarkStart.Name != "_GoBack") bookmarkNames.Add(new KeyValuePair<string, BookmarkStart>(bookmarkStart.Name, bookmarkStart));
+            }
+
+            return bookmarkNames;
         }
 
         /*public void ReplaceBookmark<T>(Dictionary<string, BookmarkEnd> bookMarks, string name, T message) where T: OpenXmlElement
@@ -182,10 +194,45 @@ namespace AutoDoc.BL.Parsers
         }*/
 
 
-        public void ReplaceBookmark<T>(Dictionary<string, BookmarkEnd> bookMarks, string name, T element,
+        public void ReplaceBookmark<T>(KeyValuePair<string, BookmarkStart> bookMark, T element,
            MainDocumentPart doc) where T : OpenXmlElement
         {
-            var bookmark = bookMarks[name];
+            var valueElementStart = bookMark.Value;
+
+            string idvalueElementEnd = valueElementStart.Id;
+
+            var valueElementEnd = (from b in doc.RootElement.Descendants<BookmarkEnd>()
+                         where b.Id == idvalueElementEnd
+                                   select b).FirstOrDefault();
+
+            var runElement = new Run(element);
+
+            try
+            {
+                if (
+                    valueElementStart.Parent.ChildElements.First(
+                        el => el.IsAfter(valueElementStart) && el.IsBefore(valueElementEnd)) != null)
+                {
+                    //valueElementStart.Parent.ChildElements.First(el => el.IsAfter(valueElementStart)).OuterXml.Remove(0);
+                    //valueElementStart.Parent.ChildElements.First(el => el.IsAfter(valueElementStart)).OuterXml.Insert(0, runElement.OuterXml);
+                    valueElementStart.Parent.ChildElements.First(el => el.IsAfter(valueElementStart)).InnerXml =
+                        runElement.InnerXml;
+                }
+                else valueElementStart.InsertAfterSelf(runElement);
+            }
+            catch (Exception ex)
+            {
+                valueElementStart.InsertAfterSelf(runElement);
+            }
+ 
+            //if (valueElementStart.FirstChild != null) valueElementStart.FirstChild.InnerXml = runElement.InnerXml;
+            //else valueElementStart.InsertAfterSelf(runElement);
+
+            //if (valueElementStart.FirstChild != null) valueElementStart.ReplaceChild(runElement, valueElementStart.FirstChild);
+            //else valueElementStart.InsertAfterSelf(runElement);
+
+
+            /*var bookmark = bookMarks[name];
             Run bookmarkEl = bookmark.NextSibling<Run>();
 
             if (bookmarkEl != null)
@@ -225,8 +272,7 @@ namespace AutoDoc.BL.Parsers
 
                 nPara.Append(nBmEnd);
 
-                sliblingElement.InsertAfterSelf(nPara);
-            }
+                sliblingElement.InsertAfterSelf(nPara);*/
         }
     }
 }

@@ -104,7 +104,7 @@ namespace AutoDoc.Controllers
                 var documentPath = _documentService.GetDocument(currentBookmark.DocumentId).Path;
 
                 var docFile = _documentCore.OpenDocument(documentPath);
-                var bookmarkNames = _bookmarkParser.FindBookmarks(docFile.MainDocumentPart.Document);
+                var bookmarkNames = _bookmarkParser.FindBookmarks(docFile);
 
                 foreach (var bookmark in bookmarks)
                 {
@@ -117,7 +117,7 @@ namespace AutoDoc.Controllers
                             bookmarkDb.MessageJson = bookmark.Message;
 
                             _bookmarkService.EditBookmark(bookmarkDb);
-                            _bookmarkParser.ReplaceBookmark(bookmarkNames, bookmark.Name, new TextUtil().GetText(bookmark.Message.ToString()), docFile.MainDocumentPart);
+                            _bookmarkParser.ReplaceBookmark(bookmarkNames.Find(name => name.Key == bookmark.Name), new TextUtil().GetText(bookmark.Message.ToString()), docFile.MainDocumentPart);
                             break;
                         case 2:
                             var bookmarkDbTable = _mapper.Map<BookmarksJsonModel, Bookmark>(bookmark);
@@ -125,7 +125,7 @@ namespace AutoDoc.Controllers
                             bookmarkDbTable.MessageJson = bookmark.Message.ToString();
 
                             _bookmarkService.EditBookmark(bookmarkDbTable);
-                            _bookmarkParser.ReplaceBookmark(bookmarkNames, bookmark.Name, new TableUtil().GetTable(bookmark.Message.ToString()), docFile.MainDocumentPart); 
+                            _bookmarkParser.ReplaceBookmark(bookmarkNames.Find(name => name.Key == bookmark.Name), new TableUtil().GetTable(bookmark.Message.ToString()), docFile.MainDocumentPart); 
                             break;
                         case 3:
                             var bookmarkDbPic = _mapper.Map<BookmarksJsonModel, Bookmark>(bookmark);

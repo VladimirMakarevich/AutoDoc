@@ -131,17 +131,15 @@ namespace AutoDoc.Controllers
                 }
             }
 
-            var bookmarkNames = new Dictionary<string, BookmarkEnd>();
-
-            bookmarkNames = _bookmarkParser.FindBookmarks(docFile.MainDocumentPart.Document);
+            var bookmarkNames = _bookmarkParser.FindBookmarks(docFile);
 
             if (bookmarkNames != null)
             {
-                foreach (var bookmarkName in bookmarkNames.Keys)
+                foreach (var bookmarkName in bookmarkNames)
                 {
                     Bookmark bookmarkEntity = new Bookmark
                     {
-                        Name = bookmarkName,
+                        Name = bookmarkName.Key,
                         MessageJson = string.Empty,
                         DocumentId = id
                     };
@@ -168,6 +166,7 @@ namespace AutoDoc.Controllers
             DAL.Entities.Document doc = _documentService.GetDocument(id);
 
             var fileByteArray = System.IO.File.ReadAllBytes(doc.Path);
+            doc.Name = doc.Name.Replace(" ", "_");
             FileContentResult file = new FileContentResult(fileByteArray, "application/x-msdownload; " + doc.Name)
             {              
                 FileDownloadName = WebUtility.UrlEncode(doc.Name)
