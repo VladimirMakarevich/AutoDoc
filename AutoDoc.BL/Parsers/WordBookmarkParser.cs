@@ -171,9 +171,14 @@ namespace AutoDoc.BL.Parsers
             }
         }*/
 
-        private int WhatTypeBookmark(BookmarkStart bookmarkStart)
+        private WordBookmark WhatTypeBookmark(BookmarkStart bookmarkStart)
         {
-            return 1;
+            var bookmarkInfo = new WordBookmark();
+            bookmarkInfo.BookmarkData = new KeyValuePair<string, BookmarkStart>(bookmarkStart.Name, bookmarkStart);
+            bookmarkInfo.BookmarkType = 1;
+            bookmarkInfo.Message = string.Empty;
+
+            return bookmarkInfo;
         }
 
         public List<WordBookmark> FindBookmarks(WordprocessingDocument doc)
@@ -184,12 +189,8 @@ namespace AutoDoc.BL.Parsers
             {
                 if (bookmarkStart.Name != "_GoBack")
                 {
-                    var bookmark = new WordBookmark()
-                    {
-                        BookmarkData = new KeyValuePair<string, BookmarkStart>(bookmarkStart.Name, bookmarkStart),
-                        BookmarkType = WhatTypeBookmark(bookmarkStart)
-                    };
-                    bookmarkNames.Add(bookmark);
+                    var bookmarkInfo = WhatTypeBookmark(bookmarkStart);
+                    bookmarkNames.Add(bookmarkInfo);
 
                 }
             }

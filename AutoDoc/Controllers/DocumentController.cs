@@ -140,7 +140,7 @@ namespace AutoDoc.Controllers
                     Bookmark bookmarkEntity = new Bookmark
                     {
                         Name = bookmarkName.BookmarkData.Key,
-                        MessageJson = string.Empty,
+                        MessageJson = bookmarkName.Message,
                         DocumentId = id,
                         Type = bookmarkName.BookmarkType
                     };
