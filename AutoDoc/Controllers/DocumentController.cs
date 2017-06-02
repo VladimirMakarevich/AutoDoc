@@ -91,7 +91,7 @@ namespace AutoDoc.Controllers
                 var props = customProps.Properties;
                 if (props != null)
                 {
-                    var prop = props.Where(p => ((CustomDocumentProperty)p).Name.Value == "ParentId").FirstOrDefault();
+                    var prop = props.FirstOrDefault(p => ((CustomDocumentProperty)p).Name.Value == "ParentId");
                     if (prop != null) Int32.TryParse(((CustomDocumentProperty)prop).InnerText, out ParentId); //Int32.TryParse(prop.InnerText, out ParentId);
                 }
             }
@@ -139,9 +139,10 @@ namespace AutoDoc.Controllers
                 {
                     Bookmark bookmarkEntity = new Bookmark
                     {
-                        Name = bookmarkName.Key,
+                        Name = bookmarkName.BookmarkData.Key,
                         MessageJson = string.Empty,
-                        DocumentId = id
+                        DocumentId = id,
+                        Type = bookmarkName.BookmarkType
                     };
                     int bookmarkId = _bookmarkService.CreateBookmark(bookmarkEntity);
                 }

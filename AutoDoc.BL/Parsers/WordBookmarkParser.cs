@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using AutoDoc.BL.Models;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
@@ -170,13 +171,27 @@ namespace AutoDoc.BL.Parsers
             }
         }*/
 
-        public List<KeyValuePair<string, BookmarkStart>> FindBookmarks(WordprocessingDocument doc)
+        private int WhatTypeBookmark(BookmarkStart bookmarkStart)
         {
-            List<KeyValuePair<string, BookmarkStart>> bookmarkNames = new List<KeyValuePair<string, BookmarkStart>>();
+            return 1;
+        }
+
+        public List<WordBookmark> FindBookmarks(WordprocessingDocument doc)
+        {
+            List<WordBookmark> bookmarkNames = new List<WordBookmark>();
           
             foreach (BookmarkStart bookmarkStart in doc.MainDocumentPart.RootElement.Descendants<BookmarkStart>())
             {
-                if (bookmarkStart.Name != "_GoBack") bookmarkNames.Add(new KeyValuePair<string, BookmarkStart>(bookmarkStart.Name, bookmarkStart));
+                if (bookmarkStart.Name != "_GoBack")
+                {
+                    var bookmark = new WordBookmark()
+                    {
+                        BookmarkData = new KeyValuePair<string, BookmarkStart>(bookmarkStart.Name, bookmarkStart),
+                        BookmarkType = WhatTypeBookmark(bookmarkStart)
+                    };
+                    bookmarkNames.Add(bookmark);
+
+                }
             }
 
             return bookmarkNames;
@@ -192,6 +207,12 @@ namespace AutoDoc.BL.Parsers
             }
 
         }*/
+
+        public void ExpandTableBookmark<T>(KeyValuePair<string, BookmarkStart> bookMark, T element,
+            MainDocumentPart doc) where T : OpenXmlElement 
+        {
+            
+        }
 
 
         public void ReplaceBookmark<T>(KeyValuePair<string, BookmarkStart> bookMark, T element,

@@ -43,7 +43,6 @@ namespace AutoDoc.DAL.Services
 
             if (existing == null)
             {
-                bookmark.Type = 1;
                 int id = _baseRepository.Add(bookmark);
                 return id;
             }

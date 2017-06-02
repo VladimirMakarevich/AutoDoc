@@ -63,6 +63,20 @@
                                         <input [(ngModel)]="bookmark.message.fileDownloadName" type="text" class="form-control" readonly>
                                     </div>
                                 </div>
+                                
+                                <div *ngIf="bookmark.type == 4">
+
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">Table Data</div>
+                                        <div class="panel-body">
+                                            <ng2-smart-table class="table" [settings]="bookmark.message.settings" [source]="bookmark.message.data"></ng2-smart-table>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                
+
                             </div>
                         </div>
 

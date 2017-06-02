@@ -75,7 +75,6 @@ namespace AutoDoc.Controllers
                         bookmark.Message = bookmartEntity.MessageJson;
                         responceBookmarksJsonModels.Add(bookmark);
                         break;
-
                     case 2:
                         var bookmarkTable = _mapper.Map<Bookmark, BookmarksJsonModel>(bookmartEntity);
                         bookmarkTable.Message = JObject.Parse(bookmartEntity.MessageJson) as JObject;
@@ -85,6 +84,11 @@ namespace AutoDoc.Controllers
                         var bookmarkPic = _mapper.Map<Bookmark, BookmarksJsonModel>(bookmartEntity);
                         bookmarkPic.Message = bookmartEntity.MessageJson;
                         responceBookmarksJsonModels.Add(bookmarkPic);
+                        break;
+                    case 4:
+                        var bookmarkExtTable = _mapper.Map<Bookmark, BookmarksJsonModel>(bookmartEntity);
+                        bookmarkExtTable.Message = JObject.Parse(bookmartEntity.MessageJson) as JObject;
+                        responceBookmarksJsonModels.Add(bookmarkExtTable);
                         break;
                     default: break;
                 }
@@ -117,7 +121,7 @@ namespace AutoDoc.Controllers
                             bookmarkDb.MessageJson = bookmark.Message;
 
                             _bookmarkService.EditBookmark(bookmarkDb);
-                            _bookmarkParser.ReplaceBookmark(bookmarkNames.Find(name => name.Key == bookmark.Name), new TextUtil().GetText(bookmark.Message.ToString()), docFile.MainDocumentPart);
+                            _bookmarkParser.ReplaceBookmark(bookmarkNames.Find(name => name.BookmarkData.Key == bookmark.Name).BookmarkData, _textUtil.GetText(bookmark.Message.ToString()), docFile.MainDocumentPart);
                             break;
                         case 2:
                             var bookmarkDbTable = _mapper.Map<BookmarksJsonModel, Bookmark>(bookmark);
@@ -125,7 +129,7 @@ namespace AutoDoc.Controllers
                             bookmarkDbTable.MessageJson = bookmark.Message.ToString();
 
                             _bookmarkService.EditBookmark(bookmarkDbTable);
-                            _bookmarkParser.ReplaceBookmark(bookmarkNames.Find(name => name.Key == bookmark.Name), new TableUtil().GetTable(bookmark.Message.ToString()), docFile.MainDocumentPart); 
+                            _bookmarkParser.ReplaceBookmark(bookmarkNames.Find(name => name.BookmarkData.Key == bookmark.Name).BookmarkData, _tableUtil.GetTable(bookmark.Message.ToString()), docFile.MainDocumentPart); 
                             break;
                         case 3:
                             var bookmarkDbPic = _mapper.Map<BookmarksJsonModel, Bookmark>(bookmark);
@@ -138,7 +142,15 @@ namespace AutoDoc.Controllers
                             bookmarkDbPic.MessageJson = bookmark.Message;
 
                             _bookmarkService.EditBookmark(bookmarkDbPic);
-                            //_bookmarkParser.ReplaceBookmark(bookmarkNames, bookmark.Name, new ImageUtil().ReplaceTextWithImage(filePath), docFile.MainDocumentPart);
+                            _bookmarkParser.ReplaceBookmark(bookmarkNames.Find(name => name.BookmarkData.Key == bookmark.Name).BookmarkData, _imageUtil.GetImage(filePath, docFile), docFile.MainDocumentPart);
+                            break;
+                        case 4:
+                            var bookmarkDbExtTable = _mapper.Map<BookmarksJsonModel, Bookmark>(bookmark);
+
+                            bookmarkDbExtTable.MessageJson = bookmark.Message.ToString();
+
+                            _bookmarkService.EditBookmark(bookmarkDbExtTable);
+                            _bookmarkParser.ExpandTableBookmark(bookmarkNames.Find(name => name.BookmarkData.Key == bookmark.Name).BookmarkData, _tableUtil.GetTable(bookmark.Message.ToString()), docFile.MainDocumentPart);
                             break;
                         default: break;
                     }

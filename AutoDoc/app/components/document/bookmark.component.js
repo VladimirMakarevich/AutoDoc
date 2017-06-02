@@ -48,51 +48,49 @@ let BookmarkComponent = class BookmarkComponent {
     }
     uploadNewValues() {
         console.log(this.bookmarks);
-        console.log(this.bookmarks[0].message);
         this.bookmarkService.postData(this.bookmarks).subscribe((ans) => {
             this.router.navigate(['./download', this.id]);
         });
     }
     prepareNewValues() {
-        //let bufIterator = new Array<number>();
-        //let allPromiseOperations: number = this.bookmarks.filter(el => el.type == 3).length;
-        //let donePromiseOperations: number = 0;
-        for (let i = 0; i < this.bookmarks.length; i++) {
+        let bufIterator = new Array();
+        let allPromiseOperations = this.bookmarks.filter(el => el.type == 3).length;
+        let donePromiseOperations = 0;
+        let i = 0;
+        while (i < this.bookmarks.length) {
             if (this.bookmarks[i].type == 2) {
                 let dataTable = this.bookmarks[i].message.data.data;
                 this.bookmarks[i].message.data = dataTable;
             }
-            /*if (this.bookmarks[i].type == 3) {
+            if (this.bookmarks[i].type == 3) {
                 bufIterator.push(i);
-
-                this.bookmarkService.postImageFile(this.bookmarks[i].message.fileContents).then((name: string) => {
+                this.bookmarkService.postImageFile(this.bookmarks[i].message.fileContents).then((name) => {
                     if (name != null) {
-
-                        let buf = new Bookmark();
-
+                        let buf = new bookmark_1.Bookmark();
                         buf.id = this.bookmarks[bufIterator[0]].id;
                         buf.name = this.bookmarks[bufIterator[0]].name;
                         buf.type = 3;
                         buf.message = name;
-
                         //this.bookmarks[bufIterator[0]].message = null;
                         //this.bookmarks[bufIterator[0]].message = new String(name);
                         //this.bookmarks[bufIterator[0]].message = name;
-
                         this.bookmarks[bufIterator[0]] = null;
                         this.bookmarks[bufIterator[0]] = buf;
-
                         bufIterator.splice(0, 1);
                     }
-
                     donePromiseOperations++;
-                    if (donePromiseOperations == allPromiseOperations && i >= this.bookmarks.length) this.uploadNewValues();
-
+                    if (donePromiseOperations == allPromiseOperations && i >= this.bookmarks.length)
+                        this.uploadNewValues();
                 });
-            }*/
+            }
+            if (this.bookmarks[i].type == 4) {
+                let dataTable = this.bookmarks[i].message.data.data;
+                this.bookmarks[i].message.data = dataTable;
+            }
+            i++;
         }
-        //if (donePromiseOperations == allPromiseOperations && i >= this.bookmarks.length) this.uploadNewValues();
-        this.uploadNewValues();
+        if (donePromiseOperations == allPromiseOperations)
+            this.uploadNewValues();
     }
     ngOnInit() {
         this.routeActivated.params.subscribe((params) => {
@@ -107,16 +105,22 @@ let BookmarkComponent = class BookmarkComponent {
                             buf.data.load(bookmarks[i].message.data);
                             bookmarks[i].message = buf;
                         }
-                        /*if (bookmarks[i].type == 3) {
+                        if (bookmarks[i].type == 3) {
                             bufIterator.push(i);
-                            this.bookmarkService.getImageFile(bookmarks[i].message).then((file: File) => {
+                            this.bookmarkService.getImageFile(bookmarks[i].message).then((file) => {
                                 if (file != null) {
-                                    bookmarks[bufIterator[0]].message = new File();
+                                    bookmarks[bufIterator[0]].message = new file_1.File();
                                     bookmarks[bufIterator[0]].message = file;
                                     bufIterator.splice(0, 1);
                                 }
                             });
-                        }*/
+                        }
+                        if (bookmarks[i].type == 4) {
+                            let buf = new bookmark_1.Table();
+                            buf.settings = bookmarks[i].message.settings;
+                            buf.data.load(bookmarks[i].message.data);
+                            bookmarks[i].message = buf;
+                        }
                     }
                     this.bookmarks = bookmarks;
                 });
@@ -125,7 +129,8 @@ let BookmarkComponent = class BookmarkComponent {
         this.inputOptions = Array();
         this.inputOptions.push(new Option(1, 'Text'));
         this.inputOptions.push(new Option(2, 'Table'));
-        //this.inputOptions.push(new Option(3, 'Image'));
+        this.inputOptions.push(new Option(3, 'Image'));
+        this.inputOptions.push(new Option(4, 'Expanded Table'));
     }
 };
 BookmarkComponent = __decorate([

@@ -9,6 +9,6 @@ namespace AutoDoc.BL.ModelsUtilities
 {
     public interface IImageUtil
     {
-        Drawing ReplaceTextWithImage(string find, string filepath, Bitmap bitmap, int incremental);
+        Drawing GetImage(string filepath, WordprocessingDocument doc);
     }
 }

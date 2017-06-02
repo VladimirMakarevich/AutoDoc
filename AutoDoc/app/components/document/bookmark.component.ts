@@ -60,7 +60,7 @@ export class BookmarkComponent implements OnInit {
 
     uploadNewValues(): void {
         console.log(this.bookmarks);
-        console.log(this.bookmarks[0].message);
+        
         this.bookmarkService.postData(this.bookmarks).subscribe((ans: string) => {
             this.router.navigate(['./download', this.id]);
         });
@@ -68,19 +68,20 @@ export class BookmarkComponent implements OnInit {
 
     prepareNewValues(): void {
 
-        //let bufIterator = new Array<number>();
+        let bufIterator = new Array<number>();
 
-        //let allPromiseOperations: number = this.bookmarks.filter(el => el.type == 3).length;
-        //let donePromiseOperations: number = 0;
+        let allPromiseOperations: number = this.bookmarks.filter(el => el.type == 3).length;
+        let donePromiseOperations: number = 0;
 
-        for(let i = 0; i < this.bookmarks.length; i++) {
+        let i = 0;
+        while (i < this.bookmarks.length) {
 
             if (this.bookmarks[i].type == 2) {
                 let dataTable = this.bookmarks[i].message.data.data;
                 this.bookmarks[i].message.data = dataTable;
             }
 
-            /*if (this.bookmarks[i].type == 3) {
+            if (this.bookmarks[i].type == 3) {
                 bufIterator.push(i);
 
                 this.bookmarkService.postImageFile(this.bookmarks[i].message.fileContents).then((name: string) => {
@@ -103,15 +104,21 @@ export class BookmarkComponent implements OnInit {
                         bufIterator.splice(0, 1);
                     }
 
-                    donePromiseOperations++;
+                    donePromiseOperations++;  
                     if (donePromiseOperations == allPromiseOperations && i >= this.bookmarks.length) this.uploadNewValues();
 
                 });
-            }*/
+            }
+
+            if (this.bookmarks[i].type == 4) {
+                let dataTable = this.bookmarks[i].message.data.data;
+                this.bookmarks[i].message.data = dataTable;
+            }
+
+            i++;
         }
 
-        //if (donePromiseOperations == allPromiseOperations && i >= this.bookmarks.length) this.uploadNewValues();
-        this.uploadNewValues();
+        if (donePromiseOperations == allPromiseOperations) this.uploadNewValues();
     }
 
     ngOnInit() {
@@ -129,7 +136,7 @@ export class BookmarkComponent implements OnInit {
                            buf.data.load(bookmarks[i].message.data);
                            bookmarks[i].message = buf;
                        }
-                       /*if (bookmarks[i].type == 3) {
+                       if (bookmarks[i].type == 3) {
                            bufIterator.push(i);
                            this.bookmarkService.getImageFile(bookmarks[i].message).then((file: File) => {
                                if (file != null) {
@@ -138,7 +145,13 @@ export class BookmarkComponent implements OnInit {
                                    bufIterator.splice(0, 1);
                                }
                            });
-                       }*/
+                       }
+                       if (bookmarks[i].type == 4) {
+                           let buf = new Table();
+                           buf.settings = bookmarks[i].message.settings;
+                           buf.data.load(bookmarks[i].message.data);
+                           bookmarks[i].message = buf;
+                       }
                    }
 
                    this.bookmarks = bookmarks;
@@ -149,7 +162,8 @@ export class BookmarkComponent implements OnInit {
         this.inputOptions = Array<Option>();
         this.inputOptions.push(new Option(1, 'Text'));
         this.inputOptions.push(new Option(2, 'Table'));
-        //this.inputOptions.push(new Option(3, 'Image'));
+        this.inputOptions.push(new Option(3, 'Image'));
+        this.inputOptions.push(new Option(4, 'Expanded Table'));
     }
     
 }
