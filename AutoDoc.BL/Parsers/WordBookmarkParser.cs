@@ -1,264 +1,71 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
+using AutoDoc.BL.Models;
 
 namespace AutoDoc.BL.Parsers
 {
     public class WordBookmarkParser : IWordBookmarkParser
     {
-        public List<string> FindAllBookmarks(WordprocessingDocument doc)
+        private WordBookmark WhatTypeBookmark(BookmarkStart bookmarkStart)
         {
-            List<string> bookmarkNames = new List<string>();
+            var bookmarkInfo = new WordBookmark();
+            bookmarkInfo.BookmarkData = new KeyValuePair<string, BookmarkStart>(bookmarkStart.Name, bookmarkStart);
+            bookmarkInfo.BookmarkType = 1;
+            bookmarkInfo.Message = string.Empty;
+
+
+            return bookmarkInfo;
+        }
+
+        public List<WordBookmark> FindBookmarks(WordprocessingDocument doc)
+        {
+            List<WordBookmark> bookmarkNames = new List<WordBookmark>();
+
             foreach (BookmarkStart bookmarkStart in doc.MainDocumentPart.RootElement.Descendants<BookmarkStart>())
             {
-                if (bookmarkStart.Name != "_GoBack") bookmarkNames.Add(bookmarkStart.Name);
+                if (bookmarkStart.Name != "_GoBack")
+                {
+                    var bookmarkInfo = WhatTypeBookmark(bookmarkStart);
+                    bookmarkNames.Add(bookmarkInfo);
+
+                }
             }
-            doc.Close();
+
             return bookmarkNames;
         }
 
-        /*public static IDictionary<String, BookmarkStart> FindAllBookmarks(WordprocessingDocument doc)
+        public void ReplaceBookmark<T>(KeyValuePair<string, BookmarkStart> bookMark, T element,
+   MainDocumentPart doc) where T : OpenXmlElement
         {
-            IDictionary<String, BookmarkStart> bookmarkMap = new Dictionary<String, BookmarkStart>();
-            foreach (BookmarkStart bookmarkStart in doc.MainDocumentPart.RootElement.Descendants<BookmarkStart>())
-            {
-                bookmarkMap[bookmarkStart.Name] = bookmarkStart;
-            }
-            return bookmarkMap;
-        }*/
+            var valueElementStart = bookMark.Value;
 
-        /*public static IDictionary<string, BookmarkEnd> FindAllBookmarksRecursive(OpenXmlElement documentPart, Dictionary<string, BookmarkEnd> results = null, Dictionary<string, string> unmatched = null)
-        {
-            results = results ?? new Dictionary<string, BookmarkEnd>();
-            unmatched = unmatched ?? new Dictionary<string, string>();
-            foreach (var child in documentPart.Elements())
-            {
-                if (child is BookmarkStart)
-                {
-                    var bStart = child as BookmarkStart;
-                    unmatched.Add(bStart.Id, bStart.Name);
-                }
-                if (child is BookmarkEnd)
-                {
-                    var bEnd = child as BookmarkEnd;
-                    foreach (var orphanName in unmatched)
-                    {
-                        if (bEnd.Id == orphanName.Key)
-                            results.Add(orphanName.Value, bEnd);
-                    }
-                }
-                FindAllBookmarksRecursive(child, results, unmatched);
-            }
-            return results;
-        }*/
+            string idvalueElementEnd = valueElementStart.Id;
 
-        /*public static void ReplaceAllBookmarksRecursive<T>(WordprocessingDocument doc, IDictionary<string, T> newValues) where T: OpenXmlElement
-        {
-            var bookmarkMap = FindAllBookmarksRecursive(doc.MainDocumentPart.Document);
-            foreach (var value in newValues)
-            {
-                //var textElement = new Text(value.Value);
-                var runElement = new Run(value.Value);
-                bookmarkMap[value.Key].InsertAfterSelf(runElement);
-            }
-        }*/
+            var valueElementEnd = (from b in doc.RootElement.Descendants<BookmarkEnd>()
+                                   where b.Id == idvalueElementEnd
+                                   select b).FirstOrDefault();
 
-        /*public static void ReplaceAllBookmarks<T>(WordprocessingDocument doc, IDictionary<string, T> newValues) where T: OpenXmlElement
-        {
-            var bookmarkMap = FindAllBookmarks(doc);
-            foreach (var value in newValues)
-            {
-                var bookmark = bookmarkMap[value.Key];
-                Run bookmarkEl = bookmark.NextSibling<Run>();
-                if (bookmarkEl != null)
-                {
-                    //bookmarkText.GetFirstChild<Text>().Text = value.Value;
-                    bookmarkEl.GetFirstChild<T>().InsertAfterSelf(value.Value);
-                }
-            }
-        }*/
+            var runElement = new Run(element);
 
-        /*public static void InsertIntoBookmark<T>(WordprocessingDocument doc, string bookmarkName, T newElement) where T: OpenXmlElement
-        {
-            MainDocumentPart mainPart = doc.MainDocumentPart;
-            Body body = mainPart.Document.GetFirstChild<Body>();
-            var bookmarkStart = body
-                                .Descendants<BookmarkStart>()
-                                .FirstOrDefault(o => o.Name == bookmarkName);
-            OpenXmlElement elem = bookmarkStart.NextSibling();
-            while (elem != null && !(elem is BookmarkEnd))
-            {
-                OpenXmlElement nextElem = elem.NextSibling();
-                elem.Remove();
-                elem = nextElem;
-            }
-            //bookmarkStart.Parent.InsertAfter<Run>(new Run(new Text(text)), bookmarkStart);
-            bookmarkStart.Parent.InsertAfter<Run>(new Run(newElement), bookmarkStart);
-            mainPart.Document.Save();
-        }*/
-
-        /*public static void ReplaceBookmark<T>(WordprocessingDocument doc, string bookmarkName, T newElement) where T : OpenXmlElement
-        {
-            MainDocumentPart mainPart = doc.MainDocumentPart;
-            Body body = mainPart.Document.GetFirstChild<Body>();
-            var bookmark = body
-                                .Descendants<BookmarkStart>()
-                                .FirstOrDefault(o => o.Name == bookmarkName);
-            var parent = bookmark.Parent; //bookmark's parent element
-            if (newElement != null)
-            {
-                parent.InsertAfterSelf(newElement);
-                parent.Remove();
-            }
-            doc.Close();
-        }*/
-
-        public Dictionary<string, BookmarkEnd> FindBookmarks(OpenXmlElement documentPart, Dictionary<string, BookmarkEnd> results = null, Dictionary<string, string> unmatched = null)
-        {
             try
             {
-                results = results ?? new Dictionary<string, BookmarkEnd>();
-                unmatched = unmatched ?? new Dictionary<string, string>();
-
-                foreach (var child in documentPart.Elements())
+                if (
+                    valueElementStart.Parent.ChildElements.First(
+                        el => el.IsAfter(valueElementStart) && el.IsBefore(valueElementEnd)) != null)
                 {
-                    if (child is BookmarkStart)
-                    {
-                        var bStart = child as BookmarkStart;
-                        if (bStart.Name != "_GoBack") unmatched.Add(bStart.Id, bStart.Name);
-                    }
-
-                    if (child is BookmarkEnd)
-                    {
-                        var bEnd = child as BookmarkEnd;
-                        foreach (var orphanName in unmatched)
-                        {
-                            if (bEnd.Id == orphanName.Key && orphanName.Value != "_GoBack")
-                                results.Add(orphanName.Value, bEnd);
-                        }
-                    }
-
-                    FindBookmarks(child, results, unmatched);
+                    valueElementStart.Parent.ChildElements.First(el => el.IsAfter(valueElementStart)).InnerXml =
+                        runElement.InnerXml;
                 }
-
-                return results;
+                else valueElementStart.InsertAfterSelf(runElement);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                valueElementStart.InsertAfterSelf(runElement);
             }
-        }
-
-        /*public void ReplaceBookmark<T>(Dictionary<string, BookmarkEnd> bookMarks, string name, T message) where T: OpenXmlElement
-        {
-            var bookmark = bookMarks[name];
-            Run bookmarkEl = bookmark.NextSibling<Run>();
-            if (bookmarkEl != null)
-            {
-                bookmarkEl.GetFirstChild<OpenXmlElement>().InsertAfterSelf(message);
-            }
-        }*/
-
-
-        public void ReplaceBookmark<T>(Dictionary<string, BookmarkStart> bookMarks, string name, T element,
-           MainDocumentPart doc) where T : OpenXmlElement
-        {
-
-            var valueElement = bookMarks[name];
-
-            string idBm = valueElement.Id;
-
-            var bmend = (from b in doc.RootElement.Descendants<BookmarkEnd>()
-                         where b.Id == idBm
-                         select b).FirstOrDefault();
-
-            if (bmend.Parent.InnerText != "")
-            {
-
-                string modifiedString = "";
-
-                string innerText = bmend.Parent.InnerText;
-                modifiedString = bmend.Parent.InnerText.Replace(innerText, "");
-
-                if (modifiedString != bmend.Parent.InnerText)
-                {
-                    bmend.RemoveAllChildren<T>();
-                    bmend.Parent.RemoveAllChildren<T>();
-                    bmend.AppendChild<T>(element);
-                    bmend.Parent.AppendChild<T>(element);
-                }
-            }
-            else
-            {
-                var runElement = new Run(element);
-
-                valueElement.InsertAfterSelf(runElement);
-            }
-            //valueElement.InnerText.Remove();
-            //valueElement.Remove();
-            //var newValueElement = valueElement;
-            //valueElement.Repla
-            //valueElement.Parent.OuterXml.
-            //valueElement.FirstChild.OuterXml;
-
-
-            //if (bmend.Parent.InnerText != "")
-            //{
-            //    //var count = bmend.Parent.InnerText.Count();
-            //    var oldInnerText = bmend.Parent.InnerText;
-            //}
-
-
-            //var runElement = new Run(element);
-
-            //valueElement.InsertAfterSelf(runElement);
-
-            //var bookmark = bookMarks[name];
-            //Run bookmarkEl = bookmark.NextSibling<Run>();
-
-            //if (bookmarkEl != null)
-            //{
-            //    var bmstart = (from b in doc.Document.Body.Descendants<BookmarkStart>()
-            //                   where b.Name.ToString().StartsWith(name)
-            //                   select b).FirstOrDefault();
-
-            //    BookmarkEnd bmend = null;
-            //    string idBm = bmstart.Id;
-
-            //    bmend = (from b in doc.RootElement.Descendants<BookmarkEnd>()
-            //             where b.Id == idBm
-            //             select b).FirstOrDefault();
-
-            //    OpenXmlElement sliblingElement = bookmark.Parent.NextSibling<OpenXmlElement>();
-
-            //    BookmarkStart nBmStart = new BookmarkStart()
-            //    {
-            //        Name = name,
-            //        Id = idBm
-            //    };
-
-            //    Paragraph nPara = new Paragraph();
-
-            //    nPara.Append(nBmStart);
-
-            //    Run nRun = new Run();
-
-            //    nRun.Append(element);
-            //    nPara.Append(nRun);
-
-            //    BookmarkEnd nBmEnd = new BookmarkEnd()
-            //    {
-            //        Id = idBm
-            //    };
-
-            //    nPara.Append(nBmEnd);
-
-            //    sliblingElement.InsertAfterSelf(nPara);
-            //}
         }
     }
 }
