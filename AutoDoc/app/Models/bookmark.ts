@@ -33,8 +33,10 @@ export class Settings {
     constructor() {
         this.columns = new Object;
         this.mode = 'inline';
+        this.insert = 'delete';
     }
     mode: string;
+    insert: string;
     columns: any;
 }
 

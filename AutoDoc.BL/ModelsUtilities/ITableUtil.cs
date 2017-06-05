@@ -9,5 +9,6 @@ namespace AutoDoc.BL.ModelsUtilities
     {
         //Table GetTable<T>(List<T> tableData, int[] tableHeadingCount, string[] columnHeadings);
         Table GetTable(string tableData);
+        Table GetExpandTable(string tableContext);
     }
 }

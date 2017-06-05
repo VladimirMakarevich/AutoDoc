@@ -28,6 +28,7 @@ class Settings {
     constructor() {
         this.columns = new Object;
         this.mode = 'inline';
+        this.insert = 'delete';
     }
 }
 exports.Settings = Settings;

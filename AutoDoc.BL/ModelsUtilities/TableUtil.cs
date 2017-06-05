@@ -55,12 +55,12 @@ namespace AutoDoc.BL.ModelsUtilities
             {
                 Run headerRun = new Run(new Text(header.Name));
 
-                RunProperties headerRunProperties = new RunProperties();
+                /*RunProperties headerRunProperties = new RunProperties();
                 headerRunProperties.Append(new Bold());
                 headerRunProperties.Append(new Justification() {Val = JustificationValues.Center});
                 headerRunProperties.Append(new Color() {Val = "FF0000"});
 
-                headerRun.Append(headerRunProperties);
+                headerRun.Append(headerRunProperties);*/
 
                 TableCell cell = new TableCell(new Paragraph(headerRun));
                 
@@ -82,6 +82,30 @@ namespace AutoDoc.BL.ModelsUtilities
                     TableCell cell = new TableCell(new Paragraph(new Run(new Text(value.ToString()))));
                     //TableCell cell = new TableCell(new Paragraph(new Run(new Text(((IDictionary<string, string>)record)[recordCell.Name]))));
                     //TableCell cell = new TableCell(new Paragraph(new Run(new Text(record.GetType().GetProperty(recordCell.Name).GetValue(record, null)))));
+                    recordTableRow.Append(cell);
+                }
+                tbl.Append(recordTableRow);
+            }
+
+            return tbl;
+        }
+
+        public Table GetExpandTable(string tableContext)
+        {
+            Table tbl = new Table();
+
+            dynamic Structure = JsonConvert.DeserializeObject(tableContext) as JObject;
+
+            dynamic tableHeading = Structure.settings.columns;
+            dynamic tableData = Structure.data;
+
+            foreach (dynamic record in tableData)
+            {
+                TableRow recordTableRow = new TableRow();
+                foreach (var recordCell in tableHeading)
+                {
+                    string value = record[recordCell.Name.ToString()];
+                    TableCell cell = new TableCell(new Paragraph(new Run(new Text(value.ToString()))));
                     recordTableRow.Append(cell);
                 }
                 tbl.Append(recordTableRow);

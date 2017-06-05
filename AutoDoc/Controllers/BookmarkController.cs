@@ -102,12 +102,13 @@ namespace AutoDoc.Controllers
         [Route("PostBookmarks")]
         public async Task<Boolean> PostBookmarks([FromBody] List<BookmarksJsonModel> bookmarks)
         {
+
+            var currentBookmark = _bookmarkService.GetBookmark(bookmarks.First().Id);
+            var documentPath = _documentService.GetDocument(currentBookmark.DocumentId).Path;
+            var docFile = _documentCore.OpenDocument(documentPath);
+
             try
             {
-                var currentBookmark = _bookmarkService.GetBookmark(bookmarks.First().Id);
-                var documentPath = _documentService.GetDocument(currentBookmark.DocumentId).Path;
-
-                var docFile = _documentCore.OpenDocument(documentPath);
                 var bookmarkNames = _bookmarkParser.FindBookmarks(docFile);
 
                 foreach (var bookmark in bookmarks)
@@ -149,8 +150,16 @@ namespace AutoDoc.Controllers
 
                             bookmarkDbExtTable.MessageJson = bookmark.Message.ToString();
 
+                            dynamic Structure = JsonConvert.DeserializeObject(bookmark.Message.ToString()) as JObject;
+                            string InsertMode = Structure.settings.insert.ToString();
+
+                            if (string.IsNullOrEmpty(InsertMode)) InsertMode = "delete";
+
+                            //InsertMode.Replace("{", "");
+                            //InsertMode.Replace("}", "");
+
                             _bookmarkService.EditBookmark(bookmarkDbExtTable);
-                            _bookmarkParser.ExpandTableBookmark(bookmarkNames.Find(name => name.BookmarkData.Key == bookmark.Name).BookmarkData, _tableUtil.GetTable(bookmark.Message.ToString()), docFile.MainDocumentPart);
+                            _bookmarkParser.ExpandTableBookmark(bookmarkNames.Find(name => name.BookmarkData.Key == bookmark.Name).BookmarkData, _tableUtil.GetExpandTable(bookmark.Message.ToString()), docFile.MainDocumentPart, InsertMode);
                             break;
                         default: break;
                     }
@@ -161,6 +170,7 @@ namespace AutoDoc.Controllers
             }
             catch (Exception ex)
             {
+                docFile.Close();
                 return false;
             }
         }

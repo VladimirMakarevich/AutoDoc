@@ -188,7 +188,20 @@ namespace AutoDoc.BL.Parsers
                 bookmarkInfo.BookmarkType = 4;
                 bookmarkInfo.Message = string.Empty;
 
-                TableRow row = elem.Elements<TableRow>().ElementAt(0);
+                int RowWithBookmark = 0;
+                foreach (var rowFindBookmark in elem.Elements<TableRow>())
+                {
+                    foreach (BookmarkStart bookmarkStartFind in rowFindBookmark.Descendants<BookmarkStart>())
+                    {
+                        if (bookmarkStart.Name != "_GoBack")
+                        {
+                            if (bookmarkStartFind.Name == bookmarkStart.Name)
+                                RowWithBookmark = elem.Elements<TableRow>().ToList().IndexOf(rowFindBookmark);
+                        }
+                    }
+                }
+
+                TableRow row = elem.Elements<TableRow>().ElementAt(RowWithBookmark);
                 List<string> headersList = new List<string>();
 
                 foreach (var cell in row.Elements<TableCell>())
@@ -276,10 +289,91 @@ namespace AutoDoc.BL.Parsers
 
         }*/
 
-        public void ExpandTableBookmark<T>(KeyValuePair<string, BookmarkStart> bookMark, T element,
-            MainDocumentPart doc) where T : OpenXmlElement 
+        private void ExpandDeleteTable<T>(T element, T elem, int RowWithBookmark) where T : OpenXmlElement
         {
-            
+            RowWithBookmark++;
+            var rowToDel = new TableRow();
+            while (rowToDel != null)
+            {
+                try
+                {
+                    rowToDel = elem.Elements<TableRow>().ElementAt(RowWithBookmark);
+                    elem.Elements<TableRow>().ElementAt(RowWithBookmark).Remove();
+                }
+                catch (Exception ex)
+                {
+                    rowToDel = null;
+                }
+
+            }
+
+            foreach (TableRow rowToInsert in element.Elements<TableRow>())
+            {
+                var buf = rowToInsert.CloneNode(true);
+                elem.AppendChild(buf);
+            }
+        }
+
+        private void ExpandUpdateTable<T>(T element, T elem, int RowWithBookmark) where T : OpenXmlElement
+        {
+            foreach (TableRow rowToInsert in element.Elements<TableRow>())
+            {
+                var buf = rowToInsert.CloneNode(true);
+                elem.Elements<TableRow>().ElementAt(RowWithBookmark).InsertAfterSelf(buf);
+                //elem.InsertAfter(elem.Elements<TableRow>().ElementAt(RowWithBookmark), buf);
+                RowWithBookmark++;
+            }
+        }
+
+        public void ExpandTableBookmark<T>(KeyValuePair<string, BookmarkStart> bookMark, T element,
+            MainDocumentPart doc, string mode) where T : OpenXmlElement
+        {
+
+            /*var bookmarkStartToIns = bookMark.Value;
+            string idvalueElementEnd = bookmarkStartToIns.Id;
+            var bookmarkEndToIns = (from b in doc.RootElement.Descendants<BookmarkEnd>()
+                                                     where b.Id == idvalueElementEnd
+                                                     select b).FirstOrDefault();*/
+
+            OpenXmlElement elem = bookMark.Value;
+            while (!(elem is DocumentFormat.OpenXml.Wordprocessing.Table) && elem.Parent != null) elem = elem.Parent;
+            if (elem is DocumentFormat.OpenXml.Wordprocessing.Table)
+            {
+                int RowWithBookmark = 0;
+                foreach (var rowFindBookmark in elem.Elements<TableRow>())
+                {
+                    foreach (BookmarkStart bookmarkStart in rowFindBookmark.Descendants<BookmarkStart>())
+                    {
+                        if (bookmarkStart.Name != "_GoBack")
+                        {
+                            if (bookmarkStart.Name == bookMark.Key)
+                                RowWithBookmark = elem.Elements<TableRow>().ToList().IndexOf(rowFindBookmark);
+                        }
+                    }
+                }
+
+                switch (mode)
+                {
+                    case "delete":
+                        ExpandDeleteTable(element, elem, RowWithBookmark);
+                        break;
+                    case "update":
+                        ExpandUpdateTable(element, elem, RowWithBookmark);
+                        break;
+                    default:
+                        break;
+                }
+
+                /*var bookmarkCloneStart = bookmarkStartToIns.CloneNode(true);
+                var bookmarkCloneEnd = bookmarkEndToIns.CloneNode(true);
+
+                var row = elem.Elements<TableRow>().ElementAt(RowWithBookmark);
+                var cell = row.Elements<TableCell>().First();
+                Paragraph parag = cell.Elements<Paragraph>().First();
+
+                parag.InsertAfterSelf(bookmarkCloneStart);
+                bookmarkCloneStart.InsertAfterSelf(bookmarkCloneEnd);*/
+            }
         }
 
 

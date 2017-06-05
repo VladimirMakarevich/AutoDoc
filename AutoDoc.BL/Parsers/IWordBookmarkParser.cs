@@ -15,6 +15,6 @@ namespace AutoDoc.BL.Parsers
         List<WordBookmark> FindBookmarks(WordprocessingDocument doc);
 
         void ExpandTableBookmark<T>(KeyValuePair<string, BookmarkStart> bookMark, T element,
-            MainDocumentPart doc) where T : OpenXmlElement;
+            MainDocumentPart doc, string mode) where T : OpenXmlElement;
     }
 }

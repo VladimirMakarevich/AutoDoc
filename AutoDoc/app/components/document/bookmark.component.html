@@ -72,6 +72,17 @@
                                             <ng2-smart-table class="table" [settings]="bookmark.message.settings" [source]="bookmark.message.data"></ng2-smart-table>
                                         </div>
                                     </div>
+                                    
+                                    <form>
+                                        <div class="form-group">
+                                            <div class="radio">
+                                                <label><input type="radio" name="radAnswer" [(ngModel)]="bookmark.message.settings.insert" value="delete">Insert with Delete</label>
+                                            </div>
+                                            <div class="radio">
+                                                <label><input type="radio" name="radAnswer" [(ngModel)]="bookmark.message.settings.insert" value="update">Insert with Update</label>
+                                            </div>
+                                        </div>
+                                    </form>
 
                                 </div>
 

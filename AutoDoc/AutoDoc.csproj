@@ -27,5 +27,8 @@
     <ProjectReference Include="..\AutoDoc.BL\AutoDoc.BL.csproj" />
     <ProjectReference Include="..\AutoDoc.DAL\AutoDoc.DAL.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="wwwroot\AppData\" />
+  </ItemGroup>
 
 </Project>

@@ -113,6 +113,8 @@ export class BookmarkComponent implements OnInit {
             if (this.bookmarks[i].type == 4) {
                 let dataTable = this.bookmarks[i].message.data.data;
                 this.bookmarks[i].message.data = dataTable;
+
+                console.log(this.bookmarks[i].message.settings.insert);
             }
 
             i++;
