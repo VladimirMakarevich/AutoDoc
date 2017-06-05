@@ -6,5 +6,7 @@ namespace AutoDoc.BL.Core
     {
         WordprocessingDocument OpenDocument(string path);
         void CloseDocument(WordprocessingDocument doc);
+        CustomFilePropertiesPart CheckCustomProperty(CustomFilePropertiesPart customFilePropertiesPart, int ParentId);
+        void CheckIfDocumentExist(WordprocessingDocument doc, int id);
     }
 }

@@ -5,5 +5,5 @@
     templateUrl: 'app/components/error/error.component.html'
 })
 
-export class ErrorComponent {
+export class NotFoundComponent {
 }

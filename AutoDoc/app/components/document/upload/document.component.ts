@@ -43,11 +43,6 @@ export class DocumentComponent implements OnInit, OnDestroy {
                     this.document = document;
                     this.navigateToBookmarks(document);
                 });
-            //.subscribe(response => {
-            //    console.log(response);
-            //    this.document = response;
-            //    this.navigateToBookmarks()
-            //});
         }
     }
 }

@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot/AppData\1168979.docx" />
     <Content Remove="wwwroot/AppData\Magistratura.docx" />
   </ItemGroup>
 
@@ -18,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\AppData\" />
     <Folder Include="wwwroot\AppData\" />
     <Folder Include="wwwroot\AppData\" />
     <Folder Include="wwwroot\AppData\" />

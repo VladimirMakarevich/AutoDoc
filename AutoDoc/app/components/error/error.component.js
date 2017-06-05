@@ -7,13 +7,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular/core");
-let ErrorComponent = class ErrorComponent {
+let NotFoundComponent = class NotFoundComponent {
 };
-ErrorComponent = __decorate([
+NotFoundComponent = __decorate([
     core_1.Component({
         selector: 'error',
         templateUrl: 'app/components/error/error.component.html'
     })
-], ErrorComponent);
-exports.ErrorComponent = ErrorComponent;
+], NotFoundComponent);
+exports.NotFoundComponent = NotFoundComponent;
 //# sourceMappingURL=error.component.js.map

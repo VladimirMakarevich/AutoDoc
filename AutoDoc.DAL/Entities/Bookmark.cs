@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace AutoDoc.DAL.Entities
+﻿namespace AutoDoc.DAL.Entities
 {
     public class Bookmark
     {

@@ -60,7 +60,7 @@ let BookmarkComponent = class BookmarkComponent {
         this.bookmarkService.uploadBookmarks(data)
             .then(id => {
             this.id = id;
-            this.router.navigate(['/downdocument', id]);
+            this.router.navigate(['/document', id]);
         });
     }
     getTable(obj) {

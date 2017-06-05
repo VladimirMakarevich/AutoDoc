@@ -22,11 +22,11 @@ const document_service_1 = require("./services/document.service");
 const bookmark_service_1 = require("./services/bookmark.service");
 const data_service_1 = require("./services/data.service");
 const routes = [
-    { path: '', component: app_component_1.AppComponent },
-    { path: 'document', component: document_component_1.DocumentComponent },
+    { path: '', component: document_component_1.DocumentComponent },
     { path: 'bookmarks', component: bookmarks_component_1.BookmarkComponent },
-    { path: 'downdocument/:id', component: downdocument_component_1.DownDocumentComponent },
-    { path: '**', component: error_component_1.ErrorComponent }
+    { path: 'document/:id', component: downdocument_component_1.DownDocumentComponent },
+    { path: 'home', component: app_component_1.AppComponent },
+    { path: '**', component: error_component_1.NotFoundComponent }
 ];
 const appRoutingProviders = [];
 let AppModule = class AppModule {
@@ -38,7 +38,7 @@ AppModule = __decorate([
         declarations: [app_component_1.AppComponent,
             document_component_1.DocumentComponent,
             downdocument_component_1.DownDocumentComponent,
-            error_component_1.ErrorComponent,
+            error_component_1.NotFoundComponent,
             bookmarks_component_1.BookmarkComponent],
         exports: [app_component_1.AppComponent, router_1.RouterModule],
         bootstrap: [app_component_1.AppComponent],

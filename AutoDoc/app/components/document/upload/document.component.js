@@ -40,11 +40,6 @@ let DocumentComponent = class DocumentComponent {
                 this.document = document;
                 this.navigateToBookmarks(document);
             });
-            //.subscribe(response => {
-            //    console.log(response);
-            //    this.document = response;
-            //    this.navigateToBookmarks()
-            //});
         }
     }
 };

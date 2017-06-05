@@ -2,8 +2,12 @@
 
 @Component({
     selector: 'autodoc-app',
-    template: `<div>
-                    <router-outlet></router-outlet>
+    template: `<div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                                <router-outlet></router-outlet>
+                        </div>
+                    </div>                
                 </div>`
 })
 

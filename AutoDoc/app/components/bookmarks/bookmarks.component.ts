@@ -72,7 +72,7 @@ export class BookmarkComponent implements OnInit, OnDestroy {
         this.bookmarkService.uploadBookmarks(data)
             .then(id => {
                 this.id = id;
-                this.router.navigate(['/downdocument', id]);
+                this.router.navigate(['/document', id]);
             });
     }
 

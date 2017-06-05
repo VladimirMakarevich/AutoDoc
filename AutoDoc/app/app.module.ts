@@ -9,7 +9,7 @@ import { AppComponent } from './components/app.component';
 import { DocumentComponent } from './components/document/upload/document.component';
 import { DownDocumentComponent } from './components/document/download/downdocument.component';
 import { BookmarkComponent } from './components/bookmarks/bookmarks.component';
-import { ErrorComponent } from './components/error/error.component';
+import { NotFoundComponent } from './components/error/error.component';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 
 import { DocumentService } from './services/document.service';
@@ -17,11 +17,11 @@ import { BookmarkService } from './services/bookmark.service';
 import { DataService } from './services/data.service';
 
 const routes: Routes = [
-    { path: '', component: AppComponent },
-    { path: 'document', component: DocumentComponent },
+    { path: '', component: DocumentComponent },
     { path: 'bookmarks', component: BookmarkComponent },
-    { path: 'downdocument/:id', component: DownDocumentComponent },
-    { path: '**', component: ErrorComponent }
+    { path: 'document/:id', component: DownDocumentComponent },
+    { path: 'home', component: AppComponent },
+    { path: '**', component: NotFoundComponent }
 ];
 
 const appRoutingProviders: any[] = [
@@ -33,7 +33,7 @@ const appRoutingProviders: any[] = [
     declarations: [AppComponent,
         DocumentComponent,
         DownDocumentComponent,
-        ErrorComponent,
+        NotFoundComponent,
         BookmarkComponent],
     exports: [AppComponent, RouterModule],
     bootstrap: [AppComponent],
