@@ -12,8 +12,8 @@ namespace AutoDoc.BL.Models
 
     public class Column
     {
-        public string Title;
-        public bool Sort;
-        public bool Filter;
+        public string title;
+        public bool sort;
+        public bool filter;
     }
 }

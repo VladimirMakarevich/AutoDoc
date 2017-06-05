@@ -117,6 +117,7 @@ let BookmarkComponent = class BookmarkComponent {
                         }
                         if (bookmarks[i].type == 4) {
                             let buf = new bookmark_1.Table();
+                            console.log(bookmarks[i].message.settings);
                             buf.settings = bookmarks[i].message.settings;
                             buf.data.load(bookmarks[i].message.data);
                             bookmarks[i].message = buf;

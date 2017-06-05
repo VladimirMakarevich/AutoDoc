@@ -148,6 +148,7 @@ export class BookmarkComponent implements OnInit {
                        }
                        if (bookmarks[i].type == 4) {
                            let buf = new Table();
+                           console.log(bookmarks[i].message.settings);
                            buf.settings = bookmarks[i].message.settings;
                            buf.data.load(bookmarks[i].message.data);
                            bookmarks[i].message = buf;

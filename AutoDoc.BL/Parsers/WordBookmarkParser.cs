@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using AutoDoc.BL.Models;
 using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
+using Newtonsoft.Json;
+using Column = AutoDoc.BL.Models.Column;
 
 namespace AutoDoc.BL.Parsers
 {
@@ -175,9 +180,70 @@ namespace AutoDoc.BL.Parsers
         {
             var bookmarkInfo = new WordBookmark();
             bookmarkInfo.BookmarkData = new KeyValuePair<string, BookmarkStart>(bookmarkStart.Name, bookmarkStart);
-            bookmarkInfo.BookmarkType = 1;
-            bookmarkInfo.Message = string.Empty;
+            
+            OpenXmlElement elem = bookmarkStart;
+            while (!(elem is DocumentFormat.OpenXml.Wordprocessing.Table) && elem.Parent != null) elem = elem.Parent;
+            if (elem is DocumentFormat.OpenXml.Wordprocessing.Table)
+            {
+                bookmarkInfo.BookmarkType = 4;
+                bookmarkInfo.Message = string.Empty;
 
+                TableRow row = elem.Elements<TableRow>().ElementAt(0);
+                List<string> headersList = new List<string>();
+
+                foreach (var cell in row.Elements<TableCell>())
+                {
+                    Paragraph parag = cell.Elements<Paragraph>().First();
+                    Run run = parag.Elements<Run>().First();
+                    Text text = run.Elements<Text>().First();
+
+                    headersList.Add(text.Text);
+                }
+
+                /*var settings = new TableSettings();
+                settings.Mode = "inline";
+                foreach (var header in headersList)
+                {
+                    var column = new Column();
+                    column.Title = header;
+                    column.Filter = false;
+                    column.Sort = false;
+
+                    settings.Columns.Add(column);
+                }*/
+
+
+                dynamic message = new ExpandoObject();
+                message.settings = new ExpandoObject();
+                message.settings.columns = new ExpandoObject();
+
+                IDictionary<string, object> columns = new ExpandoObject();
+
+                message.settings.mode = "inline";
+                message.data = new List();
+
+                foreach (var header in headersList)
+                {
+                    var column = new Column();
+                    column.title = header;
+                    column.filter = false;
+                    column.sort = false;
+
+                    //message.settings.columns[header].title = header;
+                    //message.settings.columns[header].filter = false;
+                    //message.settings.columns[header].sort = false;
+
+                    columns[header] = column;
+                }
+                message.settings.columns = columns;
+
+                bookmarkInfo.Message = JsonConvert.SerializeObject(message);
+            }
+            else
+            {
+                bookmarkInfo.BookmarkType = 1;
+                bookmarkInfo.Message = string.Empty;
+            }
 
             return bookmarkInfo;
         }
