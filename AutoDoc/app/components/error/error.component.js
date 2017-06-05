@@ -12,11 +12,7 @@ let ErrorComponent = class ErrorComponent {
 ErrorComponent = __decorate([
     core_1.Component({
         selector: 'error',
-        templateUrl: 'app/components/error/error.component.html',
-        styles: [` 
-            h1, h2{color:navy;}
-            p{font-size:13px; font-family:Verdana;}
-    `]
+        templateUrl: 'app/components/error/error.component.html'
     })
 ], ErrorComponent);
 exports.ErrorComponent = ErrorComponent;

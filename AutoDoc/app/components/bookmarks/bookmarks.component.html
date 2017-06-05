@@ -1,44 +1,60 @@
-﻿<div class="form-group">
-    <div>
-        <h2>Your Bookmarks</h2>
-        <div class="col-md-8">
-            <ul>
-                <li *ngFor="let bookmark of document.bookmarks">
-                    <select class="selectpicker" name="InputSelect" [(ngModel)]="bookmark.type" (change)="changeBookmarkType(bookmark)">
-                        <option *ngFor="let inputOption of inputOptions" [value]="inputOption.id" [selected]="inputOption.id == bookmark.type">
-                            {{inputOption.name}}
+﻿<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <a class="list-group-item" *ngFor="let bookmark of document.bookmarks">
+                <div class="row">
+                    <div class="col-md-12">
+                        <select class="form-control" name="InputSelect" [(ngModel)]="bookmark.type" (change)="changeBookmarkType(bookmark)">
+                            <option *ngFor="let inputOption of inputOptions" [value]="inputOption.id" [selected]="inputOption.id == bookmark.type">
+                                {{inputOption.name}}
+                            </option>
+                        </select>
+                        <br>
 
-                        </option>
-                    </select>
-                    <br>
+                        <div class="col-md-12">
 
-                    <div *ngIf="bookmark.type == 1">
-                        <div>
-                            <p class="bg-info">{{bookmark.id}}</p>
-                            <!--<span></span>-->
-                            <label>{{bookmark.name}}</label>
-                            <div>
-                                <input type="text" class="form-control text-input" [(ngModel)]="bookmark.message" placeholder="New Value" />
+                            <div *ngIf="bookmark.type == 1">
+                                <div class="form-group">
+                                    <label for="text">New Message: </label>
+                                    <div class="input-group">
+                                        <input [(ngModel)]="bookmark.message" type="text" id="text" class="form-control" placeholder="New Value" required="true" />
+                                    </div>
+                                </div>
                             </div>
+
+                            <div *ngIf="bookmark.type == 2">
+
+                                <div class="lead">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">Table Data</div>
+                                        <div class="panel-body">
+                                            <ng2-smart-table class="table font-size: 24" [settings]="bookmark.message.settings" [source]="bookmark.message.data"></ng2-smart-table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <form class="form-inline">
+                                    <div class="form-group">
+                                        <input type="text" [(ngModel)]="newColumn" class="form-control text-input" id="header" name="header" required placeholder="New Header..." autofocus>
+                                    </div>
+                                    <button type="submit" class="btn btn-success" (click)="addColumn(bookmark)">Add</button>
+                                </form>
+                            </div>
+                            <br>
                         </div>
                     </div>
+                </div>
+            </a>
+        </div>
 
-
-                    <div *ngIf="bookmark.type == 2">
-                        <div>
-                            <input class="form-control text-input" placeholder="new header" [(ngModel)]="newColumn">
-                            <button class="btn btn-default" (click)="addColumn(bookmark)">Add</button>
-                            <span class="badge">{{bookmark.id}}</span>
-                            <label>{{bookmark.name}}</label>
-                            <!--<button (click)="example()">Add column</button>-->
-                            <ng2-smart-table [settings]="bookmark.message.settings" [source]="bookmark.message.data" class="table"></ng2-smart-table>
-                        </div>
-                    </div>
-                    <br>
-                </li>
-            </ul>
-            <hr />
-            <button class="btn btn-default" (click)="uploadBookmarks(document.id)">Set</button>
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-4">
+                    <h1>
+                        <button type="submit" class="btn btn-block btn-success" value="Upload" (click)="uploadBookmarks(document.id)">Set</button>
+                    </h1>
+                </div>
+            </div>
         </div>
     </div>
 </div>
