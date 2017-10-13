@@ -50,9 +50,9 @@ namespace AutoDoc.BL.ModelsUtilities
 
                 TableCell cell = new TableCell(new Paragraph(headerRun));
 
-
                 headingsTableRow.Append(cell);
             }
+
             tbl.AppendChild(headingsTableRow);
 
             foreach (dynamic record in tableData)
@@ -65,6 +65,7 @@ namespace AutoDoc.BL.ModelsUtilities
 
                     recordTableRow.Append(cell);
                 }
+
                 tbl.Append(recordTableRow);
             }
 

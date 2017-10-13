@@ -99,16 +99,20 @@ namespace AutoDoc.Controllers
                         bookmarkDb.MessageJson = bookmark.Message;
 
                         _bookmarkService.EditBookmark(bookmarkDb);
-                        _bookmarkParser.ReplaceBookmark(bookmarkNames.Find(name => name.BookmarkData.Key == bookmark.Name).BookmarkData,
-                            _textUtil.GetText(bookmark.Message.ToString()), openDocument.MainDocumentPart);
+                        _bookmarkParser.ReplaceBookmark(
+                            bookmarkNames.Find(name => name.BookmarkData.Key == bookmark.Name).BookmarkData,
+                            _textUtil.GetText(bookmark.Message.ToString()), 
+                            openDocument.MainDocumentPart);
                         break;
 
                     case 2:
                         bookmarkDb.MessageJson = bookmark.Message.ToString();
 
                         _bookmarkService.EditBookmark(bookmarkDb);
-                        _bookmarkParser.ReplaceBookmark(bookmarkNames.Find(name => name.BookmarkData.Key == bookmark.Name).BookmarkData,
-                            _tableUtil.GetTable(bookmark.Message.ToString()), openDocument.MainDocumentPart);
+                        _bookmarkParser.ReplaceBookmark(
+                            bookmarkNames.Find(name => name.BookmarkData.Key == bookmark.Name).BookmarkData,
+                            _tableUtil.GetTable(bookmark.Message.ToString()), 
+                            openDocument.MainDocumentPart);
                         break;
 
                     default:

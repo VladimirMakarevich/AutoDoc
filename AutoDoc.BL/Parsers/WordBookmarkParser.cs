@@ -38,8 +38,9 @@ namespace AutoDoc.BL.Parsers
             return bookmarkNames;
         }
 
-        public void ReplaceBookmark<T>(KeyValuePair<string, BookmarkStart> bookMark, T element,
-   MainDocumentPart doc) where T : OpenXmlElement
+        public void ReplaceBookmark<T>(KeyValuePair<string, BookmarkStart> bookMark, 
+            T element, 
+            MainDocumentPart doc) where T : OpenXmlElement
         {
             var valueElementStart = bookMark.Value;
 
@@ -53,8 +54,7 @@ namespace AutoDoc.BL.Parsers
 
             try
             {
-                if (
-                    valueElementStart.Parent.ChildElements.First(
+                if (valueElementStart.Parent.ChildElements.First(
                         el => el.IsAfter(valueElementStart) && el.IsBefore(valueElementEnd)) != null)
                 {
                     valueElementStart.Parent.ChildElements.First(el => el.IsAfter(valueElementStart)).InnerXml =
